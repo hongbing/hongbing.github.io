@@ -1,6 +1,7 @@
 ---
 title: Raft
 ---
+
 ##Raft
 
 ###1 Raft概念
@@ -33,7 +34,7 @@ follower表示议员，candidate表示总统候选人，leader表示总统。
 + 如果两个总统相遇，则term number小的总统将自己降为议员（follower）。
 
 server之间通过RPC通信，三种角色转换图：
-![Alt text](https://github.com/hongbing/article/blob/master/images/raftrole.png)
+![Alt text](https://github.com/hongbing/hongbing.github.io/tree/master/images/raftrole.png)
 
 
 为了raft算法的易于理解，raft将算法分为leader election，log replication，safty，membership change几个子问题。下面将一一介绍。
@@ -117,7 +118,7 @@ Raft使用联合一致性阶段（joint consensus）来作为过渡阶段实现�
 
  如果<font size="5">C</font>new  提交失败，则需要复制<font size="5"> C</font>old，回滚配置。如果在回滚配置之前发生了Leader Election，那么leader具有<font size="5">C</font>new，则将其复制到新集群。如果leader没有<font size="5">C</font>new，则会覆盖其他server中的新配置，回到joint consensus状态。
  
- ![Alt text](https://github.com/hongbing/article/blob/master/images/raft_config_change.png)
+ ![Alt text](https://github.com/hongbing/hongbing.github.io/tree/master/images/raft_config_change.png)
  
 
 ###参考资料

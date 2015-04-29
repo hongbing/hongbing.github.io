@@ -10,7 +10,7 @@ collections: null
 safe:         false
 include:      [".htaccess"]
 exclude:      []
-keep_files:   [".git", ".svn"]
+keep_files:   [".git", ".gitignore"]
 encoding:     "utf-8"
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 
@@ -24,9 +24,9 @@ unpublished: false
 whitelist: []
 gems:      []
 
-# Conversion
-markdown:    kramdown
-highlighter: rouge
+# Conversion Kramdown
+markdown: Kramdown   
+highlighter: pygments
 lsi:         false
 excerpt_separator: "\n\n"
 

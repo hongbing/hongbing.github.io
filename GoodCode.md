@@ -31,7 +31,7 @@ title: 什么样的代码才是好的代码
   
 *  统计数据
   下面是相应的统计信息：
-  ![好代码的特征](https://github.com/hongbing/article/blob/master/images/goodcode_statistics.png)
+  ![好代码的特征](https://github.com/hongbing/hongbing.github.io/tree/master/images/tatistics.png)
 
 * 测试标准
 代码好坏的测试标准：
@@ -39,12 +39,10 @@ title: 什么样的代码才是好的代码
 WTFs / minute
 ```  
 
-![代码好坏的测试标准](https://github.com/hongbing/article/blob/master/images/standofgoodcode.png)
+![代码好坏的测试标准](https://github.com/hongbing/hongbing.github.io/tree/master/images/standofgoodcode.png)
 
 * 方法
  
 如何写出好代码的方法：
 
-![GoodCode](https://github.com/hongbing/article/blob/master/images/good_code.png)
-
-*文中图片均来自与网络，只作为学习之用。如果侵犯相关利益人或机构，我会及时撤销，不要来告我哈！*
+![GoodCode](https://github.com/hongbing/hongbing.github.io/tree/master/images/good_code.png)
