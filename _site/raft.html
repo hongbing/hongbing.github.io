@@ -9,8 +9,11 @@
 <p><strong>非对称式</strong>：有一个leader作为与外界通信的角色，其余server不与外界通信，leader会将数据的变更同步到所有的其他server中。</p>
 
 <p>raft采用的第二种方式，也就是leader—based。
-raft算法中集群中server的角色分为：
-&gt;<code>follower</code>：负责跟随leader，不会主动跟客户端通信，会随着election timeout变成candidate</p>
+raft算法中集群中server的角色分为：</p>
+
+<blockquote>
+  <p><code>follower</code>：负责跟随leader，不会主动跟客户端通信，会随着election timeout变成candidate</p>
+</blockquote>
 
 <blockquote>
   <p><code>candidate</code>: candidate为选举过程中的中间状态，当candidate得到大多数的follower的投票，会将自己升级为leader。同时，当已经存在leader后，candidate会将自己将为follower。</p>
@@ -41,7 +44,7 @@ follower表示议员，candidate表示总统候选人，leader表示总统。
 </ul>
 
 <p>server之间通过RPC通信，三种角色转换图：
-<img src="https://github.com/hongbing/hongbing.github.io/tree/master/images/raftrole.png" alt="Alt text" /></p>
+<img src="https://github.com/hongbing/hongbing.github.io/tree/master/_site/images/raftrole.png" alt="Alt text" /></p>
 
 <p>为了raft算法的易于理解，raft将算法分为leader election，log replication，safty，membership change几个子问题。下面将一一介绍。</p>
 
@@ -68,7 +71,7 @@ follower表示议员，candidate表示总统候选人，leader表示总统。
 <ul>
   <li>
     <p>如果选举出的leader属于少数没有接收到entry中的一个，这种情况不会出现，因为
-&gt;<font size="5" color="green">**选举限制规定：**</font><font size="4" color="green">**follower不能给比自己log旧的candidate投票**</font></p>
+<font size="5" color="green">**选举限制规定：</font><font size="4" color="green">follower不能给比自己log旧的candidate投票</font></p>
 
     <p>因此少数派的log会比大多数中的log旧，少数派无法在选举中成为leader。</p>
   </li>
@@ -128,7 +131,7 @@ Raft使用联合一致性阶段（joint consensus）来作为过渡阶段实现�
 
 <p>如果<font size="5">C</font>new  提交失败，则需要复制<font size="5"> C</font>old，回滚配置。如果在回滚配置之前发生了Leader Election，那么leader具有<font size="5">C</font>new，则将其复制到新集群。如果leader没有<font size="5">C</font>new，则会覆盖其他server中的新配置，回到joint consensus状态。</p>
 
-<p><img src="https://github.com/hongbing/hongbing.github.io/tree/master/images/raft_config_change.png" alt="Alt text" /></p>
+<p><img src="https://github.com/hongbing/hongbing.github.io/tree/master/_site/images/raft_config_change.png" alt="Alt text" /></p>
 
 <h3 id="section">参考资料</h3>
 <p>[1] http://raftconsensus.github.io/</p>
