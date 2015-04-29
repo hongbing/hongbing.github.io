@@ -1,3 +1,7 @@
+---
+title: 什么样的代码才是好的代码
+---
+
 ## 什么样的代码才是好的代码
 
 *文章来源*：http://engineering.intenthq.com/2015/03/what-is-good-code-a-scientific-definition/
