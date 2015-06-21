@@ -34,7 +34,7 @@ description:  好的代码应该具有可读性，可测试性，简单，功能
 ### 数据不骗人
  
  下面是具体的统计信息：
-  ![好代码的特征](https://github.com/hongbing/hongbing.github.io/images/goodcode/goodcode_statistics.png)
+  ![好代码的特征](/images/goodcode/goodcode_statistics.png)
 
 ###  代码好坏的测试标准
 
@@ -44,9 +44,9 @@ description:  好的代码应该具有可读性，可测试性，简单，功能
 WTFs / minute
 ```  
 
-![代码好坏的测试标准](https://github.com/hongbing/hongbing.github.io/images/goodcode/standofgoodcode.png)
+![代码好坏的测试标准](/images/goodcode/standofgoodcode.png)
 
 ### 写出好代码的方法
  按照下面的流程即可写出好的代码，程序员必备.
 
-![GoodCode](https://github.com/hongbing/hongbing.github.io/images/goodcode/good_code.png)
+![GoodCode](/images/goodcode/good_code.png)

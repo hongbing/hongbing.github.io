@@ -38,7 +38,7 @@ follower表示议员，candidate表示总统候选人，leader表示总统。
 + 如果两个总统相遇，则term number小的总统将自己降为议员（follower）。
 
 server之间通过RPC通信，三种角色转换图：
-![Alt text](https://github.com/hongbing/hongbing.github.io/images/raft/raftrole.png)
+![raftrole](/images/raft/raftrole.png)
 
 
 为了raft算法的易于理解，raft将算法分为leader election，log replication，safty，membership change几个子问题。下面将一一介绍。
@@ -61,6 +61,7 @@ Leader发送给follower的AppendEntry只有得到大多数的回复后，leader�
 
 接下来应该重新选举，
 对于`情况1`
+
 + 如果选举出的leader属于大多数接收到Entry中的一个，那么下一次的appendEntry到来的时候，会将前面未提交的entry一并发送给follower，得到大多数的ack回复后一并提交。
 
 + 如果选举出的leader属于少数没有接收到entry中的一个，这种情况不会出现，因为
@@ -113,26 +114,25 @@ Raft使用联合一致性阶段（joint consensus）来作为过渡阶段实现�
 
 集群中配置状态的转换：
 
-+ <font size="4"> C</font>old 已提交，<font size="4">C</font>old,new 未提交
++  <font size="4"> C</font>old 已提交，<font size="4">C</font>old,new 未提交
 
-+ <font size="4">C</font>old,new 已提交，<font size="4">C</font>new 未提交
++  <font size="4">C</font>old,new 已提交，<font size="4">C</font>new 未提交
  此时只有拥有 <font size="4">C</font>old,new 配置的server才会被选为leader。
-
  如果此时，<font size="4">C</font>old,new 提交失败，那么重新发送<font size="4"> C</font>old，回滚配置。
 
-+ <font size="4">C</font>new 已提交 
++  <font size="4">C</font>new 已提交 
  如果在这个阶段存在着Leader election，那么只有具有<font size="4">C</font>new 配置的server才能被选为Leader，Leader将<font size="4">C</font>new 配置复制到所有的follower，使得整个集群应用新的配置。
  
  如果<font size="4">C</font>new 提交时，leader并不包括在新的配置中，那么leader将降为为follower，且不参与大多数的投票。
 
  如果<font size="4">C</font>new  提交失败，则需要复制<font size="4"> C</font>old，回滚配置。如果在回滚配置之前发生了Leader Election，那么leader具有<font size="4">C</font>new，则将其复制到新集群。如果leader没有<font size="4">C</font>new，则会覆盖其他server中的新配置，回到joint consensus状态。
  
- ![Alt text](https://github.com/hongbing/hongbing.github.io/images/raft/raft_config_change.png)
+ ![raft_config_change](/images/raft/raft_config_change.png)
  
 
 ###参考资料
 [1] [http://raftconsensus.github.io](http://raftconsensus.github.io/)
-[2] [http://ramcloud.stanford.edu/raft.pdf]http://ramcloud.stanford.edu/raft.pdf
-[3] [http://raftconsensus.github.io/]http://raftconsensus.github.io/
-[4] [http://raftuserstudy.s3-website-us-west-1.amazonaws.com/raft.mp4]http://raftuserstudy.s3-website-us-west-1.amazonaws.com/raft.mp4
-[5] [http://www.infoq.com/cn/articles/coreos-analyse-etcd/]http://www.infoq.com/cn/articles/coreos-analyse-etcd/
+[2] [http://ramcloud.stanford.edu/raft.pdf](http://ramcloud.stanford.edu/raft.pdf)
+[3] [http://raftconsensus.github.io/](http://raftconsensus.github.io/)
+[4] [http://raftuserstudy.s3-website-us-west-1.amazonaws.com/raft.mp4](http://raftuserstudy.s3-website-us-west-1.amazonaws.com/raft.mp4)
+[5] [http://www.infoq.com/cn/articles/coreos-analyse-etcd/](http://www.infoq.com/cn/articles/coreos-analyse-etcd/)
