@@ -63,11 +63,11 @@ Icicle的ID设计思路来源于SnowFlake，因此与SnowFlake的ID结构有很�
 > which we chose not to use because some platforms make it difficult to get at and it messes with ordering
 
 **Time:**
-时间占41位。</br>
+时间占41位。
+
 **Shard ID:**
 由于Icicle是部署在redis上的，redis不支持分布式模式，因此shard id用来标记每一个redis实例，可支持1024个实例。</br>
-**Sequence ID:**</br>
-SnowFlake类似。
+**Sequence ID:** 与SnowFlake类似。
 
 Icicle支持每一毫秒产生2^10 * 2^12个ID号。
 
