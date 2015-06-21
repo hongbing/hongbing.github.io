@@ -59,11 +59,12 @@ Icicle的ID设计思路来源于SnowFlake，因此与SnowFlake的ID结构有很�
 
 **Sign**
 第一位为符号保留位，不使用，文中给出的解释为
+
 > which we chose not to use because some platforms make it difficult to get at and it messes with ordering
 
-**Time:**</br>
+**Time:**
 时间占41位。</br>
-**Shard ID:**</br>
+**Shard ID:**
 由于Icicle是部署在redis上的，redis不支持分布式模式，因此shard id用来标记每一个redis实例，可支持1024个实例。</br>
 **Sequence ID:**</br>
 SnowFlake类似。
