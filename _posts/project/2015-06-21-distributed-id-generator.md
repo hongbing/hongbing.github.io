@@ -8,15 +8,11 @@ description: ID最大的特点就是唯一，一个ID存在的目的就是唯一
 ###1. 什么是ID
 
 ID最大的特点就是**唯一**，一个ID存在的目的就是唯一性的标识某一个物体，如果唯一性做不到，那么ID也就失去了本质的作用。
-
 另外ID还需要保持其它特性：
 
 + **有序**   对于某些事物需要依靠ID来进行比较，同时对于排序查找也方便。
-
 + **有意义**  ID也需要包含有意义的信息，比如时间信息,业务信息。
-
 + **分布式** ID的生成也许并不在一台服务器上，可由多台服务器互不干扰的生成ID。如果采用中心式的ID生成，多半会涉及到锁，而锁意味着成本和性能的下降。
-
 + **紧凑** 为了性能或者长度的原因，要求ID要保持紧凑。越长的ID可能表达的数字范围越大，但是在存储和网络中要占据更多的空间。因此，设计ID的时候往往是保证在未来的一段时间可用的前提下（查看[2038](https://en.wikipedia.org/wiki/Year_2038_problem)问题），尽可能的缩短ID的长度。`总之，掌握好长度与时间范围之间的trade-off`。
 
 另外，参考原新浪weibo通讯技术专家 宇鹏的[业务系统需要怎样的全局唯一ID](http://weibo.com/p/1001603800404851831206?from=page_100505_profile&wvr=6&mod=wenzhangmod)博文,文中还提到了另外两个特点：
@@ -40,25 +36,24 @@ ID最大的特点就是**唯一**，一个ID存在的目的就是唯一性的标
 ####1）[SnowFlake](http://engineering.twitter.com/2010/06/announcing-snowflake.html)
 SnowFlake是为了解决Twitter在分布式环境下的全局ID的问题。
 生成的ID需要满足两个要求：
-+ 数据量
+
++ **数据量**
 每秒能产生数十万个ID，来标识不同的推文
-+ K-Sorted
++ **K-Sorted**
 ID大致有序。
 
 SnowFlake中的ID长度都是64位，由时间戳、节点号和序列编号组成。
-**时间戳**以毫秒为单位，占41位，记录的是从 1288834974657 (Thu, 04 Nov 2010 01:42:54 GMT) 这一时刻到当前时间所经过的毫秒数。有时间戳，必然会存在着一个时间原点，默认情况下的时间元年为1970年1月1日 00:00:01。而在系统设计时，可以以当前的年份来表示元年，这样可以增加ID的使用年限。
 
-**节点号**在源码中被分成两部分，数据中心的 ID 和节点 ID，各自占 5 位。
-
-**序列编号**为本地编号，占12位，从0开始，到4095，然后循环又从0开始，也就是说每一毫秒每个节点能够产生4096的ID号。
-
+**时间戳**以毫秒为单位，占41位，记录的是从 1288834974657 (Thu, 04 Nov 2010 01:42:54 GMT) 这一时刻到当前时间所经过的毫秒数。有时间戳，必然会存在着一个时间原点，默认情况下的时间元年为1970年1月1日 00:00:01。而在系统设计时，可以以当前的年份来表示元年，这样可以增加ID的使用年限。</br>
+**节点号**在源码中被分成两部分，数据中心的 ID 和节点 ID，各自占 5 位。</br>
+**序列编号**为本地编号，占12位，从0开始，到4095，然后循环又从0开始，也就是说每一毫秒每个节点能够产生4096的ID号。</br>
 还有一位为**保留位**，始终为0。
 
 ####2）[Icicle](http://engineering.intenthq.com/2015/03/icicle-distributed-id-generation-with-redis-lua/)
 
 Icicle的ID结构图：
 
-![icicle ID](./火狐截图_2015-04-05T03-41-34.717Z.png)
+![icicle ID](/images/idgenerator/snowflake.png)
 
 Icicle的ID设计思路来源于SnowFlake，因此与SnowFlake的ID结构有很大的相似性。
 
@@ -66,13 +61,12 @@ Icicle的ID设计思路来源于SnowFlake，因此与SnowFlake的ID结构有很�
 第一位为符号保留位，不使用，文中给出的解释为
 > which we chose not to use because some platforms make it difficult to get at and it messes with ordering
 
-**Time**
-时间占41位。
-
-**Shard ID**
-由于Icicle是部署在redis上的，redis不支持分布式模式，因此shard id用来标记每一个redis实例，可支持1024个实例。
-
-**Sequence ID**，与SnowFlake类似。
+**Time:**</br>
+时间占41位。</br>
+**Shard ID:**</br>
+由于Icicle是部署在redis上的，redis不支持分布式模式，因此shard id用来标记每一个redis实例，可支持1024个实例。</br>
+**Sequence ID:**</br>
+SnowFlake类似。
 
 Icicle支持每一毫秒产生2^10 * 2^12个ID号。
 
@@ -87,10 +81,8 @@ Icicle支持每一毫秒产生2^10 * 2^12个ID号。
 剩下的10bit 留给 MachineID，也就是说当前 ID 生成可以直接内嵌在业务服务中，最多支持千级别的服务器数量。最后有2bit 做Tag 用，可能区分群消息和单聊消息。同时你也看出，这个 ID 最多支持一天10亿消息（原文如此，一天的消息量按照第一版算应该是86400 * 1000 * 2^10 * 2^10 ），也是怕系统增速太快，这2bit 可以挪给 Sequence，可以支持40亿级别消息量，或者结合前面的版本支持到百亿级别。
 
 *参考文献*：
-[1][icicle-distributed-id-generation-with-redis-lua](http://engineering.intenthq.com/2015/03/icicle-distributed-id-generation-with-redis-lua/)
 
-[2][Snowflake](https://github.com/twitter/snowflake)
-
-[3][http://www.dengchuanhua.com/132.html](http://www.dengchuanhua.com/132.html)
-
+[1][icicle-distributed-id-generation-with-redis-lua](http://engineering.intenthq.com/2015/03/icicle-distributed-id-generation-with-redis-lua/)</br>
+[2][Snowflake](https://github.com/twitter/snowflake)</br>
+[3][http://www.dengchuanhua.com/132.html](http://www.dengchuanhua.com/132.html)</br>
 [4][业务系统需要怎样的全局唯一ID](http://weibo.com/p/1001603800404851831206?from=page_100505_profile&wvr=6&mod=wenzhangmod)
