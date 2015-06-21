@@ -2,7 +2,7 @@
 layout:     post
 title: Raft
 category: blog
-description: xx
+description: raft协议采用Leader-based模式，为了简化理解，分为leader election，log replication，safty，membership 四个过程。
 ---
 
 ##Raft
@@ -38,7 +38,7 @@ follower表示议员，candidate表示总统候选人，leader表示总统。
 + 如果两个总统相遇，则term number小的总统将自己降为议员（follower）。
 
 server之间通过RPC通信，三种角色转换图：
-![Alt text](https://github.com/hongbing/hongbing.github.io/tree/master/_site/images/raftrole.png)
+![Alt text](https://github.com/hongbing/hongbing.github.io/images/raft/raftrole.png)
 
 
 为了raft算法的易于理解，raft将算法分为leader election，log replication，safty，membership change几个子问题。下面将一一介绍。
@@ -64,22 +64,24 @@ Leader发送给follower的AppendEntry只有得到大多数的回复后，leader�
 + 如果选举出的leader属于大多数接收到Entry中的一个，那么下一次的appendEntry到来的时候，会将前面未提交的entry一并发送给follower，得到大多数的ack回复后一并提交。
 
 + 如果选举出的leader属于少数没有接收到entry中的一个，这种情况不会出现，因为
-<font size="5" color="green">**选举限制规定：</font><font size="4" color="green">follower不能给比自己log旧的candidate投票</font>
+<font size="4" color="green">选举限制规定：</font><font size="4" color="green">follower不能给比自己log旧的candidate投票</font>
 
 	因此少数派的log会比大多数中的log旧，少数派无法在选举中成为leader。
 
 对于`情况2`
+
 + 如果选举出的leader属于大多数没有接收到Entry中的一个。由于前一个leader挂掉了，因此客户端知道此次命令执行失败，会选择重试或者放弃等策略（主要看客户端的处理逻辑）。现在的leader也不含这条命令，因此相当于这条命令在集群中执行失败，而集群的状态还是一致的。
 
 +  如果选举出的leader属于少数接收到entry中的一个，那么情形与`情况1`中的第一种结果一样。
 
 
 follower收到leader的heartbeat，则回复leader，“你是哥”。如果在follower的timout之后，仍然没有收到leader的heartbeat，follower认为leader已挂，“**国不可一日无君**”，因此推举自己为candidate，向所有server发送AppendVote RPC为自己拉票。此时存在这三种情况：
+
 1. 自身拉票成功，成为leader。
+
 2. 其他candidate成为leader，则降低自己身份为follower。
+
 3. 没有出现leader，则开启下一轮选举直到选出leader为止。
-
-
 
 
 ###3 **log replication**
@@ -110,28 +112,27 @@ Raft使用联合一致性阶段（joint consensus）来作为过渡阶段实现�
 
 
 集群中配置状态的转换：
-+ <font size="5"> C</font>old 已提交，<font size="5">C</font>old,new 未提交
-+ <font size="5">C</font>old,new 已提交，<font size="5">C</font>new 未提交
- 此时只有拥有 <font size="5">C</font>old,new 配置的server才会被选为leader。
 
- 如果此时，<font size="5">C</font>old,new 提交失败，那么重新发送<font size="5"> C</font>old，回滚配置。
++ <font size="4"> C</font>old 已提交，<font size="4">C</font>old,new 未提交
 
-+ <font size="5">C</font>new 已提交 
- 如果在这个阶段存在着Leader election，那么只有具有<font size="5">C</font>new 配置的server才能被选为Leader，Leader将<font size="5">C</font>new 配置复制到所有的follower，使得整个集群应用新的配置。
- 如果<font size="5">C</font>new 提交时，leader并不包括在新的配置中，那么leader将降为为follower，且不参与大多数的投票。
++ <font size="4">C</font>old,new 已提交，<font size="4">C</font>new 未提交
+ 此时只有拥有 <font size="4">C</font>old,new 配置的server才会被选为leader。
 
- 如果<font size="5">C</font>new  提交失败，则需要复制<font size="5"> C</font>old，回滚配置。如果在回滚配置之前发生了Leader Election，那么leader具有<font size="5">C</font>new，则将其复制到新集群。如果leader没有<font size="5">C</font>new，则会覆盖其他server中的新配置，回到joint consensus状态。
+ 如果此时，<font size="4">C</font>old,new 提交失败，那么重新发送<font size="4"> C</font>old，回滚配置。
+
++ <font size="4">C</font>new 已提交 
+ 如果在这个阶段存在着Leader election，那么只有具有<font size="4">C</font>new 配置的server才能被选为Leader，Leader将<font size="4">C</font>new 配置复制到所有的follower，使得整个集群应用新的配置。
  
- ![Alt text](https://github.com/hongbing/hongbing.github.io/tree/master/_site/images/raft_config_change.png)
+ 如果<font size="4">C</font>new 提交时，leader并不包括在新的配置中，那么leader将降为为follower，且不参与大多数的投票。
+
+ 如果<font size="4">C</font>new  提交失败，则需要复制<font size="4"> C</font>old，回滚配置。如果在回滚配置之前发生了Leader Election，那么leader具有<font size="4">C</font>new，则将其复制到新集群。如果leader没有<font size="4">C</font>new，则会覆盖其他server中的新配置，回到joint consensus状态。
+ 
+ ![Alt text](https://github.com/hongbing/hongbing.github.io/images/raft/raft_config_change.png)
  
 
 ###参考资料
-[1] http://raftconsensus.github.io/
-
-[2] http://ramcloud.stanford.edu/raft.pdf
-
-[3]  http://raftconsensus.github.io/
-
-[4] http://raftuserstudy.s3-website-us-west-1.amazonaws.com/raft.mp4
-
-[5] http://www.infoq.com/cn/articles/coreos-analyse-etcd/
+[1] [http://raftconsensus.github.io](http://raftconsensus.github.io/)
+[2] [http://ramcloud.stanford.edu/raft.pdf]http://ramcloud.stanford.edu/raft.pdf
+[3] [http://raftconsensus.github.io/]http://raftconsensus.github.io/
+[4] [http://raftuserstudy.s3-website-us-west-1.amazonaws.com/raft.mp4]http://raftuserstudy.s3-website-us-west-1.amazonaws.com/raft.mp4
+[5] [http://www.infoq.com/cn/articles/coreos-analyse-etcd/]http://www.infoq.com/cn/articles/coreos-analyse-etcd/
