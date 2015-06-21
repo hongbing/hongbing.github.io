@@ -23,7 +23,8 @@ description:  好的代码应该具有可读性，可测试性，简单，功能
 
 ### 其它特点
 避免过早优化，[Knuth, Donald](http://en.wikipedia.org/wiki/Donald_Knuth)在40年前就这样说到： 
-	> “We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil”
+
+> “We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil”
 
 然而提到要**高效代码**的比提到**避免过早优化**的人要多出一倍。
 
@@ -47,6 +48,6 @@ WTFs / minute
 ![代码好坏的测试标准](/images/goodcode/standofgoodcode.png)
 
 ### 写出好代码的方法
- 按照下面的流程即可写出好的代码，程序员必备.
+ 按照下面的流程即可写出好的代码，程序员必备，哈哈哈.
 
 ![GoodCode](/images/goodcode/good_code.png)
