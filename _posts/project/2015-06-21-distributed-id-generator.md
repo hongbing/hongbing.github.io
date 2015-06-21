@@ -10,6 +10,7 @@ description: ID最大的特点就是唯一，一个ID存在的目的就是唯一
 ID最大的特点就是**唯一**，一个ID存在的目的就是唯一性的标识某一个物体，如果唯一性做不到，那么ID也就失去了本质的作用。
 
 另外ID还需要保持其它特性：
+
 + **有序**   对于某些事物需要依靠ID来进行比较，同时对于排序查找也方便。
 
 + **有意义**  ID也需要包含有意义的信息，比如时间信息,业务信息。
@@ -19,9 +20,9 @@ ID最大的特点就是**唯一**，一个ID存在的目的就是唯一性的标
 + **紧凑** 为了性能或者长度的原因，要求ID要保持紧凑。越长的ID可能表达的数字范围越大，但是在存储和网络中要占据更多的空间。因此，设计ID的时候往往是保证在未来的一段时间可用的前提下（查看[2038](https://en.wikipedia.org/wiki/Year_2038_problem)问题），尽可能的缩短ID的长度。`总之，掌握好长度与时间范围之间的trade-off`。
 
 另外，参考原新浪weibo通讯技术专家 宇鹏的[业务系统需要怎样的全局唯一ID](http://weibo.com/p/1001603800404851831206?from=page_100505_profile&wvr=6&mod=wenzhangmod)博文,文中还提到了另外两个特点：
+
 + **可反解**
 反解ID可以为排错提供良好的线索，ID从什么时候生成，在哪个机房生成的，等等情况都可一了解到。
-
 + **可制造**
 可制造针对的是当业务系统失败了，后续需要恢复数据重新进入业务系统，依赖于时间的数据需要在将来的时间段产生过去的时间数据。
 
@@ -35,6 +36,7 @@ ID最大的特点就是**唯一**，一个ID存在的目的就是唯一性的标
 
 
 ###3. 竞品分析
+
 ####1）[SnowFlake](http://engineering.twitter.com/2010/06/announcing-snowflake.html)
 SnowFlake是为了解决Twitter在分布式环境下的全局ID的问题。
 生成的ID需要满足两个要求：
@@ -86,6 +88,9 @@ Icicle支持每一毫秒产生2^10 * 2^12个ID号。
 
 *参考文献*：
 [1][icicle-distributed-id-generation-with-redis-lua](http://engineering.intenthq.com/2015/03/icicle-distributed-id-generation-with-redis-lua/)
+
 [2][Snowflake](https://github.com/twitter/snowflake)
+
 [3][http://www.dengchuanhua.com/132.html](http://www.dengchuanhua.com/132.html)
+
 [4][业务系统需要怎样的全局唯一ID](http://weibo.com/p/1001603800404851831206?from=page_100505_profile&wvr=6&mod=wenzhangmod)
