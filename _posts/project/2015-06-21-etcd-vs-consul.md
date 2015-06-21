@@ -7,6 +7,7 @@ description: etcd和consul均采用raft协议来保证server之间的数据一�
 
 ### 异同
 -----------------------------
+
 #### 1. 协议
 + Etcd和consul均采用raft协议来保证server之间的数据一致性，但是consul还采用了gossip协议管理成员和传播消息。
 
