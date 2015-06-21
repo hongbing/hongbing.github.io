@@ -84,7 +84,10 @@ Icicle支持每一毫秒产生2^10 * 2^12个ID号。
 
 *参考文献*：
 
-[1][icicle-distributed-id-generation-with-redis-lua](http://engineering.intenthq.com/2015/03/icicle-distributed-id-generation-with-redis-lua/)</br>
-[2][Snowflake](https://github.com/twitter/snowflake)</br>
-[3][http://www.dengchuanhua.com/132.html](http://www.dengchuanhua.com/132.html)</br>
+[1][icicle-distributed-id-generation-with-redis-lua](http://engineering.intenthq.com/2015/03/icicle-distributed-id-generation-with-redis-lua/)
+
+[2][Snowflake](https://github.com/twitter/snowflake)
+
+[3][http://www.dengchuanhua.com/132.html](http://www.dengchuanhua.com/132.html)
+
 [4][业务系统需要怎样的全局唯一ID](http://weibo.com/p/1001603800404851831206?from=page_100505_profile&wvr=6&mod=wenzhangmod)
