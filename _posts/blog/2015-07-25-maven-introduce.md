@@ -207,30 +207,29 @@ site-deploy     将生成的站点文档部署到特定的服务器上
 
 + 使用脚本显示循环依赖包
 
-```
-#!/bin/bash
-### find cycle in maven depnedency tree
+        #!/bin/bash
+        ### find cycle in maven depnedency tree
+        
+        if [ $# -gt 0 ];then
+            sourcepath=$1
+        else
+            sourcepath=`pwd`
+        fi
+        if [ ! -f "$sourcepath/pom.xml" ]; then
+            echo "$sourcepath is not a vaild maven project!"
+            echo 'Usage : ./findcycle [path]'
+            exit 1;
+        fi
+        mvn=`which mvn`
+        if [ "$mvn" = "" ];then
+            echo "counld not found mvn in PATH,exit!"
+            exit 1;
+        fi
+        
+        cd $sourcepath
+        echo "scan cycle dependency in $sourcepath ..."
+        mvn dependency:tree -Dverbose | awk -F'- ' '{if(index($2,"maven-dependency-plugin")>0){indent=0;}else{indent=length($1);}stack[indent]=$2;if(index($0,"for cycle")>0){print "****found cycle****";for(i=0;i<=indent;i++){if(stack[i]!=null){print "->"stack[i]}}}}'
+        echo "scan finished!"
 
-if [ $# -gt 0 ];then
-    sourcepath=$1
-else
-    sourcepath=`pwd`
-fi
-if [ ! -f "$sourcepath/pom.xml" ]; then
-    echo "$sourcepath is not a vaild maven project!"
-    echo 'Usage : ./findcycle [path]'
-    exit 1;
-fi
-mvn=`which mvn`
-if [ "$mvn" = "" ];then
-    echo "counld not found mvn in PATH,exit!"
-    exit 1;
-fi
-
-cd $sourcepath
-echo "scan cycle dependency in $sourcepath ..."
-mvn dependency:tree -Dverbose | awk -F'- ' '{if(index($2,"maven-dependency-plugin")>0){indent=0;}else{indent=length($1);}stack[indent]=$2;if(index($0,"for cycle")>0){print "****found cycle****";for(i=0;i<=indent;i++){if(stack[i]!=null){print "->"stack[i]}}}}'
-echo "scan finished!"
-```
 
 使用上面的脚本（将其放置于工程目录下，或者指定工程路径）检测是否存在循环依赖，如果存在，会输出循环依赖的链。（此脚本取自于@秦迪 Axb的自我修养）
