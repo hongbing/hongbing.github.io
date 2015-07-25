@@ -83,15 +83,7 @@ pre ol{margin-left:25px;list-style-type:decimal;}
     background-size:cover;
     background-position:50% 50%;
 }
-.blog .aside{
-    background-image:url(/images/githubpages/4.png);
-}
-.opinion .aside{
-    background-image:url(/images/githubpages/5.png);
-}
-.project .aside{
-    background-image:url(/images/githubpages/7.png)
-}
+
 .index-content .section { margin-left:30%; padding-top:80px; padding-right:15%; ;}
 
 .index-content .artical-list { width:70%; margin:0 auto; }
@@ -165,9 +157,6 @@ h3.about {color:#777;margin-top:20px;font-size:22px;margin-bottom:10px}
     .index-content .cate-bar { width:85%; }
     .index-content .artical-cate { margin-top:50px; }
 
-    .blog .aside,
-    .project .aside,
-    .opinion .aside {display:none;background-image:none;}
 }
 
 @media (max-width: 1020px){
