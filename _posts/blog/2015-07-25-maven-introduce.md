@@ -160,5 +160,77 @@ site-deploy     将生成的站点文档部署到特定的服务器上
 
 支持web-app发布到jetty的插件：jetty-maven-plugin
 
+#### 3. maven查找包依赖
 
+##### 3.1 传递依赖的版本冲突
 
++ 使用maven project report插件来显示所有的项目依赖关系
+
+在项目pom.xml的<project></project>里添加 maven插件maven-project-info-reports-plugin：
+
+    <reporting>
+      <plugins>
+       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>
+         maven-project-info-reports-plugin
+        </artifactId>
+         <version>2.4</version>
+       </plugin>
+     </plugins>
+     </reporting>
+
+使用这个插件，然后执行：
+
+`mvn  project-info-reports:dependencies`
+
+就可以在target/site/dependencies.html里查看依赖报表，通过这个报表就能够找到冲突的版本，然后再使用exclusions来排除相关的包。
+
+    <dependency>
+        <groupId>com.x.y</groupId>
+        <artifactId>xyz</artifactId>
+        <version>1.1.1</version>
+        <exclusions>
+                <exclusion>
+                        <groupId>com.u.v</groupId>
+                        <artifactId>uvw</artifactId>
+                        <version>0.9.1</version>
+                </exclusion>
+        </exclusions>
+    </dependency>
+    
+另外使用命令
+
+`mvn dependency:analyze`
+
+可以分析出显示声明但没有依赖的包，可以将其去除。
+
++ 使用脚本显示循环依赖包
+
+```
+#!/bin/bash
+### find cycle in maven depnedency tree
+
+if [ $# -gt 0 ];then
+    sourcepath=$1
+else
+    sourcepath=`pwd`
+fi
+if [ ! -f "$sourcepath/pom.xml" ]; then
+    echo "$sourcepath is not a vaild maven project!"
+    echo 'Usage : ./findcycle [path]'
+    exit 1;
+fi
+mvn=`which mvn`
+if [ "$mvn" = "" ];then
+    echo "counld not found mvn in PATH,exit!"
+    exit 1;
+fi
+
+cd $sourcepath
+echo "scan cycle dependency in $sourcepath ..."
+mvn dependency:tree -Dverbose | awk -F'- ' '{if(index($2,"maven-dependency-plugin")>0){indent=0;}else{indent=length($1);}stack[indent]=$2;if(index($0,"for cycle")>0){print "****found cycle****";for(i=0;i<=indent;i++){if(stack[i]!=null){print "->"stack[i]}}}}'
+echo "scan finished!"
+```
+
+使用上面的脚本（将其放置于工程目录下，或者指定工程路径）检测是否存在循环依赖，如果存在，会输出循环依赖的链。（此脚本取自于@秦迪 Axb的自我修养）
