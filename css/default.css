@@ -59,22 +59,23 @@ background: -webkit-linear-gradient(top, #373737, #212121);
 background: -ms-linear-gradient(top, #373737, #212121);
 background: -o-linear-gradient(top, #373737, #212121);
 background: linear-gradient(top, #373737, #212121);
+height:175px;
 }
 
 #header_wrap .inner {
-padding: 50px 10px 30px 10px;
+padding: 40px 10px 30px 10px;
 }
 
 #project_title {
 margin: 0;
-color: #fff;
-font-size: 42px;
+color: #F8F8F8;
+font-size: 40px;
 font-weight: 700;
 text-shadow: #111 0px 0px 10px;
 }
 #project_tagline {
-color: #fff;
-font-size: 24px;
+color: #C8C8C8;
+font-size: 20px;
 font-weight: 300;
 background: none;
 text-shadow: #111 0px 0px 10px;
@@ -86,7 +87,7 @@ background: #212121;
 }
 
 /************layout style*****************/
-#content {width:1060px;margin:90px auto 60px;min-height:400px;height:auto !important;height:400px; }
+#content {width:1060px;margin:40px auto 60px;min-height:400px;height:auto !important;height:400px; }
 
 
 /****************entry style**************/
@@ -120,11 +121,11 @@ background: #212121;
 
 .index-content .section { margin-left:30%; padding-top:80px; padding-right:15%; ;}
 
-.index-content .artical-list { width:70%; margin:0 auto; }
-.index-content .artical-list li { margin-bottom:70px; }
+.index-content .artical-list { width:80%; margin:0 auto; }
+.index-content .artical-list li { margin-bottom:30px; }
 .index-content h2 { font-size:20px; margin-bottom:15px; word-break: break-all;}
-.index-content h2 a { color:#444 }
-.index-content h2 a:hover { color:#E50053; text-decoration:none; }
+.index-content h2 a { color:#0EA9E6 ; font-size:22px;}
+.index-content h2 a:hover { color:#5095F0; text-decoration:none; }
 .index-content .title-desc {color:#999;font-size:14px;line-height:1.6em;}
 
 .index-content .artical-cate { width:70%; margin:0 auto; }
