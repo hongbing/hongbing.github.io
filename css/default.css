@@ -1,6 +1,7 @@
 /**
  * Author:           BeiYuu
  * Contact:          beiyuu.com
+ * update: 	     hongbing
  */
 
 /* 重置浏览器CSS */
@@ -73,6 +74,11 @@ font-size: 40px;
 font-weight: 700;
 text-shadow: #111 0px 0px 10px;
 }
+
+#project_title a:hover {
+text-decoration:none;
+}
+
 #project_tagline {
 color: #C8C8C8;
 font-size: 20px;
@@ -84,8 +90,12 @@ text-shadow: #111 0px 0px 10px;
 /************foot style*******************/
 #footer_wrap {
 background: #212121;
+height:30px;
 }
 
+.outer {
+width:100%;
+}
 /************layout style*****************/
 #content {width:1060px;margin:40px auto 60px;min-height:400px;height:auto !important;height:400px; }
 
@@ -119,7 +129,7 @@ background: #212121;
     background-position:50% 50%;
 }
 
-.index-content .section { margin-left:30%; padding-top:45px; padding-right:15%; ;}
+.index-content .section { margin-left:30%; padding-top:38px; padding-right:15%;margin-bottom:100px;}
 
 .index-content .artical-list { width:80%; margin:0 auto; }
 .index-content .artical-list li { margin-bottom:30px; }
