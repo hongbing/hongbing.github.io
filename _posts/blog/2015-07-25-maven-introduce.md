@@ -79,67 +79,67 @@ maven的3种独立的生命周期
 
 + **clean**
  
-        pre-clean 准备清理工作
-     
-	clean 清理     
-     
-	post-clean 清理后需要做的工作
+pre-clean 准备清理工作
+
+clean 清理     
+
+post-clean 清理后需要做的工作
 
 + **compile**
 
-	validate
-	 
-   	generate-sources
-	
- 	process-sources
-	
-	generate-resources
-	
-	process-resources     复制并处理资源文件，至目标目录，准备打包。
-	
-	compile     编译项目的源代码。
-	
-	process-classes
-	
-	generate-test-sources 
-	
-	process-test-sources
-	
-	generate-test-resources
-        
-	process-test-resources     复制并处理资源文件，至目标测试目录。
-	
-	test-compile     编译测试源代码。
-	
-	process-test-classes
-	
-	test     使用合适的单元测试框架运行测试。这些测试代码不会被打包或部署。
-        
-	prepare-package
-	
-	package     接受编译好的代码，打包成可发布的格式，如 JAR 。
-        
-	pre-integration-test
-	
-	integration-test
-	
-	post-integration-test
-	
-	verify
-	
-	install     将包安装至本地仓库，以让其它项目依赖。
-	
-        deploy     将最终的包复制到远程的仓库，以让其它开发人员与项目共享。
+validate
+ 
+ generate-sources
+
+ process-sources
+
+generate-resources
+
+process-resources     复制并处理资源文件，至目标目录，准备打包。
+
+compile     编译项目的源代码。
+
+process-classes
+
+generate-test-sources 
+
+process-test-sources
+
+generate-test-resources
+
+process-test-resources     复制并处理资源文件，至目标测试目录。
+
+test-compile     编译测试源代码。
+
+process-test-classes
+
+test     使用合适的单元测试框架运行测试。这些测试代码不会被打包或部署。
+
+prepare-package
+
+package     接受编译好的代码，打包成可发布的格式，如 JAR 。
+
+pre-integration-test
+
+integration-test
+
+post-integration-test
+
+verify
+
+install     将包安装至本地仓库，以让其它项目依赖。
+
+deploy     将最终的包复制到远程的仓库，以让其它开发人员与项目共享。
 
 + **site**
 
-	pre-site     执行一些需要在生成站点文档之前完成的工作
-	
-	site    生成项目的站点文档
-	
-	post-site     执行一些需要在生成站点文档之后完成的工作，并且为部署做准备
-	
-	site-deploy     将生成的站点文档部署到特定的服务器上
+pre-site     执行一些需要在生成站点文档之前完成的工作
+
+site    生成项目的站点文档
+
+post-site     执行一些需要在生成站点文档之后完成的工作，并且为部署做准备
+
+site-deploy     将生成的站点文档部署到特定的服务器上
 
 **clean**、**compile**和**site**这三个生命周期是不相关的。执行每一个生命周期，其前面的所有阶段都会被执行。生命周期中的每一个操作都是以插件机制完成的。
 
