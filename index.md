@@ -5,7 +5,6 @@ layout: home
 
 <div class="index-content blog">
     <div class="section">
-        <div class="cate-bar"><span id="cateBar"></span></div>
 
         <ul class="artical-list">
         {% for post in site.categories.blog %}
