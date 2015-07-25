@@ -12,6 +12,7 @@ category: blog
 版本号记录一个项目的某个阶段的某些功能的实现，实现项目不同功能的隔离与区分。
 
 版本号格式一般分为：
+
 >主版本号.分支版本号.小版本号-里程碑版本号
 
 **主版本号**：一般指框架具有重大变化的版本号，比如struts1，struts2框架的变化
@@ -75,19 +76,22 @@ maven远程服务器管理的仓库，地址是[maven中心仓库](http://repo1.
 #### 4. maven的生命周期
 
 maven的3种独立的生命周期
+
 + **clean**
-     pre-clean 准备清理工作
+ 
+        pre-clean 准备清理工作
      
 	clean 清理     
      
 	post-clean 清理后需要做的工作
 
 + **compile**
+
 	 validate
 	 
-	generate-sources
+   	 generate-sources
 	
- 	process-sources
+ 	 process-sources
 	
 	 generate-resources
 	
@@ -128,6 +132,7 @@ maven的3种独立的生命周期
 	 deploy     将最终的包复制到远程的仓库，以让其它开发人员与项目共享。
 
 + **site**
+
 	pre-site     执行一些需要在生成站点文档之前完成的工作
 	
 	site    生成项目的站点文档
