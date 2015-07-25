@@ -87,49 +87,49 @@ maven的3种独立的生命周期
 
 + **compile**
 
-	 validate
+	validate
 	 
-   	 generate-sources
+   	generate-sources
 	
- 	 process-sources
+ 	process-sources
 	
-	 generate-resources
+	generate-resources
 	
-	 process-resources     复制并处理资源文件，至目标目录，准备打包。
+	process-resources     复制并处理资源文件，至目标目录，准备打包。
 	
-	 compile     编译项目的源代码。
+	compile     编译项目的源代码。
 	
-	 process-classes
+	process-classes
 	
-	 generate-test-sources 
+	generate-test-sources 
 	
-	 process-test-sources
+	process-test-sources
 	
-	 generate-test-resources
+	generate-test-resources
         
-	 process-test-resources     复制并处理资源文件，至目标测试目录。
+	process-test-resources     复制并处理资源文件，至目标测试目录。
 	
-	 test-compile     编译测试源代码。
+	test-compile     编译测试源代码。
 	
-	 process-test-classes
+	process-test-classes
 	
-	 test     使用合适的单元测试框架运行测试。这些测试代码不会被打包或部署。
+	test     使用合适的单元测试框架运行测试。这些测试代码不会被打包或部署。
         
-	 prepare-package
+	prepare-package
 	
-	 package     接受编译好的代码，打包成可发布的格式，如 JAR 。
+	package     接受编译好的代码，打包成可发布的格式，如 JAR 。
         
-	 pre-integration-test
+	pre-integration-test
 	
-	 integration-test
+	integration-test
 	
-	 post-integration-test
+	post-integration-test
 	
-	 verify
+	verify
 	
-	 install     将包安装至本地仓库，以让其它项目依赖。
+	install     将包安装至本地仓库，以让其它项目依赖。
 	
-	 deploy     将最终的包复制到远程的仓库，以让其它开发人员与项目共享。
+        deploy     将最终的包复制到远程的仓库，以让其它开发人员与项目共享。
 
 + **site**
 
