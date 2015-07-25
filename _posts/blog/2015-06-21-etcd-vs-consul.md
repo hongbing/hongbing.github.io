@@ -1,7 +1,7 @@
 ---
 layout:     post
 title: ETCD vs. Consul
-category: project
+category: blog 
 description: etcd和consul均采用raft协议来保证server之间的数据一致性，但是consul还采用了gossip协议管理成员和传播消息。
 ---
 

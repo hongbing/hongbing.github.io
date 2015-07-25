@@ -1,7 +1,7 @@
 ---
 layout:     post
 title: 分布式ID生成器
-category: project
+category: blog 
 description: ID最大的特点就是唯一，一个ID存在的目的就是唯一性的标识某一个物体，如果唯一性做不到，那么ID也就失去了本质的作用。
 ---
 
