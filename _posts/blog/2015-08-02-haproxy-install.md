@@ -2,7 +2,7 @@
 layout:     post
 title: haproxy部署
 category: blog
-description: 
+description: haproxy部署，记录之。
 ---
 
 ##### 安装
@@ -10,10 +10,13 @@ description:
 + 下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），**Fuck GFW**。
 
  可以通过直接访问http://www.haproxy.org/download/1.5/src/地址，选择相应的版本下载。或者使用
+ 
  `# wget http://www.haproxy.org/download/1.5/src/haproxy-1.5.12.tar.gz`下载，下载完成后，将其解压。
+ 
 + `# cd haproxy-X.Y.Z`
 + `# uname -a`
 + `# make TARGET=linux26 PREFIX=/usr/local/haproxy install`
+
 linux26,26表示linux系统的主次版本号。
 执行上面的命令，输出done就正确安装完成。
 
@@ -24,6 +27,7 @@ linux26,26表示linux系统的主次版本号。
 + `# cd /usr/local/haproxy`
 + `# mkdir conf logs`
 + `# vim /conf/haproxy.cfg`
+
 ```
  global  //全局配置参数，进程级
      log 127.0.0.1 local0//日志输出配置，所有日志都记录在本机，通过local0输出
@@ -62,26 +66,37 @@ global是进程级别的参数；
 代理参数可以设置defaults，listen，frontend和backend。listen是frontend和backend的组合，可以设置frontend的端口，backend的server节点，以及一些其他参数。
 
 + 配置日志环境
+
 `# vim /etc/syslog.conf `
+
 添加
+
 ```
 local0.*        /usr/local/logs/haproxy.log 
 local3.*        /usr/local/logs/haproxy_err.log 
 ```
 `# vim /etc/sysconfig/syslog`
+
 设置系统接收外来日志，修改
+
 ```
  SYSLOGD_OPTIONS="-r -m 0"
 ```
 
 + 启动
+
 `# ./sbin/haproxy -f ./conf/haproxy.cfg`
+
 + 重启
- `# ./sbin/haproxy -f ./conf/haproxy.cfg -st [haproxy.pid]`
+
+`# ./sbin/haproxy -f ./conf/haproxy.cfg -st [haproxy.pid]`
+
 + 停止
+
 `# killall haproxy`
 
 执行
+
  `# ./sbin/haproxy -f ./conf/haproxy.cfg -sf [haproxy.pid]` 
  
  可以在修改haproxy.cfg后，快速重载变更配置。
