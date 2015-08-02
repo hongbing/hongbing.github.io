@@ -26,7 +26,7 @@ linux26,26表示linux系统的主次版本号。
 + `# mkdir conf logs`
 + `# vim /conf/haproxy.cfg`
 
-	 global  //全局配置参数，进程级
+>	 global  //全局配置参数，进程级
 	     log 127.0.0.1 local0//日志输出配置，所有日志都记录在本机，通过local0输出
 	     maxconn  5120  //每个进程的最大连接数 
 	     chroot   /usr/local/haproxy  //改变当前工作目录
@@ -56,7 +56,6 @@ linux26,26表示linux系统的主次版本号。
 		 server web1 192.168.1.128:8080 check inter 5000 fall 1 rise 2
 	//check inter 5000 是检测心跳频率，rise 2 是2次正确认为服务可用，fall 1 是1次失败认为服务不可用，weight代表权重
 
-
 global是进程级别的参数；
 代理参数可以设置defaults，listen，frontend和backend。listen是frontend和backend的组合，可以设置frontend的端口，backend的server节点，以及一些其他参数。
 
@@ -76,10 +75,8 @@ global是进程级别的参数；
 
 + 启动
 `# ./sbin/haproxy -f ./conf/haproxy.cfg`
-
 + 重启
 `# ./sbin/haproxy -f ./conf/haproxy.cfg -st [haproxy.pid]`
-
 + 停止
 `# killall haproxy`
 
