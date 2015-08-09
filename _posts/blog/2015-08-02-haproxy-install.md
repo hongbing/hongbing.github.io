@@ -67,6 +67,7 @@ global是进程级别的参数；
 
 >	local0.*        /usr/local/logs/haproxy.log 
 >	local3.*        /usr/local/logs/haproxy_err.log 
+
 `# vim /etc/sysconfig/syslog`
 
 设置系统接收外来日志，修改
