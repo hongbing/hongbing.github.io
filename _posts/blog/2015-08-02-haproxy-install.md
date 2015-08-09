@@ -9,8 +9,8 @@ description: haproxy部署，记录之。
 
 + 下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），**Fuck GFW**。
  可以通过直接访问http://www.haproxy.org/download/1.5/src/地址，选择相应的版本下载。或者使用
-  `# wget http://www.haproxy.org/download/1.5/src/haproxy-1.5.12.tar.gz`下载，下载完成后，将其解压。
- 
+  `# wget http://www.haproxy.org/download/1.5/src/haproxy-1.5.12.tar.gz`
+下载，下载完成后，将其解压。
 + `# cd haproxy-X.Y.Z`
 + `# uname -a`
 + `# make TARGET=linux26 PREFIX=/usr/local/haproxy install`
@@ -62,15 +62,13 @@ global是进程级别的参数；
 + 配置日志环境
 
 `# vim /etc/syslog.conf `
-
 添加
-	local0.*        /usr/local/logs/haproxy.log 
-	local3.*        /usr/local/logs/haproxy_err.log 
+>	local0.*        /usr/local/logs/haproxy.log 
+>	local3.*        /usr/local/logs/haproxy_err.log 
 
 `# vim /etc/sysconfig/syslog`
 
 设置系统接收外来日志，修改
-
  `SYSLOGD_OPTIONS="-r -m 0"`
 
 + 启动
