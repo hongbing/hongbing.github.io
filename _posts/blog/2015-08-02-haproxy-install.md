@@ -62,10 +62,10 @@ global是进程级别的参数；
 + 配置日志环境
 
 `# vim /etc/syslog.conf `
+
 添加
 >	local0.*        /usr/local/logs/haproxy.log 
 >	local3.*        /usr/local/logs/haproxy_err.log 
-
 `# vim /etc/sysconfig/syslog`
 
 设置系统接收外来日志，修改
@@ -80,5 +80,4 @@ global是进程级别的参数；
 
 执行
  `# ./sbin/haproxy -f ./conf/haproxy.cfg -sf [haproxy.pid]` 
- 
- 可以在修改haproxy.cfg后，快速重载变更配置。
+  可以在修改haproxy.cfg后，快速重载变更配置。
