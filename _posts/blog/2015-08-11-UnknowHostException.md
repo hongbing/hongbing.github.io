@@ -6,28 +6,29 @@ category: blog
 ---
 
 + **问题**
+
   团队中使用Docker测试环境，在新起的测试环境中启动内部项目trigger，项目启动失败，抛出如下异常：
 
->  UnknowHostException：
-java.net.UnknownHostException: e7a05a2abfc5: e7a05a2abfc5: 未知的名称或服务
+
+	UnknowHostException：
+	java.net.UnknownHostException: e7a05a2abfc5: e7a05a2abfc5: 未知的名称或服务
 
 
 + **分析**
+
 根据异常信息栈发现抛出异常的语句是：
 
 `InetAddress localHost = InetAddress.getLocalHost();`
  
 跟踪源代码，发现`InetAddress.getLocalHost()`会调用**Inet6AddressImpl**或者**Inet4AddressImpl**的native方法：
-
 ```
 public native String getLocalHostName() throws UnknownHostException;
 ```
 该native方法直接执行linux的系统调用gethostname。系统调用gethostname与在终端执行`$ hostname`或者`$ cat /etc/hostname`的结果一致。
 
 获得hostname后，比较该hostname的值，如果为localhost，则执行`impl.loopbackAddress();`获得localhost对应的ip地址。
-
 ```
-if (local.equals("localhost")) {
+	if (local.equals("localhost")) {
                 return impl.loopbackAddress();
             }
 ```
@@ -43,7 +44,6 @@ if (local.equals("localhost")) {
                     else
                         cachedLocalHost = null;
                 }
-
                 // we are calling getAddressesFromNameService directly
                 // to avoid getting localHost from cache
                 if (ret == null) {
