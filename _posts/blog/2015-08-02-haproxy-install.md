@@ -2,7 +2,7 @@
 layout:     post
 title: haproxy部署
 category: blog
-description: haproxy部署，记录之。
+description: 记录haproxy的部署过程。
 ---
 
 ##### 安装
@@ -27,9 +27,9 @@ linux26,26表示linux系统的主次版本号。
 + `# vim /conf/haproxy.cfg`
 
 >	 global  //全局配置参数，进程级
-	     log 127.0.0.1 local0//日志输出配置，所有日志都记录在本机，通过local0输出
-	     maxconn  5120  //每个进程的最大连接数 
-	     chroot   /usr/local/haproxy  //改变当前工作目录
+	     	log 127.0.0.1 local0//日志输出配置，所有日志都记录在本机，通过local0输出
+	     	maxconn  5120  //每个进程的最大连接数 
+	     	chroot   /usr/local/haproxy  //改变当前工作目录
 	     uid      100  //所属用户的uid
 	     gid      100  //所属用户的gid
 	     daemon  //以后台形式运行haproxy   
@@ -67,6 +67,7 @@ global是进程级别的参数；
 
 >	local0.*        /usr/local/logs/haproxy.log 
 >	local3.*        /usr/local/logs/haproxy_err.log 
+
 
 `# vim /etc/sysconfig/syslog`
 

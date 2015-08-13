@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>haproxy部署 | </title>
+    <meta name="author" content="hongbing" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="hongbing的部落格" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="shortcut icon" href="/jinchuan.png" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="header_wrap" class="outer">
+	<header class="inner">
+		<h1 id="project_title" align="center"><a href="/">hongbingの部落格</a></h1>
+		<h2 id="project_tagline" align="center">ONCE A GEEK, FOREVER A GEEK.</h2>
+	</header>
+    </div>
+    
+	<link rel="stylesheet" href="/js/prettify/prettify.css" />
+<style type="text/css">
+    body { background:#e8e8e8; }
+    @media screen and (max-width: 750px){
+        body { background:#fff; }
+    }
+    @media screen and (max-width: 1020px){
+        body { background:#fff; }
+    }
+</style>
+
+<div id="content">
+    <div class="entry">
+        <h1 class="entry-title"><a href="/blog/2015/08/02/haproxy-install.html" title="haproxy部署">haproxy部署</a></h1>
+        <p class="entry-date">2015-08-02</p>
+        <h5 id="section">安装</h5>
+
+<ul>
+  <li>下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），<strong>Fuck GFW</strong>。
+ 可以通过直接访问http://www.haproxy.org/download/1.5/src/地址，选择相应的版本下载。或者使用
+<code># wget http://www.haproxy.org/download/1.5/src/haproxy-1.5.12.tar.gz</code>
+下载，下载完成后，将其解压。</li>
+  <li><code># cd haproxy-X.Y.Z</code></li>
+  <li><code># uname -a</code></li>
+  <li><code># make TARGET=linux26 PREFIX=/usr/local/haproxy install</code></li>
+</ul>
+
+<p>linux26,26表示linux系统的主次版本号。
+执行上面的命令，输出done就正确安装完成。</p>
+
+<h5 id="section-1">配置文件</h5>
+
+<p>配置文件可以参考源码里面examples下面的haproxy.cfg文件，haproxy里的配置参数可以在<a href="http://cbonte.github.io/haproxy-dconv/index.html">haproxy-dconv</a>查看相关参数的含义。</p>
+
+<ul>
+  <li><code># cd /usr/local/haproxy</code></li>
+  <li><code># mkdir conf logs</code></li>
+  <li><code># vim /conf/haproxy.cfg</code></li>
+</ul>
+
+<blockquote>
+  <pre><code> global  //全局配置参数，进程级
+     	log 127.0.0.1 local0//日志输出配置，所有日志都记录在本机，通过local0输出
+     	maxconn  5120  //每个进程的最大连接数 
+     	chroot   /usr/local/haproxy  //改变当前工作目录
+     uid      100  //所属用户的uid
+     gid      100  //所属用户的gid
+     daemon  //以后台形式运行haproxy   
+     nbproc   2  //创建2个进程进去deamon模式
+     pidfile  /usr/local/haproxy/logs/haproxy.pid  //pid文件
+ defaults  
+     log     127.0.0.1  local3  err
+     mode    http  //http七层,tcp4层,health只返回OK
+     option  httplog  //采用httpd日志格式
+     option  dontlognull  
+     option  redispatch  
+     retries 3  //三次失败认为服务不可用
+     maxconn 3000  //默认的最大连接数
+     contimeout 5000  //连接超时时间
+     clitimeout 50000  //客户端超时时间
+     srvtimeout 50000  //服务器超时时间
+     stats enable  
+     stats uri /admin  //统计页面的url
+     stats auth admin:admin  //统计页面的用户名密码
+     stats realm Haproxy \ statistic  //统计页面提示信息
+     stats hide-version//隐藏统计页面版本信息
+ listen web_proxy *:80
+	 server web1 192.168.1.128:80 check inter 5000 fall 1 rise 2  
+	 server web1 192.168.1.128:8080 check inter 5000 fall 1 rise 2
+//check inter 5000 是检测心跳频率，rise 2 是2次正确认为服务可用，fall 1 是1次失败认为服务不可用，weight代表权重
+</code></pre>
+</blockquote>
+
+<p>global是进程级别的参数；
+代理参数可以设置defaults，listen，frontend和backend。listen是frontend和backend的组合，可以设置frontend的端口，backend的server节点，以及一些其他参数。</p>
+
+<ul>
+  <li>配置日志环境</li>
+</ul>
+
+<p><code># vim /etc/syslog.conf </code></p>
+
+<p>添加</p>
+
+<blockquote>
+  <pre><code>local0.*        /usr/local/logs/haproxy.log 
+local3.*        /usr/local/logs/haproxy_err.log 
+</code></pre>
+</blockquote>
+
+<p><code># vim /etc/sysconfig/syslog</code></p>
+
+<p>设置系统接收外来日志，修改
+ <code>SYSLOGD_OPTIONS="-r -m 0"</code></p>
+
+<ul>
+  <li>启动
+<code># ./sbin/haproxy -f ./conf/haproxy.cfg</code></li>
+  <li>重启
+<code># ./sbin/haproxy -f ./conf/haproxy.cfg -st [haproxy.pid]</code></li>
+  <li>停止
+<code># killall haproxy</code></li>
+</ul>
+
+<p>执行
+ <code># ./sbin/haproxy -f ./conf/haproxy.cfg -sf [haproxy.pid]</code> 
+可以在修改haproxy.cfg后，快速重载变更配置。</p>
+
+    </div>
+
+    <div class="sidenav">
+	<iframe width="100%" height="85" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=85&fansRow=2&ptype=1&speed=0&skin=1&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=2702608131&verifier=f3af5509&dpc=1"></iframe>	
+    </div>
+	
+    <div class="sidenav">
+        <!--<h2>Blog</h2>-->
+        <ul class="artical-list">
+        
+            <li><a href="/blog/2015/08/02/haproxy-install.html">haproxy部署</a></li>
+        
+            <li><a href="/blog/2015/07/25/maven-introduce.html">maven实践</a></li>
+        
+            <li><a href="/blog/2015/06/21/etcd-vs-consul.html">ETCD vs. Consul</a></li>
+        
+            <li><a href="/blog/2015/06/21/distributed-id-generator.html">分布式ID生成器</a></li>
+        
+            <li><a href="/blog/2015/06/17/what-is-good-code.html">什么样的代码才是好的代码</a></li>
+        
+            <li><a href="/blog/2015/06/17/raft-introduce.html">Raft</a></li>
+        
+        </ul>
+<!--
+        <h2>Opinion</h2>
+        <ul class="artical-list">
+        
+        </ul>
+
+        <h2>Project</h2>
+        <ul class="artical-list">
+        
+        </ul>-->
+    </div>
+</div>
+
+<script src="/js/post.js" type="text/javascript"></script>
+
+
+<!--    <div id="footer_wrap" class="outer">
+    	<footer class="inner">
+    	</footer>
+    </div>
+-->
+
+</body>
+</html>
