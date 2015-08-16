@@ -8,6 +8,7 @@
     <meta name="description" content="hongbing的部落格" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
     <link rel="shortcut icon" href="/jinchuan.png" type="image/x-icon" />
     <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="" />
     <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
@@ -121,7 +122,7 @@ Etcd使用强一致性读需要添加参数<code>quorum=true</code></p>
     <p>Etcd和Consul均采用类似与*nux文件目录格式存储，Etcd支持隐藏的目录节点（以<code>/—</code>开始的key，不知道做什么用，在V3版可能去掉），etcd存储的value可以直接采用json文件，xml文件，txt文件等。</p>
   </li>
   <li>
-    <p>Etcd中的value都是以json格式存储（空间占用比较大，Etcd的V3.0可能支持二进制存储）。 </p>
+    <p>Etcd中的value都是以json格式存储（空间占用比较大，Etcd的V3.0可能支持二进制存储）。</p>
   </li>
 </ul>
 
@@ -206,6 +207,8 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
     <div class="sidenav">
         <!--<h2>Blog</h2>-->
         <ul class="artical-list">
+        
+            <li><a href="/blog/2015/08/11/UnknowHostException.html">UnknowHostException</a></li>
         
             <li><a href="/blog/2015/08/02/haproxy-install.html">haproxy部署</a></li>
         

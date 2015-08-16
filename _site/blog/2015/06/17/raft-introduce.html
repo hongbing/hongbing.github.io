@@ -8,6 +8,7 @@
     <meta name="description" content="hongbing的部落格" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
     <link rel="shortcut icon" href="/jinchuan.png" type="image/x-icon" />
     <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="" />
     <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
@@ -109,12 +110,14 @@ follower表示议员，candidate表示总统候选人，leader表示总统。
     <p>如果选举出的leader属于大多数接收到Entry中的一个，那么下一次的appendEntry到来的时候，会将前面未提交的entry一并发送给follower，得到大多数的ack回复后一并提交。</p>
   </li>
   <li>
-    <p>如果选举出的leader属于少数没有接收到entry中的一个，这种情况不会出现，因为
-<font size="4" color="green">选举限制规定：</font><font size="4" color="green">follower不能给比自己log旧的candidate投票</font></p>
-
-    <p>因此少数派的log会比大多数中的log旧，少数派无法在选举中成为leader。</p>
+    <p>如果选举出的leader属于少数没有接收到entry中的一个，这种情况不会出现，因为</p>
   </li>
 </ul>
+<font size="4" color="green">选举限制规定：</font>
+<font size="4" color="green">follower不能给比自己log旧的candidate投票</font>
+
+<pre><code>因此少数派的log会比大多数中的log旧，少数派无法在选举中成为leader。
+</code></pre>
 
 <p>对于<code>情况2</code></p>
 
@@ -205,6 +208,8 @@ Raft使用联合一致性阶段（joint consensus）来作为过渡阶段实现�
     <div class="sidenav">
         <!--<h2>Blog</h2>-->
         <ul class="artical-list">
+        
+            <li><a href="/blog/2015/08/11/UnknowHostException.html">UnknowHostException</a></li>
         
             <li><a href="/blog/2015/08/02/haproxy-install.html">haproxy部署</a></li>
         
