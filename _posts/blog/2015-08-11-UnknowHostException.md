@@ -5,7 +5,7 @@ description: 在Docker测试环境中启动项目，启动失败，报UnknowHost
 category: blog
 ---
 
-####1. **问题**
+#### 1. **问题**
 
   团队使用Docker中的测试环境，在新起的测试环境中启动消息队列项目，项目启动失败，抛出如下异常：
 
@@ -13,7 +13,7 @@ category: blog
 	java.net.UnknownHostException: e7a05a2abfc5: e7a05a2abfc5: 未知的名称或服务
 
 
-####2. **分析**
+#### 2. **分析**
 
   异常信息栈显示抛出异常的地方在：`InetAddress localHost = InetAddress.getLocalHost();`
  
@@ -59,7 +59,7 @@ category: blog
    
   如果不是localhost，则会读取缓存;如果缓存不存在，调用`InetAddress.getAddressesFromNameService(local, null)`。该方法调用native的`lookupAllHostAddr`方法，该方法会在/etc/hosts里面查找对应host的ip地址，如果没有则抛出UnknowHostException。
 
-####3. **解决方法**
+#### 3. **解决方法**
 
   知道了异常发生的原因，那么解决方法只需要在/etc/hosts里面添加一项
 
