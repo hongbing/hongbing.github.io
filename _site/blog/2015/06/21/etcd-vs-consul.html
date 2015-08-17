@@ -37,7 +37,6 @@
         <h1 class="entry-title"><a href="/blog/2015/06/21/etcd-vs-consul.html" title="ETCD vs. Consul">ETCD vs. Consul</a></h1>
         <p class="entry-date">2015-06-21</p>
         <h3 id="section">异同</h3>
-<hr />
 
 <h4 id="section-1">1. 协议</h4>
 <ul>
@@ -158,29 +157,39 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
 </ul>
 
 <h4 id="section-10">11. 集群节点发现</h4>
+
+<p>Etcd支持三种节点发现功能：</p>
+
 <ul>
-  <li>Etcd支持三种节点发现功能：
-    <ul>
-      <li>
-        <p><strong>static</strong>
-  已知集群节点个数，IP地址等信息，通过-initial-cluster参数指定集群中的节点信息
-  <code>
--initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 -initial-cluster-state new
- </code></p>
-      </li>
-      <li>
-        <p><strong>discovery</strong>
-  Etcd自身的节点发现功能，使用自定义的注册目录</p>
-      </li>
-    </ul>
+  <li><strong>static</strong>
+已知集群节点个数，IP地址等信息，通过-initial-cluster参数指定集群中的节点信息</li>
+</ul>
 
-    <p><code>curl -X PUT https://myetcd.local/v2/keys/discovery/6c007a14875d53d9bf0ef5a6fc0257c817f0fb83/_config/size -d value=3</code></p>
+<blockquote>
+  <pre><code>-initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 -initial-cluster-state new
+</code></pre>
+</blockquote>
 
-    <p>上面的命令在已有的集群上注册node size，命令表明集群中有3个node，只有当3个node都注册后集群才开始工作，如果注册的node多于3个，那多余的都降为proxy模式启动。
-  如果没有权限获取已有的集群信息，可以使用公共的discovery url：<code>https://discovery.etcd.io</code>
-  + <strong>DNS SRV records</strong></p>
+<ul>
+  <li>
+    <p><strong>discovery</strong></p>
+
+    <p>Etcd自身的节点发现功能，使用自定义的注册目录</p>
   </li>
-  <li>Consul通过<code>join</code>命令将node加入到集群中，每添加一个node都会加入到gossip pool，通过gossip protocol将新加入的node信息传输到集群中的所有node。</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">curl -X PUT https://myetcd.local/v2/keys/discovery/6c007a14875d53d9bf0ef5a6fc0257c817f0fb83/_config/size -d value=3</code></pre></div>
+
+<p>上面的命令在已有的集群上注册node size，命令表明集群中有3个node，只有当3个node都注册后集群才开始工作，如果注册的node多于3个，那多余的都降为proxy模式启动。
+    如果没有权限获取已有的集群信息，可以使用公共的discovery url：<code>https://discovery.etcd.io</code></p>
+
+<ul>
+  <li>
+    <p><strong>DNS SRV records</strong></p>
+  </li>
+  <li>
+    <p>Consul通过<code>join</code>命令将node加入到集群中，每添加一个node都会加入到gossip pool，通过gossip protocol将新加入的node信息传输到集群中的所有node。</p>
+  </li>
 </ul>
 
 <h4 id="section-11">12. 统计数据</h4>

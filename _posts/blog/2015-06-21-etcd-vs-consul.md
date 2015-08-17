@@ -6,7 +6,6 @@ description: etcd和consul均采用raft协议来保证server之间的数据一�
 ---
 
 ### 异同
------------------------------
 
 #### 1. 协议
 + Etcd和consul均采用raft协议来保证server之间的数据一致性，但是consul还采用了gossip协议管理成员和传播消息。
@@ -79,21 +78,26 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
 + Consul对blocking query有超时机制。
 
 #### 11. 集群节点发现
-+ Etcd支持三种节点发现功能：
-	+ **static**
+
+Etcd支持三种节点发现功能：
+
+  + **static**
 	已知集群节点个数，IP地址等信息，通过-initial-cluster参数指定集群中的节点信息
-	```
--initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 -initial-cluster-state new
-	```
+
+>	-initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 -initial-cluster-state new
 	
-	+ **discovery**
+  + **discovery**
+
 	Etcd自身的节点发现功能，使用自定义的注册目录
 
-    `curl -X PUT https://myetcd.local/v2/keys/discovery/6c007a14875d53d9bf0ef5a6fc0257c817f0fb83/_config/size -d value=3`
+{%highlight html%}
+   	 curl -X PUT https://myetcd.local/v2/keys/discovery/6c007a14875d53d9bf0ef5a6fc0257c817f0fb83/_config/size -d value=3
+{% endhighlight%}
 
-    上面的命令在已有的集群上注册node size，命令表明集群中有3个node，只有当3个node都注册后集群才开始工作，如果注册的node多于3个，那多余的都降为proxy模式启动。
+  上面的命令在已有的集群上注册node size，命令表明集群中有3个node，只有当3个node都注册后集群才开始工作，如果注册的node多于3个，那多余的都降为proxy模式启动。
     如果没有权限获取已有的集群信息，可以使用公共的discovery url：`https://discovery.etcd.io`
-	+ **DNS SRV records**
+	  
+   + **DNS SRV records**
 
 + Consul通过`join`命令将node加入到集群中，每添加一个node都会加入到gossip pool，通过gossip protocol将新加入的node信息传输到集群中的所有node。
 

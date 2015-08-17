@@ -12,9 +12,11 @@ description: 记录haproxy的部署过程。
   `# wget http://www.haproxy.org/download/1.5/src/haproxy-1.5.12.tar.gz`
 下载，下载完成后，将其解压。
   	
+
 		 # cd haproxy-X.Y.Z
 		 # uname -a
 		 # make TARGET=linux26 PREFIX=/usr/local/haproxy install
+
 
 linux26,26表示linux系统的主次版本号。
 执行上面的命令，输出done就正确安装完成。
@@ -23,12 +25,11 @@ linux26,26表示linux系统的主次版本号。
 
 + 修改配置
 
-配置文件可以参考源码里面examples下面的haproxy.cfg文件，haproxy里的配置参数可以在[haproxy-dconv](http://cbonte.github.io/haproxy-dconv/index.html)查看相关参数的含义。
+配置文件可以参考源码里面examples下面的haproxy.cfg文件，haproxy里的配置参数可到[haproxy-dconv](http://cbonte.github.io/haproxy-dconv/index.html)查看。
 
-  	 	# cd /usr/local/haproxy
-	 	# mkdir conf logs
-	 	# vim /conf/haproxy.cfg
-
+	  	 #cd /usr/local/haproxy
+		 #mkdir conf logs
+	 	 #vim /conf/haproxy.cfg
 
 下面是参考配置
 
@@ -74,23 +75,24 @@ global是进程级别的参数；代理参数可以设置defaults，listen，fro
 	local3.*        /usr/local/logs/haproxy_err.log 
 
 
-`# vim /etc/sysconfig/syslog`
+使用`# vim /etc/sysconfig/syslog`设置系统接收外来日志，修改
+ 
+>	SYSLOGD_OPTIONS="-r -m 0"
 
-设置系统接收外来日志，修改
- `SYSLOGD_OPTIONS="-r -m 0"`
++ 启动命令
 
-+ 启动
+>	# ./sbin/haproxy -f ./conf/haproxy.cfg
 
-`# ./sbin/haproxy -f ./conf/haproxy.cfg`
++ 重启命令
 
-+ 重启
+>	# ./sbin/haproxy -f ./conf/haproxy.cfg -st [haproxy.pid]
 
-`# ./sbin/haproxy -f ./conf/haproxy.cfg -st [haproxy.pid]`
++ 停止命令
 
-+ 停止
-
-`# killall haproxy`
+>	# killall haproxy
 
 执行
- `# ./sbin/haproxy -f ./conf/haproxy.cfg -sf [haproxy.pid]` 
+
+>	 # ./sbin/haproxy -f ./conf/haproxy.cfg -sf [haproxy.pid] 
+
 可以在修改haproxy.cfg后，快速重载变更配置。

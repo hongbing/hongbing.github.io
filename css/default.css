@@ -133,11 +133,12 @@ text-decoration:none;
 
 #project_tagline {
 color: #0A5E8C;
-font-size: 20px;
+font-size: 18px;
 font-weight: 300;
 background: none;
 text-shadow: #111 0px 0px 10px;
 line-height:2.6em;
+font-style:italic;
 }
 
 /************foot style*******************/

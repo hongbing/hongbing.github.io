@@ -6,14 +6,13 @@ category: blog
 ---
 
 ### 一. 相关概念
-----------------------------------------
 
 #### 1.版本号
-版本号记录一个项目的某个阶段的某些功能的实现，实现项目不同功能的隔离与区分。
+版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。
 
 版本号格式一般分为：
 
->主版本号.分支版本号.小版本号-里程碑版本号
+>      主版本号.分支版本号.小版本号-里程碑版本号
 
 **主版本号**：一般指框架具有重大变化的版本号，比如struts1，struts2框架的变化
 
@@ -68,10 +67,7 @@ maven远程服务器管理的仓库，地址是[maven中心仓库](http://repo1.
         </snapshotRepository>
     </distributeManagement>
 
-使用
-
-`# mvn deploy`
-命令即可将项目发布到私有仓库中，也即是上面的url中
+使用`# mvn deploy`命令即可将项目发布到私有仓库中，也即是上面的url中
 
 #### 4. maven的生命周期
 
@@ -145,11 +141,11 @@ site-deploy     将生成的站点文档部署到特定的服务器上
 
 
 ### 二. maven实践
------------------------------------------
 
 #### 1. 手动添加jar包到本地仓库
 执行命令：
-`# mvn install:install-file -Dfile=jar包的位置 -DgroupId=jar的groupId -DartifactId=jar的artifactId -Dversion=jar的version -Dpackaging=jar`
+
+>	# mvn install:install-file -Dfile=jar包的位置 -DgroupId=jar的groupId -DartifactId=jar的artifactId -Dversion=jar的version -Dpackaging=jar`
 
 添加到maven库中后，使用该jar包时需要修改maven工程的pom.xml文件，将添加的jar包加入到pom.xml文件中即可使用。
  

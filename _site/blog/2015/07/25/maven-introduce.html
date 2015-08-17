@@ -37,15 +37,15 @@
         <h1 class="entry-title"><a href="/blog/2015/07/25/maven-introduce.html" title="maven实践">maven实践</a></h1>
         <p class="entry-date">2015-07-25</p>
         <h3 id="section">一. 相关概念</h3>
-<hr />
 
 <h4 id="section-1">1.版本号</h4>
-<p>版本号记录一个项目的某个阶段的某些功能的实现，实现项目不同功能的隔离与区分。</p>
+<p>版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。</p>
 
 <p>版本号格式一般分为：</p>
 
 <blockquote>
-  <p>主版本号.分支版本号.小版本号-里程碑版本号</p>
+  <pre><code> 主版本号.分支版本号.小版本号-里程碑版本号
+</code></pre>
 </blockquote>
 
 <p><strong>主版本号</strong>：一般指框架具有重大变化的版本号，比如struts1，struts2框架的变化</p>
@@ -109,10 +109,7 @@
 &lt;/distributeManagement&gt;
 </code></pre>
 
-<p>使用</p>
-
-<p><code># mvn deploy</code>
-命令即可将项目发布到私有仓库中，也即是上面的url中</p>
+<p>使用<code># mvn deploy</code>命令即可将项目发布到私有仓库中，也即是上面的url中</p>
 
 <h4 id="maven">4. maven的生命周期</h4>
 
@@ -191,11 +188,14 @@
 <p><strong>clean</strong>、<strong>compile</strong>和<strong>site</strong>这三个生命周期是不相关的。执行每一个生命周期，其前面的所有阶段都会被执行。生命周期中的每一个操作都是以插件机制完成的。</p>
 
 <h3 id="maven-1">二. maven实践</h3>
-<hr />
 
 <h4 id="jar">1. 手动添加jar包到本地仓库</h4>
-<p>执行命令：
-<code># mvn install:install-file -Dfile=jar包的位置 -DgroupId=jar的groupId -DartifactId=jar的artifactId -Dversion=jar的version -Dpackaging=jar</code></p>
+<p>执行命令：</p>
+
+<blockquote>
+  <pre><code># mvn install:install-file -Dfile=jar包的位置 -DgroupId=jar的groupId -DartifactId=jar的artifactId -Dversion=jar的version -Dpackaging=jar`
+</code></pre>
+</blockquote>
 
 <p>添加到maven库中后，使用该jar包时需要修改maven工程的pom.xml文件，将添加的jar包加入到pom.xml文件中即可使用。</p>
 
