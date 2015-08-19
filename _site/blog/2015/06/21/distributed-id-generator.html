@@ -38,7 +38,7 @@
         <p class="entry-date">2015-06-21</p>
         <h3 id="id">1. 什么是ID</h3>
 
-<p>ID最大的特点就是<strong>唯一</strong>，一个ID存在的目的就是唯一性的标识某一个物体，如果唯一性做不到，那么ID也就失去了本质的作用。
+<p>ID最大的特点就是<strong>唯一</strong>，一个ID存在的目的就是唯一性的标识某一个物体，如果唯一性做不到，那么ID也就失去了本质的作用。<br />
 另外ID还需要保持其它特性：</p>
 
 <ul>
@@ -51,9 +51,9 @@
 <p>另外，参考原新浪weibo通讯技术专家 宇鹏的<a href="http://weibo.com/p/1001603800404851831206?from=page_100505_profile&amp;wvr=6&amp;mod=wenzhangmod">业务系统需要怎样的全局唯一ID</a>博文,文中还提到了另外两个特点：</p>
 
 <ul>
-  <li><strong>可反解</strong>
+  <li><strong>可反解</strong><br />
 反解ID可以为排错提供良好的线索，ID从什么时候生成，在哪个机房生成的，等等情况都可一了解到。</li>
-  <li><strong>可制造</strong>
+  <li><strong>可制造</strong><br />
 可制造针对的是当业务系统失败了，后续需要恢复数据重新进入业务系统，依赖于时间的数据需要在将来的时间段产生过去的时间数据。</li>
 </ul>
 
@@ -67,21 +67,21 @@
 <h3 id="section">3. 竞品分析</h3>
 
 <h4 id="snowflakehttpengineeringtwittercom201006announcing-snowflakehtml">1）<a href="http://engineering.twitter.com/2010/06/announcing-snowflake.html">SnowFlake</a></h4>
-<p>SnowFlake是为了解决Twitter在分布式环境下的全局ID的问题。
+<p>SnowFlake是为了解决Twitter在分布式环境下的全局ID的问题。<br />
 生成的ID需要满足两个要求：</p>
 
 <ul>
-  <li><strong>数据量</strong>
+  <li><strong>数据量</strong><br />
 每秒能产生数十万个ID，来标识不同的推文</li>
-  <li><strong>K-Sorted</strong>
+  <li><strong>K-Sorted</strong><br />
 ID大致有序。</li>
 </ul>
 
 <p>SnowFlake中的ID长度都是64位，由时间戳、节点号和序列编号组成。</p>
 
-<p><strong>时间戳</strong>以毫秒为单位，占41位，记录的是从 1288834974657 (Thu, 04 Nov 2010 01:42:54 GMT) 这一时刻到当前时间所经过的毫秒数。有时间戳，必然会存在着一个时间原点，默认情况下的时间元年为1970年1月1日 00:00:01。而在系统设计时，可以以当前的年份来表示元年，这样可以增加ID的使用年限。&lt;/br&gt;
-<strong>节点号</strong>在源码中被分成两部分，数据中心的 ID 和节点 ID，各自占 5 位。&lt;/br&gt;
-<strong>序列编号</strong>为本地编号，占12位，从0开始，到4095，然后循环又从0开始，也就是说每一毫秒每个节点能够产生4096的ID号。&lt;/br&gt;
+<p><strong>时间戳</strong>以毫秒为单位，占41位，记录的是从 1288834974657 (Thu, 04 Nov 2010 01:42:54 GMT) 这一时刻到当前时间所经过的毫秒数。有时间戳，必然会存在着一个时间原点，默认情况下的时间元年为1970年1月1日 00:00:01。而在系统设计时，可以以当前的年份来表示元年，这样可以增加ID的使用年限。&lt;/br&gt;<br />
+<strong>节点号</strong>在源码中被分成两部分，数据中心的 ID 和节点 ID，各自占 5 位。&lt;/br&gt;<br />
+<strong>序列编号</strong>为本地编号，占12位，从0开始，到4095，然后循环又从0开始，也就是说每一毫秒每个节点能够产生4096的ID号。&lt;/br&gt;<br />
 还有一位为<strong>保留位</strong>，始终为0。</p>
 
 <h4 id="iciclehttpengineeringintenthqcom201503icicle-distributed-id-generation-with-redis-lua">2）<a href="http://engineering.intenthq.com/2015/03/icicle-distributed-id-generation-with-redis-lua/">Icicle</a></h4>
@@ -92,17 +92,17 @@ ID大致有序。</li>
 
 <p>Icicle的ID设计思路来源于SnowFlake，因此与SnowFlake的ID结构有很大的相似性。</p>
 
-<p><strong>Sign</strong>
+<p><strong>Sign</strong><br />
 第一位为符号保留位，不使用，文中给出的解释为</p>
 
 <blockquote>
   <p>which we chose not to use because some platforms make it difficult to get at and it messes with ordering</p>
 </blockquote>
 
-<p><strong>Time:</strong>
+<p><strong>Time:</strong><br />
 时间占41位。</p>
 
-<p><strong>Shard ID:</strong>
+<p><strong>Shard ID:</strong><br />
 由于Icicle是部署在redis上的，redis不支持分布式模式，因此shard id用来标记每一个redis实例，可支持1024个实例。</p>
 
 <p><strong>Sequence ID:</strong> 与SnowFlake类似。</p>
@@ -119,7 +119,7 @@ ID大致有序。</li>
 
 <p>剩下的10bit 留给 MachineID，也就是说当前 ID 生成可以直接内嵌在业务服务中，最多支持千级别的服务器数量。最后有2bit 做Tag 用，可能区分群消息和单聊消息。同时你也看出，这个 ID 最多支持一天10亿消息（原文如此，一天的消息量按照第一版算应该是86400 * 1000 * 2^10 * 2^10 ），也是怕系统增速太快，这2bit 可以挪给 Sequence，可以支持40亿级别消息量，或者结合前面的版本支持到百亿级别。</p>
 
-<p><em>参考文献</em>：</p>
+<p><strong>参考文献</strong>：</p>
 
 <p>[1]<a href="http://engineering.intenthq.com/2015/03/icicle-distributed-id-generation-with-redis-lua/">icicle-distributed-id-generation-with-redis-lua</a></p>
 

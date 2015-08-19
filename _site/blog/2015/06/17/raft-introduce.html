@@ -45,7 +45,7 @@
 
 <p><strong>非对称式</strong>：有一个leader作为与外界通信的角色，其余server不与外界通信，leader会将数据的变更同步到所有的其他server中。</p>
 
-<p>raft采用的第二种方式，也就是leader—based。
+<p>raft采用的第二种方式，也就是leader—based。<br />
 raft算法中集群中server的角色分为：</p>
 
 <blockquote>
@@ -60,9 +60,9 @@ raft算法中集群中server的角色分为：</p>
   <p><code>leader</code>: 负责与client打交道，每一个term中<strong>至多</strong>存在一个leader。一个term表示一轮选举。</p>
 </blockquote>
 
-<p>可以将follower，candidate，leader的角色与美国选举中的角色对应起来。
-follower表示议员，candidate表示总统候选人，leader表示总统。
-遵循的原则为：
+<p>可以将follower，candidate，leader的角色与美国选举中的角色对应起来。<br />
+follower表示议员，candidate表示总统候选人，leader表示总统。<br />
+遵循的原则为：<br />
 + 每一任期（term）中最多只有一个总统</p>
 
 <ul>
@@ -80,7 +80,7 @@ follower表示议员，candidate表示总统候选人，leader表示总统。
   </li>
 </ul>
 
-<p>server之间通过RPC通信，三种角色转换图：
+<p>server之间通过RPC通信，三种角色转换图：<br />
 <img src="/images/raft/raftrole.png" alt="raftrole" /></p>
 
 <p>为了raft算法的易于理解，raft将算法分为leader election，log replication，safty，membership change几个子问题。下面将一一介绍。</p>
@@ -102,7 +102,7 @@ follower表示议员，candidate表示总统候选人，leader表示总统。
 
 <p><code>2）：大多数follower没有接收到AppendEntry</code></p>
 
-<p>接下来应该重新选举，
+<p>接下来应该重新选举，<br />
 对于<code>情况1</code></p>
 
 <ul>
@@ -141,7 +141,7 @@ follower表示议员，candidate表示总统候选人，leader表示总统。
 <h3 id="log-replication">3 <strong>log replication</strong></h3>
 <hr />
 
-<p>每个server中都会保存一份log，log中记录了客户端的command。同时存在着一个状态机，状态机负责将log中的command提交，前提是必须在安全的情况下（下面将会解释安全的含义）。状态机按序执行log中的command，每个log中包含了同样的command，且命令的顺序一致，因此状态机在执行的时候能够保证每次执行都会有相同的输出。也就是只要所有的server中的log一致，那么经过状态机的执行，都会得到相同的结果，来保证分布式集群之中的数据一致性。因此，如何确保log一致是一致性算法要解决的问题。
+<p>每个server中都会保存一份log，log中记录了客户端的command。同时存在着一个状态机，状态机负责将log中的command提交，前提是必须在安全的情况下（下面将会解释安全的含义）。状态机按序执行log中的command，每个log中包含了同样的command，且命令的顺序一致，因此状态机在执行的时候能够保证每次执行都会有相同的输出。也就是只要所有的server中的log一致，那么经过状态机的执行，都会得到相同的结果，来保证分布式集群之中的数据一致性。因此，如何确保log一致是一致性算法要解决的问题。<br />
 log中的一个单元称为<strong>Entry</strong>，每个Entry包含了command，index和term</p>
 
 <p>leader通过RPC 将command发送给所有的follower。等到大多数的follower回复leader接收到发送的append entry时（如果有follower没有回复，那么leader会持续向该follower发送append entry），leader会将自己的log entry提交。</p>
@@ -155,13 +155,13 @@ log中的一个单元称为<strong>Entry</strong>，每个Entry包含了command�
 
 <p>需要<code>保证新的leader保存所有前任leader的所有提交</code>。因此，每一任leader中的log都能保证整个系统自启动以来的所有变更，因此状态机执行的时候总能保证分布式环境下的一致性。</p>
 
-<p>实现方式：
-在leader选举时，对于log比自己的log旧的candidate，follower拒绝为其投票，由于leader会根据自己的log内容重写follower中的log，因此避免了前任leader的提交记录被修改，使得集群整体状态被改变。比较的方式为：
+<p>实现方式：<br />
+在leader选举时，对于log比自己的log旧的candidate，follower拒绝为其投票，由于leader会根据自己的log内容重写follower中的log，因此避免了前任leader的提交记录被修改，使得集群整体状态被改变。比较的方式为：<br />
 根据Entry中的index和term来比较，如果term更大，说明更新，如果term一致，log越长即index越大，说明越新。</p>
 
 <h3 id="membership-change">5 <strong>membership change</strong></h3>
 <hr />
-<p>集群中节点的变更，要么是故障，要么是业务需求扩容/缩容。
+<p>集群中节点的变更，要么是故障，要么是业务需求扩容/缩容。<br />
 Raft使用联合一致性阶段（joint consensus）来作为过渡阶段实现配置从旧到新的变化。</p>
 
 <p>集群中配置状态的转换：</p>
@@ -171,13 +171,13 @@ Raft使用联合一致性阶段（joint consensus）来作为过渡阶段实现�
     <p>Cold 已提交，Cold,new 未提交</p>
   </li>
   <li>
-    <p>Cold,new 已提交，Cnew 未提交
- 此时只有拥有 Cold,new 配置的server才会被选为leader。
+    <p>Cold,new 已提交，Cnew 未提交<br />
+ 此时只有拥有 Cold,new 配置的server才会被选为leader。<br />
  如果此时，Cold,new 提交失败，那么重新发送Cold，回滚配置。</p>
   </li>
   <li>
-    <p>Cnew 已提交 
- 如果在这个阶段存在着Leader election，那么只有具有Cnew 配置的server才能被选为Leader，
+    <p>Cnew 已提交 <br />
+ 如果在这个阶段存在着Leader election，那么只有具有Cnew 配置的server才能被选为Leader，<br />
  Leader将Cnew 配置复制到所有的follower，使得整个集群应用新的配置。</p>
   </li>
 </ul>
@@ -188,7 +188,7 @@ Raft使用联合一致性阶段（joint consensus）来作为过渡阶段实现�
 
 <p><img src="/images/raft/raft_config_change.png" alt="raft_config_change" /></p>
 
-<h3 id="section">参考资料</h3>
+<h3 id="section">6 参考资料</h3>
 <p>[1] <a href="http://raftconsensus.github.io/">http://raftconsensus.github.io</a></p>
 
 <p>[2] <a href="http://ramcloud.stanford.edu/raft.pdf">http://ramcloud.stanford.edu/raft.pdf</a></p>
