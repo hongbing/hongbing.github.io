@@ -23,7 +23,8 @@ category: blog
   
   该native方法直接执行linux的系统调用gethostname。系统调用gethostname与在终端执行`$ hostname`或者`$ cat /etc/hostname`的结果一致。获得hostname后，比较该hostname的值，如果为localhost，则执行`impl.loopbackAddress();`获得localhost对应的ip地址。
 	
->	if (local.equals("localhost")) {
+{% highlight java %}
+	if (local.equals("localhost")) {
                 return impl.loopbackAddress();
         } else {
 		......
@@ -56,7 +57,8 @@ category: blog
                 }
             }
 	}
-   
+{% endhighlight %}   
+
   如果不是localhost，则会读取缓存;如果缓存不存在，调用`InetAddress.getAddressesFromNameService(local, null)`。该方法调用native的`lookupAllHostAddr`方法，该方法会在/etc/hosts里面查找对应host的ip地址，如果没有则抛出UnknowHostException。
 
 #### 3. **解决方法**
@@ -67,3 +69,4 @@ category: blog
 
 即可。另外还可以选择将`hostname`的值改为`localhost`的方式来解决问题。
 
+![thatslove](/images/unknowhostexception/thatslove.jpeg)

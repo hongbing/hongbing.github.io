@@ -11,12 +11,12 @@ description: 记录haproxy的部署过程。
  可以通过直接访问http://www.haproxy.org/download/1.5/src/地址，选择相应的版本下载。或者使用
   `# wget http://www.haproxy.org/download/1.5/src/haproxy-1.5.12.tar.gz`
 下载，下载完成后，将其解压。
-  	
-
-		 # cd haproxy-X.Y.Z
-		 # uname -a
-		 # make TARGET=linux26 PREFIX=/usr/local/haproxy install
-
+  
+{%highlight Bash shell scripts%}	
+cd haproxy-X.Y.Z
+uname -a
+make TARGET=linux26 PREFIX=/usr/local/haproxy install
+{% endhighlight%}
 
 linux26,26表示linux系统的主次版本号。
 执行上面的命令，输出done就正确安装完成。
@@ -27,9 +27,11 @@ linux26,26表示linux系统的主次版本号。
 
 配置文件可以参考源码里面examples下面的haproxy.cfg文件，haproxy里的配置参数可到[haproxy-dconv](http://cbonte.github.io/haproxy-dconv/index.html)查看。
 
-	  	 #cd /usr/local/haproxy
-		 #mkdir conf logs
-	 	 #vim /conf/haproxy.cfg
+{%highlight Bash shell scripts%}
+cd /usr/local/haproxy
+mkdir conf logs
+vim /conf/haproxy.cfg
+{%endhighlight%}
 
 下面是参考配置
 
@@ -81,18 +83,25 @@ global是进程级别的参数；代理参数可以设置defaults，listen，fro
 
 + 启动命令
 
->	# ./sbin/haproxy -f ./conf/haproxy.cfg
+{% highlight Bash shell scripts%}
+./sbin/haproxy -f ./conf/haproxy.cfg
+{% endhighlight%}
 
 + 重启命令
 
->	# ./sbin/haproxy -f ./conf/haproxy.cfg -st [haproxy.pid]
+{% highlight Bash shell scripts%}
+./sbin/haproxy -f ./conf/haproxy.cfg -st [haproxy.pid]
+{% endhighlight%}
 
 + 停止命令
 
->	# killall haproxy
+{% highlight Bash shell scripts%}
+killall haproxy
+{% endhighlight%}
 
-执行
++ reload配置
 
->	 # ./sbin/haproxy -f ./conf/haproxy.cfg -sf [haproxy.pid] 
-
+{% highlight Bash shell scripts%}
+./sbin/haproxy -f ./conf/haproxy.cfg -sf [haproxy.pid] 
+{% endhighlight%}
 可以在修改haproxy.cfg后，快速重载变更配置。

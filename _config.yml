@@ -29,7 +29,7 @@ gems:      []
 markdown: Kramdown   
 highlighter: pygments
 lsi:         false
-excerpt_separator: "\n\n"
+excerpt_separator: "\n"
 
 # Serving
 detach:  false
@@ -41,8 +41,9 @@ baseurl: "" # does not include hostname
 relative_permalinks: false
 
 # Outputting
+paginate: 5
 permalink:     date
-paginate_path: /page:num
+paginate_path: blog/page:num
 timezone:      null
 
 quiet:    false
