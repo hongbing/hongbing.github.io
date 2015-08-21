@@ -132,14 +132,11 @@ Raft使用联合一致性阶段（joint consensus）来作为过渡阶段实现�
  
  ![raft_config_change](/images/raft/raft_config_change.png)
  
+ ![britney](/images/raft/britney.jpg)
 
 ### 6 参考资料
 [1] [http://raftconsensus.github.io](http://raftconsensus.github.io/)
-
 [2] [http://ramcloud.stanford.edu/raft.pdf](http://ramcloud.stanford.edu/raft.pdf)
-
 [3] [http://raftconsensus.github.io/](http://raftconsensus.github.io/)
-
 [4] [http://raftuserstudy.s3-website-us-west-1.amazonaws.com/raft.mp4](http://raftuserstudy.s3-website-us-west-1.amazonaws.com/raft.mp4)
-
 [5] [http://www.infoq.com/cn/articles/coreos-analyse-etcd/](http://www.infoq.com/cn/articles/coreos-analyse-etcd/)

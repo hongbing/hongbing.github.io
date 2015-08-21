@@ -135,5 +135,5 @@ Setting this to zero disables periodic writeback altogether.
 
 
 **参考**：
-[http://www.westnet.com/~gsmith/content/linux-pdflush.htm](http://www.westnet.com/~gsmith/content/linux-pdflush.htm)
-[https://www.kernel.org/doc/](https://www.kernel.org/doc/)
+[1] [http://www.westnet.com/~gsmith/content/linux-pdflush.htm](http://www.westnet.com/~gsmith/content/linux-pdflush.htm)
+[2] [https://www.kernel.org/doc/](https://www.kernel.org/doc/)

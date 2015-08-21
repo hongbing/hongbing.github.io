@@ -82,8 +82,9 @@ Icicle支持每一毫秒产生2^10 * 2^12个ID号。
 
 剩下的10bit 留给 MachineID，也就是说当前 ID 生成可以直接内嵌在业务服务中，最多支持千级别的服务器数量。最后有2bit 做Tag 用，可能区分群消息和单聊消息。同时你也看出，这个 ID 最多支持一天10亿消息（原文如此，一天的消息量按照第一版算应该是86400 * 1000 * 2^10 * 2^10 ），也是怕系统增速太快，这2bit 可以挪给 Sequence，可以支持40亿级别消息量，或者结合前面的版本支持到百亿级别。
 
+![idgenerator](/images/idgenerator/idgenerator.jpg)
 
-**参考文献**：
+**参考**：
 
 [1][icicle-distributed-id-generation-with-redis-lua](http://engineering.intenthq.com/2015/03/icicle-distributed-id-generation-with-redis-lua/)
 

@@ -109,3 +109,6 @@ Etcd支持三种节点发现功能：
 
 #### 13. 输出信息格式
 + Etcd和Consul均采用json格式输出
+
+![etcd](/images/etcd/etcd.jpg)
+

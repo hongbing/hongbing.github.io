@@ -133,12 +133,12 @@ Inode	Pathname
 ![blockdump](/images/linuxofblockdump/blockdump.jpg)
 
 **参考**
-[http://www.vpsee.com/2009/08/monitor-process-io-activity/](http://www.vpsee.com/2009/08/monitor-process-io-activity/)
+[1] [http://www.vpsee.com/2009/08/monitor-process-io-activity/](http://www.vpsee.com/2009/08/monitor-process-io-activity/)
 
-[http://www.vpsee.com/2010/07/monitoring-process-io-activity-on-linux-with-block_dump/](http://www.vpsee.com/2010/07/monitoring-process-io-activity-on-linux-with-block_dump/)
+[2] [http://www.vpsee.com/2010/07/monitoring-process-io-activity-on-linux-with-block_dump/](http://www.vpsee.com/2010/07/monitoring-process-io-activity-on-linux-with-block_dump/)
 
-[https://www.kernel.org/doc/Documentation/laptops/laptop-mode.txt](https://www.kernel.org/doc/Documentation/laptops/laptop-mode.txt)
+[3] [https://www.kernel.org/doc/Documentation/laptops/laptop-mode.txt](https://www.kernel.org/doc/Documentation/laptops/laptop-mode.txt)
 
-[http://stackoverflow.com/questions/249570/how-can-i-record-what-process-or-kernel-activity-is-using-the-disk-in-gnu-linux](http://stackoverflow.com/questions/249570/how-can-i-record-what-process-or-kernel-activity-is-using-the-disk-in-gnu-linux)
+[4] [http://stackoverflow.com/questions/249570/how-can-i-record-what-process-or-kernel-activity-is-using-the-disk-in-gnu-linux](http://stackoverflow.com/questions/249570/how-can-i-record-what-process-or-kernel-activity-is-using-the-disk-in-gnu-linux)
 
-[http://blog.chinaunix.net/uid-24774106-id-4096470.html](http://blog.chinaunix.net/uid-24774106-id-4096470.html)
+[5] [http://blog.chinaunix.net/uid-24774106-id-4096470.html](http://blog.chinaunix.net/uid-24774106-id-4096470.html)
