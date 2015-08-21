@@ -67,8 +67,9 @@ The total avaiable memory is not equal to total system memory.
 ==============================================================
 ```
 
-从doc中可以看出，含义都是表示`占可用内存空间的百分比`。但是区别在达到**dirty_background_ratio**这个阈值后，pdflush线程会`异步`执行脏页回写，而当达到**dirty_ratio**阈值时，当时执行写操作的进程会被强制`同步`执行脏页回写操作，此时所有进程的写操作都会被阻塞。
-**dirty_ratio**的值应该设置得比**dirty_background_ratio**大。看看工作机中与dirty有关的参数：
+从doc中可以看出，含义都是表示`占可用内存空间的百分比`。但是区别在达到**dirty_background_ratio**这个阈值后，pdflush线程会`异步`执行脏页回写，而当达到**dirty_ratio**阈值时，当时执行写操作的进程会被强制`同步`执行脏页回写操作，此时所有进程的写操作都会被阻塞,直到脏页占比在dirty_ratio之下，如果脏页率仍然在dirty_backgroud_radio之上，将调用pdflush执行异步刷新。
+
+默认的**dirty_ratio**的值应该设置得比**dirty_background_ratio**大。看看工作机中与dirty有关的参数：
 
 ```
 $ sysctl -a | grep dirty

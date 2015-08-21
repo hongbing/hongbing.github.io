@@ -27,7 +27,12 @@
         <ul class="artical-list">
         
             <li>
-                <h2><a href="/blog/2015/08/21/linux-of-pdflush.html">linux系统之pdflush</a></h2>
+                <h2><a href="/blog/2015/08/21/linux-of-blockdump.html">linux系统之block_dump</a></h2>
+                <div class="title-desc">block_dump是linux系统的一个调试选项，选项打开的时候，会把当前所有磁盘读写操作的信息打印到内核输出，可以通过`dmesg`来查看输出内容。</div>
+	     </li>
+        
+            <li>
+                <h2><a href="/blog/2015/08/20/linux-of-pdflush.html">linux系统之pdflush</a></h2>
                 <div class="title-desc">当我们向磁盘文件写入数据时，由于内存与磁盘之间数据读取的差异，操作系统不会直接将数据写透（write through）到磁盘上，而是会写到页高速缓存（page cache）中，真正的写磁盘操作会延迟进行。</div>
 	     </li>
         
