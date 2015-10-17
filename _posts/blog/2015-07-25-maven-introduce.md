@@ -5,9 +5,9 @@ description: maven相关概念与实践
 category: blog
 ---
 
-### 一. 相关概念
+#### 一. 相关概念
 
-#### 1.版本号
+##### 1.版本号
 版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。
 
 版本号格式一般分为：
@@ -22,17 +22,17 @@ category: blog
 
 **里程碑版本号**：`SNAPSHOT`-->`RELEASAE`-->`FINAL`
 
-#### 2.仓库分类
+##### 2.仓库分类
 
 狭义上讲，仓库分为两种，一种是本地仓库，一种是远程仓库。
 
 广义上讲，远程仓库也可分为私有仓库和中心仓库，也即是分为三种：本地仓库，私有仓库和中心仓库
 
-##### 2.1. 本地仓库
+###### 2.1. 本地仓库
 
 即为本地的./.m2/repository文件夹，项目中需要的jar包都会被保存在本地仓库中，项目的更新操作（commit操作）都会首先同步到本地仓库中。
 
-##### 2.2. 私有仓库
+###### 2.2. 私有仓库
 
 局域网内部的仓库，当本地仓库没有项目中所需要的jar包时，从私有仓库中找，如果存在，就将其下载到本地仓库中。同时，针对多人协作开发，可以将不同的开发版本deploy到私有仓库中。
 私有仓库的作用为：提升查找jar包的速度，进行项目版本管理。
@@ -52,10 +52,10 @@ category: blog
 ![私有仓库示例](/images/maven/repository.png)
 
 
-##### 2.3. 中心仓库
+###### 2.3. 中心仓库
 maven远程服务器管理的仓库，地址是[maven中心仓库](http://repo1.maven.org.maven2)
 
-#### 3. 项目的发布
+##### 3. 项目的发布
 
 在项目中添加  
 
@@ -69,7 +69,7 @@ maven远程服务器管理的仓库，地址是[maven中心仓库](http://repo1.
 
 使用`# mvn deploy`命令即可将项目发布到私有仓库中，也即是上面的url中
 
-#### 4. maven的生命周期
+##### 4. maven的生命周期
 
 maven的3种独立的生命周期
 
@@ -140,25 +140,25 @@ site-deploy     将生成的站点文档部署到特定的服务器上
 **clean**、**compile**和**site**这三个生命周期是不相关的。执行每一个生命周期，其前面的所有阶段都会被执行。生命周期中的每一个操作都是以插件机制完成的。
 
 
-### 二. maven实践
+#### 二. maven实践
 
-#### 1. 手动添加jar包到本地仓库
+##### 1. 手动添加jar包到本地仓库
 执行命令：
 
 >	# mvn install:install-file -Dfile=jar包的位置 -DgroupId=jar的groupId -DartifactId=jar的artifactId -Dversion=jar的version -Dpackaging=jar`
 
 添加到maven库中后，使用该jar包时需要修改maven工程的pom.xml文件，将添加的jar包加入到pom.xml文件中即可使用。
  
-#### 2. maven创建web-app
+##### 2. maven创建web-app
 使用maven创建web-app，需要自行建文件夹src/main/java包。
 
 支持web-app发布到tomcat的插件：cargo
 
 支持web-app发布到jetty的插件：jetty-maven-plugin
 
-#### 3. maven查找包依赖
+##### 3. maven查找包依赖
 
-##### 3.1 传递依赖的版本冲突
+###### 3.1 传递依赖的版本冲突
 
 + 使用maven project report插件来显示所有的项目依赖关系
 
@@ -228,6 +228,6 @@ site-deploy     将生成的站点文档部署到特定的服务器上
         echo "scan finished!"
 
 
-使用上面的脚本（将其放置于工程目录下，或者指定工程路径）检测是否存在循环依赖，如果存在，会输出循环依赖的链。（此脚本取自于@秦迪 Axb的自我修养）
+使用上面的脚本（将其放置于工程目录下，或者指定工程路径）检测是否存在循环依赖，如果存在，会输出循环依赖的链。（此脚本取自于@秦迪 [Axb的自我修养](http://blog.2baxb.me)）
 
 ![jewel](/images/maven/jewel.jpg)
