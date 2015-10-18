@@ -1,5 +1,6 @@
 #!/bin/bash
 ### find cycle in maven depnedency tree
+# author: qindi(axb)
 
 if [ $# -gt 0 ];then
     sourcepath=$1
