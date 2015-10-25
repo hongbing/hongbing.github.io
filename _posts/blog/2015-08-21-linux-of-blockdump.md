@@ -1,12 +1,13 @@
 ---
 layout: post
 title: linux系统之block_dump
-description: block_dump是linux系统的一个调试选项，选项打开的时候，会把当前所有磁盘读写操作的信息打印到内核输出，可以通过`dmesg`来查看输出内容。
 category: blog
+tags: linux blockdump
 ---
 
 
 当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过`iostat`，`vmstat`命令从宏观上来查看系统的一些io参数，比如某设备的读写速度，cpu的使用情况。
+<!-- more -->
 
 ```
 #iostat
@@ -129,7 +130,6 @@ debugfs 1.42.9 (4-Feb-2014)
 Inode	Pathname
 3545002	/home/hongbing/.cache/google-chrome/Default/Cache/data_1
 ```
-
 ![blockdump](/images/linuxofblockdump/blockdump.jpg)
 
 **参考**

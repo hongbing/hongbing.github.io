@@ -26,10 +26,10 @@ gems:      []
 
 
 # Conversion Kramdown
-markdown: Kramdown   
+markdown: Kramdown
 highlighter: pygments
 lsi:         false
-excerpt_separator: "\n"
+excerpt_separator: "<!-- more -->"
 
 # Serving
 detach:  false
@@ -43,8 +43,11 @@ relative_permalinks: false
 # Outputting
 paginate: 5
 permalink:     date
-paginate_path: blog/page:num
+paginate_path: "page:num"
 timezone:      null
+
+disqus:
+  shortname: 'hongbing.disqus.com'
 
 quiet:    false
 defaults: []

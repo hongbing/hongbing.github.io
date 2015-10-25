@@ -2,10 +2,9 @@
 layout:     post
 title: haproxy部署
 category: blog
-description: 记录haproxy的部署过程。
 ---
 
-#### 1. 安装
+## 1 安装
 
 下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），**Fuck GFW**。
  可以通过直接访问http://www.haproxy.org/download/1.5/src/地址，选择相应的版本下载。或者使用
@@ -17,11 +16,11 @@ cd haproxy-X.Y.Z
 uname -a
 make TARGET=linux26 PREFIX=/usr/local/haproxy install
 {% endhighlight%}
-
+<!-- more -->
 linux26,26表示linux系统的主次版本号。
 执行上面的命令，输出done就正确安装完成。
 
-#### 2. 配置文件
+## 2 配置
 
 + 修改配置
 
