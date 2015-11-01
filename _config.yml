@@ -22,7 +22,6 @@ unpublished: false
 
 # Plugins
 whitelist: []
-gems:      []
 
 
 # Conversion Kramdown
@@ -39,6 +38,9 @@ baseurl: "" # does not include hostname
 
 # Backwards-compatibility
 relative_permalinks: false
+
+#github
+github: hongbing
 
 # Outputting
 paginate: 5

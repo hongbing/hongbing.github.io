@@ -119,6 +119,7 @@ height:162px;
 padding: 40px 10px 30px 10px;
 }
 
+
 #project_title {
 margin: 0;
 color: #F8F8F8;
@@ -142,16 +143,22 @@ font-style:italic;
 }
 
 /************foot style*******************/
-#footer_wrap {
-background: #212121;
-height:30px;
+
+footer.inner {
+    text-align: center;
 }
 
+#footer_wrap {
+    color: #373737;
+    margin-top:25px;
+    margin-bottom:10px;
+    background-color:#FFFFFF;
+}
 .outer {
 width:100%;
 }
 /************layout style*****************/
-#content {width:1060px;margin:40px auto 60px;min-height:400px;height:auto !important;height:400px; }
+#content {width:1060px;margin:40px auto 60px;min-height:400px;height:auto !important; }
 
 
 /****************entry style**************/
@@ -172,6 +179,11 @@ width:100%;
 
 .entry img{max-width:670px;display:block;margin:10px auto;}
 
+.index-content.blog {
+    background-color:#F2F2F2;
+
+}
+
 .index-content .aside {
     position: fixed;
     top: 0;
@@ -185,14 +197,14 @@ width:100%;
     background-position:50% 50%;
 }
 
-.index-content .section { margin-left:30%; padding-top:38px; padding-right:15%;margin-bottom:100px;}
+.index-content .section { margin-left:20%;margin-right:20%; padding-top:30px;}
 
-.index-content .artical-list { width:80%; margin:0 auto; }
-.index-content .artical-list li { margin-bottom:30px; }
-.index-content h2 { font-size:20px; margin-bottom:15px; word-break: break-all;}
+.index-content .artical-list { width:80%; margin:0 auto;background-color:#f2f2f2; }
+.index-content .artical-list li { margin-bottom:30px; background-color:#ffffff;border-radius:10px;}
+.index-content h2 { font-size:20px; margin-bottom:15px; word-break: break-all;text-align:center;padding-top:15px;}
 .index-content h2 a { color:#413E3E ; font-size:22px;}
 .index-content h2 a:hover { color:#2E93D4; text-decoration:none; }
-.index-content .title-desc {color:#999;font-size:14px;line-height:1.6em;}
+.index-content .title-desc {color:#999;font-size:14px;text-indent:2em;line-height:1.6em;padding:0 20px 20px 20px;}
 
 .index-content .artical-cate { width:70%; margin:0 auto; }
 .index-content .artical-cate li { display:inline-block; *float:left; zoom:1; font-size:18px; width:32%; cursor:pointer; }
@@ -218,7 +230,6 @@ h3.about {color:#777;margin-top:20px;font-size:22px;margin-bottom:10px}
 
 .pager {
     padding-bottom: 20px;
-    margin: 0 0 60px 0 !important;
     list-style: none;
     text-align: center;
 }

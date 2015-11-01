@@ -14,20 +14,8 @@
     <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
 </head>
 <body>
-    <div id="header_wrap" class="outer">
-	<header class="inner">
-		<div id="project_title" align="center"><a href="/">hongbingの部落格</a></div>
-		<div id="project_tagline" align="center">ONCE A GEEK, FOREVER A GEEK.</div>
-	</header>
-    </div>
-    
-	{{content}}
-
-<!--    <div id="footer_wrap" class="outer">
-    	<footer class="inner">
-    	</footer>
-    </div>
--->
-
+      {% include header.html %} 
+         {{content}}
+      {% include analytics.html %}
 </body>
 </html>
