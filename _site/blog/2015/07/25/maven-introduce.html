@@ -189,13 +189,30 @@
 
 <h2 id="maven-1">2 maven实践</h2>
 
-<h3 id="jar">2.1 手动添加jar包到本地仓库</h3>
-<p>执行命令：</p>
+<h3 id="jar">2.1 手动添加jar包到仓库</h3>
+
+<p><strong>本地仓库</strong></p>
 
 <blockquote>
-  <pre><code> mvn install:install-file -Dfile=jar包的位置 -DgroupId=jar的groupId -DartifactId=jar的artifactId -Dversion=jar的version -Dpackaging=jar`
+  <pre><code> mvn install:install-file -DgroupId=jar的groupId  -DartifactId=jar的artifactId -Dversion=jar的version  -Dfile=jar包的路径 -Dpackaging=jar
 </code></pre>
 </blockquote>
+
+<p>一个命令将二进制，源码和javadoc都上传到本地仓库：</p>
+
+<blockquote>
+  <pre><code> mvn install:install-file  -DgroupId=jar的groupId  -DartifactId=jar的artifactId -Dversion=jar的version -Dfile=二进制jar包的路径  -Dsources=sources jar包的路径  -Djavadoc=javadoc jar包的路径
+</code></pre>
+</blockquote>
+
+<p><strong>远程仓库</strong></p>
+
+<blockquote>
+  <pre><code> mvn deploy:deploy-file  -DgroupId=jar的groupId -DartifactId=jar的artifactId -Dversion=jar的version -Dfile=二进制jar包的路径  -Dsources=sources jar包的路径 -Djavadoc=javadoc jar包的路径
+</code></pre>
+</blockquote>
+
+<p><em>注：在上述命令后都可以指定上传的仓库地址，在命令后面添加<code>-url=file://path/to/repository</code>，如果没有指定则会依据maven的setting.xml中的配置</em></p>
 
 <p>添加到maven库中后，使用该jar包时需要修改maven工程的pom.xml文件，将添加的jar包加入到pom.xml文件中即可使用。</p>
 
@@ -333,8 +350,6 @@
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
-        
-            <li><a href="/blog/2015/10/24/template.html">存在感</a></li>
         
             <li><a href="/blog/2015/08/21/linux-of-blockdump.html">linux系统之block_dump</a></li>
         

@@ -141,10 +141,29 @@ site-deploy     将生成的站点文档部署到特定的服务器上
 
 ## 2 maven实践
 
-### 2.1 手动添加jar包到本地仓库
-执行命令：
+### 2.1 手动添加jar包到仓库
 
->	 mvn install:install-file -Dfile=jar包的位置 -DgroupId=jar的groupId -DartifactId=jar的artifactId -Dversion=jar的version -Dpackaging=jar`
+**本地仓库**
+  
+>      mvn install:install-file -DgroupId=jar的groupId 
+-DartifactId=jar的artifactId -Dversion=jar的version
+ -Dfile=jar包的路径 -Dpackaging=jar
+
+一个命令将二进制，源码和javadoc都上传到本地仓库：
+
+>      mvn install:install-file  -DgroupId=jar的groupId 
+-DartifactId=jar的artifactId -Dversion=jar的version
+-Dfile=二进制jar包的路径  -Dsources=sources jar包的路径 
+-Djavadoc=javadoc jar包的路径
+
+**远程仓库**
+
+>      mvn deploy:deploy-file  -DgroupId=jar的groupId
+-DartifactId=jar的artifactId -Dversion=jar的version
+-Dfile=二进制jar包的路径  -Dsources=sources jar包的路径
+-Djavadoc=javadoc jar包的路径
+
+*注：在上述命令后都可以指定上传的仓库地址，在命令后面添加`-url=file://path/to/repository`，如果没有指定则会依据maven的setting.xml中的配置*
 
 添加到maven库中后，使用该jar包时需要修改maven工程的pom.xml文件，将添加的jar包加入到pom.xml文件中即可使用。
  
