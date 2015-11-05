@@ -5,7 +5,6 @@ category: blog
 ---
 
 ## 1 Raft概念
-----------------------------------------
 
 分布式系统中，为了实现一致性，一般采用**对称式**和**非对称式**两种server组织方式。
 
@@ -27,6 +26,7 @@ raft算法中集群中server的角色分为：
 可以将follower，candidate，leader的角色与美国选举中的角色对应起来。
 follower表示议员，candidate表示总统候选人，leader表示总统。
 遵循的原则为：
+
 + 每一任期（term）中最多只有一个总统
 
 + 如果总统挂掉，其余某个或某些议员会升级为总统候选人，候选人得到多数选票则变成总统，如果同时几个候选人都未得到多数选票，候选人重新参与选举（term number自增），直到选出总统。
@@ -40,11 +40,9 @@ follower表示议员，candidate表示总统候选人，leader表示总统。
 server之间通过RPC通信，三种角色转换图：
 ![raftrole](/images/raft/raftrole.png)
 
-
 为了raft算法的易于理解，raft将算法分为leader election，log replication，safty，membership change几个子问题。下面将一一介绍。
 
 ## 2 leader election
-------------------------------------
 
 系统刚开始启动的时候，会从所有follower中选择一个或几个candidate（依据哪个follower的timeout先到），然后其余follower为candidate投票（每个follower只能投一票），从candidate中选出leader，leader负责与client通信（所有到follower的请求也会重新指向leader），同时负责向follower发送appendEntry。
 
@@ -52,8 +50,8 @@ server之间通过RPC通信，三种角色转换图：
 
 Leader发送给follower的AppendEntry只有得到大多数的回复后，leader自身状态机才能执行entry提交，并将结果返回给客户端。同时，leader会向follower发送heartbeat告知follower可以将上一次接收到的log entry提交。
 
-<font color="blue">这里存在着这样一种可能：
-如果leader将appendEntry发送给follower后就挂了，那么应该怎么处理？</font>
+这里存在着这样一种可能：
+如果leader将appendEntry发送给follower后就挂了，那么应该怎么处理?
 分两种情况：
 
 `1）：大多数follower已经接收到AppendEntry`
@@ -65,8 +63,7 @@ Leader发送给follower的AppendEntry只有得到大多数的回复后，leader�
 
 + 如果选举出的leader属于大多数接收到Entry中的一个，那么下一次的appendEntry到来的时候，会将前面未提交的entry一并发送给follower，得到大多数的ack回复后一并提交。
 
-+ 如果选举出的leader属于少数没有接收到entry中的一个，这种情况不会出现，因为
-<font size="4" color="green">选举限制规定：</font><font size="4" color="green">follower不能给比自己log旧的candidate投票</font>
++ 如果选举出的leader属于少数没有接收到entry中的一个，这种情况不会出现，因为选举限制规定：follower不能给比自己log旧的candidate投票
 
 	因此少数派的log会比大多数中的log旧，少数派无法在选举中成为leader。
 
@@ -79,15 +76,14 @@ Leader发送给follower的AppendEntry只有得到大多数的回复后，leader�
 
 follower收到leader的heartbeat，则回复leader，“你是哥”。如果在follower的timout之后，仍然没有收到leader的heartbeat，follower认为leader已挂，“**国不可一日无君**”，因此推举自己为candidate，向所有server发送AppendVote RPC为自己拉票。此时存在这三种情况：
 
-1）. 自身拉票成功，成为leader。
+1) 自身拉票成功，成为leader。
 
-2）. 其他candidate成为leader，则降低自己身份为follower。
+2) 其他candidate成为leader，则降低自己身份为follower。
 
-3）. 没有出现leader，则开启下一轮选举直到选出leader为止。
+3) 没有出现leader，则开启下一轮选举直到选出leader为止。
 
 
 ## 3 log replication
----------------------------------
 
 每个server中都会保存一份log，log中记录了客户端的command。同时存在着一个状态机，状态机负责将log中的command提交，前提是必须在安全的情况下（下面将会解释安全的含义）。状态机按序执行log中的command，每个log中包含了同样的command，且命令的顺序一致，因此状态机在执行的时候能够保证每次执行都会有相同的输出。也就是只要所有的server中的log一致，那么经过状态机的执行，都会得到相同的结果，来保证分布式集群之中的数据一致性。因此，如何确保log一致是一致性算法要解决的问题。
 log中的一个单元称为**Entry**，每个Entry包含了command，index和term
@@ -97,7 +93,6 @@ leader通过RPC 将command发送给所有的follower。等到大多数的followe
 leader不会移除自己的log entry，follower在entry与leader不一致时，会移除自己的entry与leader保持一致。
 
 ## 4 safty
-------------------------------------------
 
 **保证在非Byzantine条件下，无论是网络延时，分区，丢包，包重复以及无序等情况下，都能返回正确的结果。**
 
@@ -110,10 +105,9 @@ leader不会移除自己的log entry，follower在entry与leader不一致时，�
 
 
 ## 5 membership change
-----------------------------------------
+
 集群中节点的变更，要么是故障，要么是业务需求扩容/缩容。
 Raft使用联合一致性阶段（joint consensus）来作为过渡阶段实现配置从旧到新的变化。
-
 
 集群中配置状态的转换：
 

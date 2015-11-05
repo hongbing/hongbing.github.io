@@ -141,10 +141,19 @@ nr_table_entries = min_t(u32, nr_table_entries, sysctl_max_syn_backlog);
 
 <p>ESTABLISH队列表示传输层已经接收到客户端发送的ACK包，但是应用层还没有调用accept来取走连接。ESTABLISHED队列的长度与<code>net.core.somaxconn</code>有关，且其值为<code>min(listen的backlog参数,somaxconn)</code>,前面LISTEN状态的listen系统调用已经明确了这一点。</p>
 
-<p>对于洪泛攻击，可以通过改变linux的tcp参数来减轻压力：<br />
-+ 改变SYN队列的大小，修改linux系统下<code>net.ipv4.tcp_max_syn_backlog</code>的值。<br />
-+ 减少重传次数 <code>tcp_synack_retries</code><br />
-+ 如果处理不过来，直接拒绝连接 <code>tcp_abort_on_overflow</code></p>
+<p>对于洪泛攻击，可以通过改变linux的tcp参数来减轻压力：</p>
+
+<ul>
+  <li>
+    <p>改变SYN队列的大小，修改linux系统下<code>net.ipv4.tcp_max_syn_backlog</code>的值。</p>
+  </li>
+  <li>
+    <p>减少重传次数 <code>tcp_synack_retries</code></p>
+  </li>
+  <li>
+    <p>如果处理不过来，直接拒绝连接 <code>tcp_abort_on_overflow</code></p>
+  </li>
+</ul>
 
 <p>另外如果开启<code>syncookies</code>（忽略<code>net.ipv4.tcp_max_syn_backlog</code>的值），那么可以接收更多的连接请求。当SYN队列满了后，TCP会通过源地址端口、目标地址端口和时间戳打造出一个特别的Sequence Number发回去（又叫cookie），如果是攻击者则不会有响应，如果是正常连接，则会把这个 SYN Cookie发回来，然后服务端可以通过cookie建连接（即使你不在SYN队列中）。</p>
 
