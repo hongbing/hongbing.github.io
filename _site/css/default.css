@@ -102,7 +102,17 @@ p code {
     white-space: nowrap;
 }
 
-
+blockquote {
+    background-color: #f0f0f0;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 15px;
+    padding-bottom: 1px;
+    text-indent: 1.2em;
+    margin-bottom: 15px;
+    font-style: italic;
+    color: #373737;
+}
 
 /****************header style*************/
 #header_wrap {
@@ -130,6 +140,7 @@ text-shadow: #111 0px 0px 10px;
 
 #project_title a:hover {
 text-decoration:none;
+color:#009999;
 }
 
 #project_tagline {

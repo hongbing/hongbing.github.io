@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jetty6 deadlock </title>
+    <meta name="author" content="hongbing" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="hongbing的部落格" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <link rel="shortcut icon" href="/jinchuan.png" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+      <div id="header_wrap" class="outer">
+        <header class="inner">
+                <div id="project_title" align="center"><a href="/">hongbingの部落格</a></div>
+                <div id="project_tagline" align="center">ONCE A GEEK, FOREVER A GEEK.</div>
+        </header>
+</div>
+ 
+         <link rel="stylesheet" href="/js/prettify/prettify.css" />
+<style type="text/css">
+    body { background:#e8e8e8; }
+    @media screen and (max-width: 750px){
+        body { background:#fff; }
+    }
+    @media screen and (max-width: 1020px){
+        body { background:#fff; }
+    }
+</style>
+
+<div id="content">
+    <div class="entry">
+        <h1 class="entry-title"><a href="/blog/2015/11/04/2015-11-02-jetty-deadlock.html" title="jetty6 deadlock">jetty6 deadlock</a></h1>
+        <p class="entry-date">2015-11-04</p>
+	<h2 id="section">1 背景</h2>
+<p>业务方反应消息队列最近几天输出的消息量变少了（良好的监控系统应该在业务方反馈之前将问题暴露出来），进入到前端机发现，多达20多万的TCP连接状态都处于CLOSE_WAIT状态，且TCP socket的RECV-Q中还有100多个包<!-- more -->没有被处理。</p>
+
+<h2 id="section-1">2 线索</h2>
+<p>看到tcp连接都处于CLOSE_WAIT状态，初步猜测是网络收发包方面出现了问题，重启应该可以解决当前的问题。在重启之前，使用jstack dump了一份当前java进程的线程栈,发现在dump的文件最后，检测到了deadlock，内容如下：</p>
+
+<pre><code> Java stack information for the threads listed above:
+"1854411210@qtp-1306606930-148":
+	at org.mortbay.io.nio.SelectorManager$SelectSet.scheduleIdle(SelectorManager.java:795)
+	- waiting to lock &lt;0x00000006fd82b228&gt; (a org.mortbay.io.nio.SelectorManager$SelectSet)
+	at org.mortbay.io.nio.SelectChannelEndPoint.scheduleIdle(SelectChannelEndPoint.java:159)
+	at org.mortbay.io.nio.SelectChannelEndPoint.blockWritable(SelectChannelEndPoint.java:293)
+	- locked &lt;0x0000000777e8d338&gt; (a org.mortbay.jetty.nio.SelectChannelConnector$ConnectorEndPoint)
+	at org.mortbay.jetty.AbstractGenerator$Output.blockForOutput(AbstractGenerator.java:544)
+	at org.mortbay.jetty.AbstractGenerator$Output.flush(AbstractGenerator.java:571)
+	at org.mortbay.jetty.HttpConnection$Output.flush(HttpConnection.java:1010)
+	at cn.xxxx.xxxxx.channel.DataOutputChannel.process(DataOutputChannel.java:23)
+	at cn.xxxx.xxxxx.channel.DataChannel.handler(DataChannel.java:40)
+	at cn.xxxx.xxxxx.channel.DataChannelFactory.handler(DataChannelFactory.java:27)
+	at cn.xxxx.xxxxx.processor.ClientProcessor.outputDataMessage(ClientProcessor.java:287)
+	at cn.xxxx.xxxxx.processor.ClientProcessor.outputDataMessage(ClientProcessor.java:259)
+	at cn.xxxx.xxxxx.processor.ClientProcessor.handler(ClientProcessor.java:82)
+	at cn.xxxx.xxxxx.web.DataServlet.service(DataServlet.java:34)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:820)
+	at org.mortbay.jetty.servlet.ServletHolder.handle(ServletHolder.java:511)
+	at org.mortbay.jetty.servlet.ServletHandler.handle(ServletHandler.java:390)
+	at org.mortbay.jetty.security.SecurityHandler.handle(SecurityHandler.java:216)
+	at org.mortbay.jetty.servlet.SessionHandler.handle(SessionHandler.java:182)
+	at org.mortbay.jetty.handler.ContextHandler.handle(ContextHandler.java:765)
+	at org.mortbay.jetty.webapp.WebAppContext.handle(WebAppContext.java:440)
+	at org.mortbay.jetty.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:230)
+	at org.mortbay.jetty.handler.HandlerCollection.handle(HandlerCollection.java:114)
+	at org.mortbay.jetty.handler.HandlerWrapper.handle(HandlerWrapper.java:152)
+	at org.mortbay.jetty.Server.handle(Server.java:326)
+	at org.mortbay.jetty.HttpConnection.handleRequest(HttpConnection.java:542)
+	at org.mortbay.jetty.HttpConnection$RequestHandler.headerComplete(HttpConnection.java:926)
+	at org.mortbay.jetty.HttpParser.parseNext(HttpParser.java:549)
+	at org.mortbay.jetty.HttpParser.parseAvailable(HttpParser.java:212)
+	at org.mortbay.jetty.HttpConnection.handle(HttpConnection.java:404)
+	at org.mortbay.io.nio.SelectChannelEndPoint.run(SelectChannelEndPoint.java:410)
+	at org.mortbay.thread.QueuedThreadPool$PoolThread.run(QueuedThreadPool.java:582)
+
+"965223859@qtp-1306606930-25 - Acceptor14 SelectChannelConnector@0.0.0.0:8082":
+	at org.mortbay.io.nio.SelectChannelEndPoint.updateKey(SelectChannelEndPoint.java:322)
+	- waiting to lock &lt;0x0000000777e8d338&gt; (a org.mortbay.jetty.nio.SelectChannelConnector$ConnectorEndPoint)
+	at org.mortbay.io.nio.SelectChannelEndPoint.close(SelectChannelEndPoint.java:456)
+	at org.mortbay.jetty.nio.SelectChannelConnector$ConnectorEndPoint.close(SelectChannelConnector.java:362)
+	at org.mortbay.io.nio.SelectChannelEndPoint.idleExpired(SelectChannelEndPoint.java:174)
+	at org.mortbay.io.nio.SelectChannelEndPoint$IdleTask.expire(SelectChannelEndPoint.java:489)
+	at org.mortbay.thread.Timeout.tick(Timeout.java:137)
+	- locked &lt;0x00000006fd82b228&gt; (a org.mortbay.io.nio.SelectorManager$SelectSet)
+	at org.mortbay.thread.Timeout.tick(Timeout.java:153)
+	at org.mortbay.io.nio.SelectorManager$SelectSet.doSelect(SelectorManager.java:762)
+	at org.mortbay.io.nio.SelectorManager.doSelect(SelectorManager.java:192)
+	at org.mortbay.jetty.nio.SelectChannelConnector.accept(SelectChannelConnector.java:124)
+	at org.mortbay.jetty.AbstractConnector$Acceptor.run(AbstractConnector.java:708)
+	at org.mortbay.thread.QueuedThreadPool$PoolThread.run(QueuedThreadPool.java:582)
+</code></pre>
+<p>此时应该查看服务器端CLOSE_WAIT的某一个连接的对端的tcp连接状况，对端是已经close了，还是hang住在这个连接上，这个情况当时没能及时了解，遗憾。</p>
+
+
+	<ul class="pager">
+            
+            <li class="previous"><a href="/blog/2015/11/04/template.html" title="存在感">上一篇 存在感</a></li>
+	    
+
+            
+            <li class="next"><a href="/blog/2015/11/05/2015-11-03-tcp-connection-status.html" title="tcp连接状态分析">下一篇 tcp连接状态分析</a></li>
+            
+	</ul>
+	<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hongbing.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    </div>
+
+    <div class="sidenav">
+	<iframe width="100%" height="85" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=85&fansRow=2&ptype=1&speed=0&skin=1&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=2702608131&verifier=f3af5509&dpc=1"></iframe>	
+    </div>
+	
+    <div class="sidenav">
+        <h2>Blog</h2>
+        <ul class="artical-list">
+        
+            <li><a href="/blog/2015/11/05/2015-11-03-tcp-connection-status.html">tcp连接状态分析</a></li>
+        
+            <li><a href="/blog/2015/11/04/2015-11-02-jetty-deadlock.html">jetty6 deadlock</a></li>
+        
+            <li><a href="/blog/2015/11/04/template.html">存在感</a></li>
+        
+            <li><a href="/blog/2015/08/21/linux-of-blockdump.html">linux系统之block_dump</a></li>
+        
+            <li><a href="/blog/2015/08/20/linux-of-pdflush.html">linux系统之pdflush</a></li>
+        
+            <li><a href="/blog/2015/08/11/UnknowHostException.html">UnknowHostException</a></li>
+        
+            <li><a href="/blog/2015/08/02/haproxy-install.html">haproxy部署</a></li>
+        
+            <li><a href="/blog/2015/07/25/maven-introduce.html">maven实践</a></li>
+        
+            <li><a href="/blog/2015/06/21/etcd-vs-consul.html">ETCD vs. Consul</a></li>
+        
+            <li><a href="/blog/2015/06/21/distributed-id-generator.html">分布式ID生成器</a></li>
+        
+            <li><a href="/blog/2015/06/17/what-is-good-code.html">什么样的代码才是好的代码</a></li>
+        
+            <li><a href="/blog/2015/06/17/raft-introduce.html">Raft</a></li>
+        
+        </ul>
+<!--
+        <h2>Opinion</h2>
+        <ul class="artical-list">
+        
+        </ul>
+
+        <h2>Project</h2>
+        <ul class="artical-list">
+        
+        </ul>-->
+     </div>
+</div>
+<script src="/js/jquery-1.7.1.min.js"" type="text/javascript"></script>
+<script src="/js/post.js" type="text/javascript"></script>
+
+      
+
+</body>
+</html>
