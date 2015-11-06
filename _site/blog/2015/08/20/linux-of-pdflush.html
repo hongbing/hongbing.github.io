@@ -113,8 +113,7 @@ vm.dirty_writeback_centisecs = 500
 <p>这里有一个需要注意的点，占比依据的是<code>可用内存</code>，并不是全部内存。可用内存如何计算？</p>
 
 <blockquote>
-  <pre><code> MemFree + Cached - Mapped 
-</code></pre>
+  <p>MemFree + Cached - Mapped</p>
 </blockquote>
 
 <p>因此，按照前面给出的数字，可用内存为435M，那么当脏页达到21.75M时，就会触发空间阈值。</p>

@@ -131,11 +131,11 @@ follower表示议员，candidate表示总统候选人，leader表示总统。<br
 
 <p>follower收到leader的heartbeat，则回复leader，“你是哥”。如果在follower的timout之后，仍然没有收到leader的heartbeat，follower认为leader已挂，“<strong>国不可一日无君</strong>”，因此推举自己为candidate，向所有server发送AppendVote RPC为自己拉票。此时存在这三种情况：</p>
 
-<p>1) 自身拉票成功，成为leader。</p>
+<p><strong>1)</strong> 自身拉票成功，成为leader。</p>
 
-<p>2) 其他candidate成为leader，则降低自己身份为follower。</p>
+<p><strong>2)</strong> 其他candidate成为leader，则降低自己身份为follower。</p>
 
-<p>3) 没有出现leader，则开启下一轮选举直到选出leader为止。</p>
+<p><strong>3)</strong> 没有出现leader，则开启下一轮选举直到选出leader为止。</p>
 
 <h2 id="log-replication">3 log replication</h2>
 

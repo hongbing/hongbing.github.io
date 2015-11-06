@@ -61,27 +61,26 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 <p>可以使用linux内核提供的<code>block_dump</code>参数。linux doc对block_dump的描述：</p>
 
-<pre><code>==============================================================
-block_dump
+<blockquote>
+  <p>block_dump<br />
+block_dump enables block I/O debugging when set to a nonzero value. More<br />
+information on block I/O debugging is in Documentation/laptops/laptop-mode.txt.</p>
+</blockquote>
 
-block_dump enables block I/O debugging when set to a nonzero value. More
-information on block I/O debugging is in Documentation/laptops/laptop-mode.txt.
-
-==============================================================
-</code></pre>
 <p>下面是laptop-mode.txt中对block_dump的描述：</p>
 
-<pre><code>If you want to find out which process caused the disk to spin up, you can
-gather information by setting the flag /proc/sys/vm/block_dump. When this flag
-is set, Linux reports all disk read and write operations that take place, and
-all block dirtyings done to files. This makes it possible to debug why a disk
-needs to spin up, and to increase battery life even more. The output of
-block_dump is written to the kernel output, and it can be retrieved using
-"dmesg". When you use block_dump and your kernel logging level also includes
-kernel debugging messages, you probably want to turn off klogd, otherwise
-the output of block_dump will be logged, causing disk activity that is not
-normally there.
-</code></pre>
+<blockquote>
+  <p>If you want to find out which process caused the disk to spin up, you can<br />
+gather information by setting the flag /proc/sys/vm/block_dump. When this flag<br />
+is set, Linux reports all disk read and write operations that take place, and<br />
+all block dirtyings done to files. This makes it possible to debug why a disk<br />
+needs to spin up, and to increase battery life even more. The output of<br />
+block_dump is written to the kernel output, and it can be retrieved using<br />
+“dmesg”. When you use block_dump and your kernel logging level also includes<br />
+kernel debugging messages, you probably want to turn off klogd, otherwise<br />
+the output of block_dump will be logged, causing disk activity that is not<br />
+normally there.</p>
+</blockquote>
 
 <p>从上面的描述可以知道，block_dump是一个调试选项，选项打开的时候，会把当前所有磁盘读写操作的信息输出到内核输出，可以通过<code>dmesg</code>来查看输出内容。执行下面的脚本可以在/tmp/diskio.log中看到相关的信息。</p>
 
@@ -102,14 +101,12 @@ echo 0 &gt; /proc/sys/vm/block_dump
 
 <p>下面是从/tmp/diskio.log中截取的一部分内容：</p>
 
-<blockquote>
-  <pre><code>[88005.820372] jbd2/sda1-8(140): WRITE block 239498592 on sda1 (8 sectors)
-[88005.821425] jbd2/sda1-8(140): WRITE block 239498600 on sda1 (8 sectors)
+ 	[88005.820372] jbd2/sda1-8(140): WRITE block 239498592 on sda1 (8 sectors)<br />
+<pre><code>[88005.821425] jbd2/sda1-8(140): WRITE block 239498600 on sda1 (8 sectors)
 [88006.732202] kworker/u8:1(13277): WRITE block 2537400 on sda1 (8 sectors)
 [88006.732327] kworker/u8:1(13277): WRITE block 25003008 on sda1 (16 sectors)
 [88006.732354] kworker/u8:1(13277): WRITE block 1599768 on sda1 (8 sectors)
 </code></pre>
-</blockquote>
 
 <p>解释一下输出的内容，[88005.820372]是机器启动到现在的时间，单位为秒， jbd2/sda1-8(140)进程名和pid，后面的内容为磁盘写数据的内容，block后面的数字表示的不是文件层面的block，而是硬件层面的block（也即是扇区），扇区的大小为512B，而大多数文件系统的block大小为4K，因此转换为文件系统的block只需要将后面的值除以8。</p>
 
@@ -120,13 +117,11 @@ echo 0 &gt; /proc/sys/vm/block_dump
 
 <p>结果为：</p>
 
-<blockquote>
-  <pre><code>jbd2/sda1-8 21
-kworker/u8:1 7
+ 	jbd2/sda1-8 21<br />
+<pre><code>kworker/u8:1 7
 rs:main 3
 sh 2
 </code></pre>
-</blockquote>
 
 <p>仅仅凭上面的信息是无法知道具体在写哪一个文件。要知道哪个文件是io操作大户，一种方式是前面提到的通过<code>lsof -p [pid]</code>命令来分析进程打开的文件，找到正在频繁操作的文件。<br />
 另一种方式是通过<a href="https://en.wikipedia.org/wiki/Debugfs">debugfs</a>工具来分析。</p>
@@ -135,10 +130,7 @@ sh 2
 
 <p>我们分析kworker的一条记录</p>
 
-<blockquote>
-  <pre><code>[88006.732202] kworker/u8:1(13277): WRITE block 2537400 on sda1 (8 sectors)
-</code></pre>
-</blockquote>
+ 	[88006.732202] kworker/u8:1(13277): WRITE block 2537400 on sda1 (8 sectors)<br />
 
 <p>扇区号：2537400，文件块号：2537400/8=317175</p>
 

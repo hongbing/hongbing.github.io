@@ -40,11 +40,9 @@
 
 <p>团队使用Docker中的测试环境，在新起的测试环境中启动消息队列项目，项目启动失败，抛出如下异常：</p>
 
-<blockquote>
-  <pre><code>UnknowHostException：
+<pre><code>UnknowHostException：
 java.net.UnknownHostException: e7a05a2abfc5: e7a05a2abfc5: 未知的名称或服务
 </code></pre>
-</blockquote>
 
 <h2 id="section-1">2 <strong>分析</strong></h2>
 
@@ -52,10 +50,7 @@ java.net.UnknownHostException: e7a05a2abfc5: e7a05a2abfc5: 未知的名称或服
 <!-- more --> <br />
   跟踪源代码发现<code>InetAddress.getLocalHost()</code>会调用<strong>Inet6AddressImpl</strong>或者<strong>Inet4AddressImpl</strong>的native方法：</p>
 
-<blockquote>
-  <pre><code>public native String getLocalHostName() throws UnknownHostException;
-</code></pre>
-</blockquote>
+ 	public native String getLocalHostName() throws UnknownHostException;<br />
 
 <p>该native方法直接执行linux的系统调用gethostname。系统调用gethostname与在终端执行<code>$ hostname</code>或者<code>$ cat /etc/hostname</code>的结果一致。获得hostname后，比较该hostname的值，如果为localhost，则执行<code>impl.loopbackAddress();</code>获得localhost对应的ip地址。</p>
 
@@ -99,10 +94,8 @@ java.net.UnknownHostException: e7a05a2abfc5: e7a05a2abfc5: 未知的名称或服
 
 <p>知道了异常发生的原因，那么解决方法只需要在/etc/hosts里面添加一项</p>
 
-<blockquote>
-  <pre><code>127.0.0.1 e7a05a2abfc5
+<pre><code>127.0.0.1 e7a05a2abfc5
 </code></pre>
-</blockquote>
 
 <p>即可。另外还可以选择将<code>hostname</code>的值改为<code>localhost</code>的方式来解决问题。</p>
 

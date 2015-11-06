@@ -11,7 +11,7 @@ category: blog
 
 版本号格式一般分为：
 
->      主版本号.分支版本号.小版本号-里程碑版本号
+      主版本号.分支版本号.小版本号-里程碑版本号
 
 **主版本号**：一般指框架具有重大变化的版本号，比如struts1，struts2框架的变化
 
@@ -145,25 +145,25 @@ site-deploy     将生成的站点文档部署到特定的服务器上
 
 **本地仓库**
   
->      mvn install:install-file -DgroupId=jar的groupId 
+      mvn install:install-file -DgroupId=jar的groupId 
 -DartifactId=jar的artifactId -Dversion=jar的version
  -Dfile=jar包的路径 -Dpackaging=jar
 
 一个命令将二进制，源码和javadoc都上传到本地仓库：
 
->      mvn install:install-file  -DgroupId=jar的groupId 
+      mvn install:install-file  -DgroupId=jar的groupId 
 -DartifactId=jar的artifactId -Dversion=jar的version
 -Dfile=二进制jar包的路径  -Dsources=sources jar包的路径 
 -Djavadoc=javadoc jar包的路径
 
 **远程仓库**
 
->      mvn deploy:deploy-file  -DgroupId=jar的groupId
+      mvn deploy:deploy-file  -DgroupId=jar的groupId
 -DartifactId=jar的artifactId -Dversion=jar的version
 -Dfile=二进制jar包的路径  -Dsources=sources jar包的路径
 -Djavadoc=javadoc jar包的路径
 
-*注：在上述命令后都可以指定上传的仓库地址，在命令后面添加`-url=file://path/to/repository`，如果没有指定则会依据maven的setting.xml中的配置*
+_注：在上述命令后都可以指定上传的仓库地址，在命令后面添加`-url=file://path/to/repository`，如果没有指定则会依据maven的setting.xml中的配置_
 
 添加到maven库中后，使用该jar包时需要修改maven工程的pom.xml文件，将添加的jar包加入到pom.xml文件中即可使用。
  
@@ -175,8 +175,6 @@ site-deploy     将生成的站点文档部署到特定的服务器上
 支持web-app发布到jetty的插件：jetty-maven-plugin
 
 ### 2.3 maven查找包依赖
-
-### 2.4 传递依赖的版本冲突
 
 + 使用maven project report插件来显示所有的项目依赖关系
 

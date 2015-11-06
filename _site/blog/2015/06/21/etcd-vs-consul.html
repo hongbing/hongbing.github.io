@@ -46,9 +46,14 @@
   <li>
     <p>Etcd中的RPC消息格式都是protobuf格式，Consul的RPC消息格式采用MsgPack格式。</p>
   </li>
-  <li>Etcd支持HTTP操作接口，Consul支持HTTP和DNS两种操作接口<br />
-<!-- more --><br />
-### 2. 架构</li>
+  <li>
+    <p>Etcd支持HTTP操作接口，Consul支持HTTP和DNS两种操作接口<br />
+<!-- more --></p>
+  </li>
+</ul>
+
+<h3 id="section-2">2. 架构</h3>
+<ul>
   <li>
     <p>Etcd不支持多数据中心，consul支持多数据中心</p>
   </li>
@@ -58,10 +63,12 @@
   <li>
     <p>Etcd可以以proxy和etcd两种方式启动，proxy只负责请求的转发，是请求转发代理的角色，不参与raft一致性协议（关于请求转发这方面功能Etcd的proxy类似于consul的client）。</p>
   </li>
-  <li>Etcd和Consul都建议server数量在3，5，7个左右。Consul的client数量可以多达几百上千。</li>
+  <li>
+    <p>Etcd和Consul都建议server数量在3，5，7个左右。Consul的client数量可以多达几百上千。</p>
+  </li>
 </ul>
 
-<h3 id="section-2">3. 数据处理</h3>
+<h3 id="section-3">3. 数据处理</h3>
 <ul>
   <li><code>Consul集群中的所有请求都会重定向到server，对于非leader的server会将写请求转发给leader处理</code>。对于读请求支持3种一致性模式：
     <ul>
@@ -79,7 +86,7 @@
 <p>对于写请求来说，两者都必须经过leader的强一致来处理。但是对于读请求，consul的default模式在etcd被认为是consistent，consul的stale模式在etcd是被当作默认的一致性模式。<br />
 Etcd使用强一致性读需要添加参数<code>quorum=true</code></p>
 
-<h3 id="section-3">4. 健康检测</h3>
+<h3 id="section-4">4. 健康检测</h3>
 <ul>
   <li>
     <p>Consul支持健康检测，包括应用级和系统级两种健康检测。</p>
@@ -89,7 +96,7 @@ Etcd使用强一致性读需要添加参数<code>quorum=true</code></p>
   </li>
 </ul>
 
-<h3 id="section-4">5.  压测</h3>
+<h3 id="section-5">5.  压测</h3>
 <ul>
   <li>
     <p>Etcd支持单实例1000次/s的写请求</p>
@@ -99,7 +106,7 @@ Etcd使用强一致性读需要添加参数<code>quorum=true</code></p>
   </li>
 </ul>
 
-<h3 id="section-5">6. 安全</h3>
+<h3 id="section-6">6. 安全</h3>
 <ul>
   <li>
     <p>Consul支持ACL，Etcd不支持（TODO）</p>
@@ -119,7 +126,7 @@ Etcd使用强一致性读需要添加参数<code>quorum=true</code></p>
   </li>
 </ul>
 
-<h3 id="section-6">8. 变更通知</h3>
+<h3 id="section-7">8. 变更通知</h3>
 <ul>
   <li>
     <p>Etcd使用long polling监听某一个key的变化，当变化发生时将变化key的相关信息推送给监听key的client。同时，还可以监听最近1000次以内的key的变化情况（X-Etcd-Index表示当前获取的key的index）。</p>
@@ -130,7 +137,7 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
   </li>
 </ul>
 
-<h3 id="section-7">9. 节点变更或故障处理</h3>
+<h3 id="section-8">9. 节点变更或故障处理</h3>
 <ul>
   <li>
     <p>Etcd中的server故障（硬件故障等难以恢复的故障），应该尽快用新的服务器替换掉故障的机器，否则quorum机制可能产生影响。需要手动执行命令移除和添加新的member。如果故障机器中的数据大于50MB，最好将数据copy到新的机器中，否则leader会将store中的所有数据传输给该member，将会长时间占用带宽。</p>
@@ -140,7 +147,7 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
   </li>
 </ul>
 
-<h3 id="section-8">10. 请求超时</h3>
+<h3 id="section-9">10. 请求超时</h3>
 <ul>
   <li>
     <p>Etcd不对get request做超时处理，因为get request为non-blocking way。watch request也不设置超时。只对Delete, Put, Post, QuorumGet requests设置超时时间，超时发生要么请求的server故障，要么集群中的大多数server故障。</p>
@@ -150,21 +157,17 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
   </li>
 </ul>
 
-<h3 id="section-9">11. 集群节点发现</h3>
+<h3 id="section-10">11. 集群节点发现</h3>
 
 <p>Etcd支持三种节点发现功能：</p>
 
 <ul>
-  <li><strong>static</strong><br />
-已知集群节点个数，IP地址等信息，通过-initial-cluster参数指定集群中的节点信息</li>
-</ul>
+  <li>
+    <p><strong>static</strong><br />
+已知集群节点个数，IP地址等信息，通过-initial-cluster参数指定集群中的节点信息</p>
 
-<blockquote>
-  <pre><code>-initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 -initial-cluster-state new
-</code></pre>
-</blockquote>
-
-<ul>
+    <p>-initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 -initial-cluster-state new</p>
+  </li>
   <li>
     <p><strong>discovery</strong></p>
 
@@ -174,7 +177,7 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
 
 <div class="highlight"><pre><code class="language-html" data-lang="html">curl -X PUT https://myetcd.local/v2/keys/discovery/6c007a14875d53d9bf0ef5a6fc0257c817f0fb83/config/size -d value=3
 
-_注：config前面有下划线_</code></pre></div>
+//注：config前面有下划线</code></pre></div>
 
 <p>上面的命令在已有的集群上注册node size，命令表明集群中有3个node，只有当3个node都注册后集群才开始工作，如果注册的node多于3个，那多余的都降为proxy模式启动。<br />
     如果没有权限获取已有的集群信息，可以使用公共的discovery url：<code>https://discovery.etcd.io</code></p>
@@ -188,7 +191,7 @@ _注：config前面有下划线_</code></pre></div>
   </li>
 </ul>
 
-<h3 id="section-10">12. 统计数据</h3>
+<h3 id="section-11">12. 统计数据</h3>
 <ul>
   <li>
     <p>Etcd支持node的统计数据，包括latency, bandwidth和uptime， Store的统计数据。</p>
@@ -198,7 +201,7 @@ _注：config前面有下划线_</code></pre></div>
   </li>
 </ul>
 
-<h3 id="section-11">13. 输出信息格式</h3>
+<h3 id="section-12">13. 输出信息格式</h3>
 <ul>
   <li>Etcd和Consul均采用json格式输出</li>
 </ul>

@@ -13,6 +13,7 @@ category: blog
 
 + Etcd支持HTTP操作接口，Consul支持HTTP和DNS两种操作接口
 <!-- more -->
+
 ### 2. 架构
 + Etcd不支持多数据中心，consul支持多数据中心
 
@@ -83,7 +84,7 @@ Etcd支持三种节点发现功能：
   + **static**
 	已知集群节点个数，IP地址等信息，通过-initial-cluster参数指定集群中的节点信息
 
->	-initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 -initial-cluster-state new
+	-initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 -initial-cluster-state new
 	
   + **discovery**
 
@@ -92,7 +93,7 @@ Etcd支持三种节点发现功能：
 {% highlight html %}
    	 curl -X PUT https://myetcd.local/v2/keys/discovery/6c007a14875d53d9bf0ef5a6fc0257c817f0fb83/config/size -d value=3
 
-_注：config前面有下划线_
+//注：config前面有下划线
 
 {% endhighlight %}
 

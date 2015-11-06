@@ -32,19 +32,13 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 可以使用linux内核提供的`block_dump`参数。linux doc对block_dump的描述：
 
-```
-==============================================================
-block_dump
-
+> block_dump
 block_dump enables block I/O debugging when set to a nonzero value. More
 information on block I/O debugging is in Documentation/laptops/laptop-mode.txt.
 
-==============================================================
-```
 下面是laptop-mode.txt中对block_dump的描述：
 
-```
-If you want to find out which process caused the disk to spin up, you can
+> If you want to find out which process caused the disk to spin up, you can
 gather information by setting the flag /proc/sys/vm/block_dump. When this flag
 is set, Linux reports all disk read and write operations that take place, and
 all block dirtyings done to files. This makes it possible to debug why a disk
@@ -54,7 +48,7 @@ block_dump is written to the kernel output, and it can be retrieved using
 kernel debugging messages, you probably want to turn off klogd, otherwise
 the output of block_dump will be logged, causing disk activity that is not
 normally there.
-```
+
 
 从上面的描述可以知道，block_dump是一个调试选项，选项打开的时候，会把当前所有磁盘读写操作的信息输出到内核输出，可以通过`dmesg`来查看输出内容。执行下面的脚本可以在/tmp/diskio.log中看到相关的信息。
 
@@ -76,7 +70,7 @@ echo 0 > /proc/sys/vm/block_dump
 
 下面是从/tmp/diskio.log中截取的一部分内容：
  
-> 	[88005.820372] jbd2/sda1-8(140): WRITE block 239498592 on sda1 (8 sectors)
+ 	[88005.820372] jbd2/sda1-8(140): WRITE block 239498592 on sda1 (8 sectors)
 	[88005.821425] jbd2/sda1-8(140): WRITE block 239498600 on sda1 (8 sectors)
 	[88006.732202] kworker/u8:1(13277): WRITE block 2537400 on sda1 (8 sectors)
 	[88006.732327] kworker/u8:1(13277): WRITE block 25003008 on sda1 (16 sectors)
@@ -92,7 +86,7 @@ cat /tmp/diskio.log | awk -F"[() \t]" '/(READ|WRITE|dirtied)/ {activity[$2]++} E
 
 结果为：
 
-> 	jbd2/sda1-8 21
+ 	jbd2/sda1-8 21
 	kworker/u8:1 7
 	rs:main 3
 	sh 2
@@ -104,7 +98,7 @@ cat /tmp/diskio.log | awk -F"[() \t]" '/(READ|WRITE|dirtied)/ {activity[$2]++} E
 
 我们分析kworker的一条记录
 
-> 	[88006.732202] kworker/u8:1(13277): WRITE block 2537400 on sda1 (8 sectors)
+ 	[88006.732202] kworker/u8:1(13277): WRITE block 2537400 on sda1 (8 sectors)
 
 扇区号：2537400，文件块号：2537400/8=317175
 
