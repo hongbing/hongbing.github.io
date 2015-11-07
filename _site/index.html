@@ -26,32 +26,6 @@
         <ul class="artical-list">
         
             <li>
-                <h2><a href="/blog/2015/11/05/2015-11-03-tcp-connection-status.html">tcp连接状态分析</a></h2>
-                <!--<div class="title-desc"></div>-->
-		<div class="title-desc">在工作中分析排查问题，只要涉及到网络方面，总是感觉无从下手，tcp各种状态的转换，以及每个状态后面各项参数的含义都令人头疼。下面对tcp各状态以及状态转换关系进行详细描述。
-
-首先附上一张学习TCP连接状态必备的神图——TCP状态转换图，后面涉及的所有状态都可以在图中找到相应的
-
-&hellip; <a href="/blog/2015/11/05/2015-11-03-tcp-connection-status.html" style="font-weight:bold;">Read More</a></div>
-	     </li>
-        
-            <li>
-                <h2><a href="/blog/2015/11/04/2015-11-02-jetty-deadlock.html">jetty6 deadlock</a></h2>
-                <!--<div class="title-desc"></div>-->
-		<div class="title-desc">1 背景
-业务方反应消息队列最近几天输出的消息量变少了（良好的监控系统应该在业务方反馈之前将问题暴露出来），进入到前端机发现，多达20多万的TCP连接状态都处于CLOSE_WAIT状态，且TCP socket的RECV-Q中还有100多个包
-
-&hellip; <a href="/blog/2015/11/04/2015-11-02-jetty-deadlock.html" style="font-weight:bold;">Read More</a></div>
-	     </li>
-        
-            <li>
-                <h2><a href="/blog/2015/11/04/template.html">存在感</a></h2>
-                <!--<div class="title-desc">存在感对于每个人的生活有多么的重要，可能平时并不是太关，其实他就是生活的全部</div>-->
-		<div class="title-desc">
-&hellip; <a href="/blog/2015/11/04/template.html" style="font-weight:bold;">Read More</a></div>
-	     </li>
-        
-            <li>
                 <h2><a href="/blog/2015/08/21/linux-of-blockdump.html">linux系统之block_dump</a></h2>
                 <!--<div class="title-desc"></div>-->
 		<div class="title-desc">当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过iostat，vmstat命令从宏观上来查看系统的一些io参数，比如某设备的读写速度，cpu的使用情况。
@@ -65,6 +39,64 @@
 		<div class="title-desc">当我们向磁盘文件写入数据时，由于内存与磁盘之间数据读取的差异，操作系统不会直接将数据写透（write through）到磁盘上，而是会写到页高速缓存（page cache）中，真正的写磁盘操作会延迟进行，称为写延迟（write delay）。当page cache中的数据比后端存储中的数据还要新时，称page cache中的数据为脏数据（或者脏页，dirty page）。page cache对被缓存的页面范围的定义非常宽泛，任何基于页的对象，包括各种类型
 
 &hellip; <a href="/blog/2015/08/20/linux-of-pdflush.html" style="font-weight:bold;">Read More</a></div>
+	     </li>
+        
+            <li>
+                <h2><a href="/blog/2015/08/11/UnknowHostException.html">UnknowHostException</a></h2>
+                <!--<div class="title-desc"></div>-->
+		<div class="title-desc">1 问题
+
+团队使用Docker中的测试环境，在新起的测试环境中启动消息队列项目，项目启动失败，抛出如下异常：
+
+UnknowHostException：
+java.net.UnknownHostException: e7a05a2abfc5: e7a05a2abfc5: 未知的名称或服务
+
+
+2 分析
+
+异常信息栈显示抛出异常的地方在：InetAddress localHost = InetAddress.getLocalHost();
+
+&hellip; <a href="/blog/2015/08/11/UnknowHostException.html" style="font-weight:bold;">Read More</a></div>
+	     </li>
+        
+            <li>
+                <h2><a href="/blog/2015/08/02/haproxy-install.html">haproxy部署</a></h2>
+                <!--<div class="title-desc"></div>-->
+		<div class="title-desc">1 安装
+
+下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），Fuck GFW。
+ 可以通过直接访问http://www.haproxy.org/download/1.5/src/地址，选择相应的版本下载。或者使用
+
+ wget http://www.haproxy.org/download/1.5/src/haproxy-1.5.12.tar.gz
+
+
+下载，下载完成后，将其解压。
+
+cd haproxy-X.Y.Z
+uname -a
+make TARGET=linux26 PREFIX=/usr/local/haproxy install
+
+&hellip; <a href="/blog/2015/08/02/haproxy-install.html" style="font-weight:bold;">Read More</a></div>
+	     </li>
+        
+            <li>
+                <h2><a href="/blog/2015/07/25/maven-introduce.html">maven实践</a></h2>
+                <!--<div class="title-desc"></div>-->
+		<div class="title-desc">1 相关概念
+
+1.1 版本号
+版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。
+
+版本号格式一般分为：
+
+  主版本号.分支版本号.小版本号-里程碑版本号
+
+
+主版本号：一般指框架具有重大变化的版本号，比如struts1，struts2框架的变化
+
+分支版本号： 一般指功能的变化
+
+&hellip; <a href="/blog/2015/07/25/maven-introduce.html" style="font-weight:bold;">Read More</a></div>
 	     </li>
         
         
@@ -83,10 +115,6 @@
       		&nbsp;	<a href="page2">2</a>
     		
       	    
-    		
-      		&nbsp;	<a href="page3">3</a>
-    		
-      	    
                 &nbsp;
 	    
                <li class="nextpage"> <a href="/page2">下一页</a></li>
@@ -102,8 +130,9 @@
       Powered by <a href="https://github.com/jekyll/jekyll">Jekyll</a>
       on
       
-      GitHub
+      GitHub.
       
+      Page theme based on <a href="https://github.com/beiyuu/Github-Pages-Example">BeiYuu</a>.
   </footer>
 </div>
 
