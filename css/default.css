@@ -140,6 +140,7 @@ text-shadow: #111 0px 0px 10px;
 
 #project_title a:hover {
 text-decoration:none;
+color:#009999;
 }
 
 #project_tagline {
