@@ -2,7 +2,9 @@
 layout: post
 title: linux系统之block_dump
 category: blog
-tags: linux blockdump
+nav:
+  - name: linux
+    link: "#linux"
 ---
 
 

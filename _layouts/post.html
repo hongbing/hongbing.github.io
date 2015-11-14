@@ -17,6 +17,15 @@ layout: default
     <div class="entry">
         <h1 class="entry-title"><a href="{{ page.url }}" title="{{ page.title }}">{{ page.title }}</a></h1>
         <p class="entry-date">{{ page.date|date:"%Y-%m-%d" }}</p>
+<!--	
+	{% if page.nav %}
+        <ul id="pagenav">
+           {% for nav in page.nav %}
+               <li><a href="{{ nav['link'] }}">{{ nav['name'] }}</a></li>
+           {% endfor %}
+        </ul>
+        {% endif %}
+-->	
 	{{ content }}
 	<ul class="pager">
             {% if page.previous %}

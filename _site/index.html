@@ -17,8 +17,14 @@
       <div id="header_wrap" class="outer">
         <header class="inner">
                 <div id="project_title" align="center"><a href="/">hongbingの部落格</a></div>
-                <div id="project_tagline" align="center">ONCE A GEEK, FOREVER A GEEK.</div>
-        </header>
+                <div id="project_tagline" align="center">ONCE A GEEK, FOREVER A GEEK</div>
+    <!--    
+	        <div id="nav" class="navbar">
+                         <div id="home" class="navbar"><a href="/">Home</a></div>
+                         <div id="archive" class="navbar"><a href="/archive">Archive</a></div>
+                         <div id="about" class="navbar"><a href="/about">About</a></div>
+                </div>
+-->	</header>
 </div>
  
          <div class="index-content blog">
@@ -27,7 +33,6 @@
         
             <li>
                 <h2><a href="/blog/2015/08/21/linux-of-blockdump.html">linux系统之block_dump</a></h2>
-                <!--<div class="title-desc"></div>-->
 		<div class="title-desc">当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过iostat，vmstat命令从宏观上来查看系统的一些io参数，比如某设备的读写速度，cpu的使用情况。
 
 &hellip; <a href="/blog/2015/08/21/linux-of-blockdump.html" style="font-weight:bold;">Read More</a></div>
@@ -35,7 +40,6 @@
         
             <li>
                 <h2><a href="/blog/2015/08/20/linux-of-pdflush.html">linux系统之pdflush</a></h2>
-                <!--<div class="title-desc"></div>-->
 		<div class="title-desc">当我们向磁盘文件写入数据时，由于内存与磁盘之间数据读取的差异，操作系统不会直接将数据写透（write through）到磁盘上，而是会写到页高速缓存（page cache）中，真正的写磁盘操作会延迟进行，称为写延迟（write delay）。当page cache中的数据比后端存储中的数据还要新时，称page cache中的数据为脏数据（或者脏页，dirty page）。page cache对被缓存的页面范围的定义非常宽泛，任何基于页的对象，包括各种类型
 
 &hellip; <a href="/blog/2015/08/20/linux-of-pdflush.html" style="font-weight:bold;">Read More</a></div>
@@ -43,7 +47,6 @@
         
             <li>
                 <h2><a href="/blog/2015/08/11/UnknowHostException.html">UnknowHostException</a></h2>
-                <!--<div class="title-desc"></div>-->
 		<div class="title-desc">1 问题
 
 团队使用Docker中的测试环境，在新起的测试环境中启动消息队列项目，项目启动失败，抛出如下异常：
@@ -61,7 +64,6 @@ java.net.UnknownHostException: e7a05a2abfc5: e7a05a2abfc5: 未知的名称或服
         
             <li>
                 <h2><a href="/blog/2015/08/02/haproxy-install.html">haproxy部署</a></h2>
-                <!--<div class="title-desc"></div>-->
 		<div class="title-desc">1 安装
 
 下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），Fuck GFW。
@@ -81,7 +83,6 @@ make TARGET=linux26 PREFIX=/usr/local/haproxy install
         
             <li>
                 <h2><a href="/blog/2015/07/25/maven-introduce.html">maven实践</a></h2>
-                <!--<div class="title-desc"></div>-->
 		<div class="title-desc">1 相关概念
 
 1.1 版本号
@@ -127,6 +128,7 @@ make TARGET=linux26 PREFIX=/usr/local/haproxy install
 
 <div id="footer_wrap" class="outer">
   <footer class="inner">
+      Copyright © 2015 hongbing - 
       Powered by <a href="https://github.com/jekyll/jekyll">Jekyll</a>
       on
       

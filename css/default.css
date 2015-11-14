@@ -62,7 +62,7 @@ a.external {padding-right:13px;background:url('/images/icons.gif') no-repeat rig
 a.external:hover {background-position:right -15px;}
 .entry-title,.entry-title a {font-size:32px;font-weight:bold;margin-bottom:6px;color:#000;text-align:center;word-wrap: break-word;}
 .entry-title a:hover {text-decoration:none;}
-.entry-date {text-align:center;color:#999;margin-bottom:60px;font-size:14px;}
+.entry-date {text-align:center;color:#999;margin-bottom:45px;font-size:18px;}
 
 h1 {font-size:32px; font-weight: 700;}
 h2 {font-size:28px;font-weight:bold;padding-bottom:10px;}
@@ -126,7 +126,7 @@ height:162px;
 }
 
 #header_wrap .inner {
-padding: 40px 10px 30px 10px;
+padding: 40px 0px 30px 0px;
 }
 
 
@@ -140,7 +140,6 @@ text-shadow: #111 0px 0px 10px;
 
 #project_title a:hover {
 text-decoration:none;
-color:#009999;
 }
 
 #project_tagline {
@@ -153,6 +152,34 @@ line-height:2.6em;
 font-style:italic;
 }
 
+.navbar {
+    position: relative;
+    min-height: 40px;
+    background-color: #ffffff;
+}
+
+#nav {
+ text-align:center;
+ border:1px solid #ddd;
+}
+.navbar div {
+    display:inline;
+}
+
+.navbar a {    
+ font-size: 22px;
+ color: #777;    
+ padding-left: 5px;
+ padding-right: 8px;
+ transition: color 0.3s ease 0s, text-decoration 0.3s ease 0s, background 0.3s ease 0s;
+}
+
+.navbar a:hover {
+ text-decoration:none;
+ color:#d01757;
+}
+
+
 /************foot style*******************/
 
 footer.inner {
@@ -160,10 +187,10 @@ footer.inner {
 }
 
 #footer_wrap {
-    color: #373737;
-    margin-top:25px;
-    margin-bottom:10px;
-    background-color:#FFFFFF;
+    color: #aaa;
+    padding-top:12px;
+    padding-bottom:12px;
+    background-color:#292929;
 }
 .outer {
 width:100%;
@@ -211,7 +238,7 @@ ul.pager {
     background-position:50% 50%;
 }
 
-.index-content .section { margin-left:20%;margin-right:20%; padding-top:30px;}
+.index-content .section { margin-left:15%;margin-right:15%; padding-top:40px;}
 
 .index-content .artical-list { width:80%; margin:0 auto;background-color:#f2f2f2; }
 .index-content .artical-list li { margin-bottom:30px; background-color:#ffffff;border-radius:10px;}
