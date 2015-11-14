@@ -108,3 +108,4 @@ killall haproxy
 ./sbin/haproxy -f ./conf/haproxy.cfg -sf [haproxy.pid] 
 {% endhighlight%}
 可以在修改haproxy.cfg后，快速重载变更配置。
+![haproxy](/images/haproxy/haproxy.jpg)

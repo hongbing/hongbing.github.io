@@ -16,9 +16,8 @@ category: blog
   + **Works**（功能良好）
   + **Maintainable**（可维护性）
 
-<!-- more -->
 
- > “Good code is written so that is <font size="4" color="red">readable</font>, <font size="4" color="red">understandable</font>, covered by <font size="4" color="red">automated tests</font>, <font size="4" color="red">not over complicated</font> and <font size="4" color="red">does well</font> what is intended to do.”
+ > “Good code is written <!-- more --> so that is readable, understandable, covered by automated tests, not over complicated and does well what is intended to do.”
     
 **Readable**应该体现在包，类，方法以及变量的命名上，同时方法调用逻辑，从上到下应该是可读的。写代码就像写故事一样，随着调用链的进行，应该是故事一步一步向前推进的过程。
 

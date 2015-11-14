@@ -51,8 +51,7 @@
         </ul>
         
 -->	
-	<p>当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过<code>iostat</code>，<code>vmstat</code>命令从宏观上来查看系统的一些io参数，比如某设备的读写速度，cpu的使用情况。<br />
-<!-- more --></p>
+	<p>当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过<code>iostat</code>，<code>vmstat</code>命令从宏观上来查看系统的一些io参数，比如某设备的读写速度，cpu的使用情况。</p>
 
 <pre><code>#iostat
 avg-cpu:  %user   %nice %system %iowait  %steal   %idle
@@ -67,7 +66,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  0  0 619448 167984   5728 366044   12   13    52    40  125  393 18  3 78  1  0
 
 </code></pre>
-
+<!-- more -->
 <p>但是宏观的信息只能帮助我们得到当前系统的现状，无法了解到具体是哪些进程在频繁执行io操作，以及具体操作的文件是什么。</p>
 
 <p>如果使用的linux内核版本 &gt;= 2.6.20，且内核开启了  CONFIG_TASK_DELAY_ACCT,   CONFIG_TASK_IO_ACCOUNTING,   CONFIG_TASKSTATS   and  CONFIG_VM_EVENT_COUNTERS 选项，python版本在2.5及其以上，我们可以使用<code>iotop -P</code>来查看I/O调度器（I/O Scheduler）管理的所有进程，不使用<code>-P</code>选项，默认显示所有的线程（注意<code>iotop</code>命令需要在root权限下运行）。然后可以使用<code>lsof -p [pid]</code>来分析到底该进程正在频繁操作哪些文件。</p>
@@ -188,6 +187,8 @@ Inode	Pathname
 	    
 
             
+            <li class="next"><a href="/blog/2015/11/14/jetty-deadlock.html" title="jetty6 deadlock">下一篇 jetty6 deadlock</a></li>
+            
 	</ul>
 	<div id="disqus_thread"></div>
 <script>
@@ -221,6 +222,8 @@ Inode	Pathname
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/blog/2015/11/14/jetty-deadlock.html">jetty6 deadlock</a></li>
         
             <li><a href="/blog/2015/08/21/linux-of-blockdump.html">linux系统之block_dump</a></li>
         

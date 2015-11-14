@@ -9,7 +9,6 @@ nav:
 
 
 当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过`iostat`，`vmstat`命令从宏观上来查看系统的一些io参数，比如某设备的读写速度，cpu的使用情况。
-<!-- more -->
 
 ```
 #iostat
@@ -25,7 +24,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  0  0 619448 167984   5728 366044   12   13    52    40  125  393 18  3 78  1  0
 
 ```
-
+<!-- more -->
 但是宏观的信息只能帮助我们得到当前系统的现状，无法了解到具体是哪些进程在频繁执行io操作，以及具体操作的文件是什么。
 
 如果使用的linux内核版本 >= 2.6.20，且内核开启了  CONFIG_TASK_DELAY_ACCT,   CONFIG_TASK_IO_ACCOUNTING,   CONFIG_TASKSTATS   and  CONFIG_VM_EVENT_COUNTERS 选项，python版本在2.5及其以上，我们可以使用`iotop -P`来查看I/O调度器（I/O Scheduler）管理的所有进程，不使用`-P`选项，默认显示所有的线程（注意`iotop`命令需要在root权限下运行）。然后可以使用`lsof -p [pid]`来分析到底该进程正在频繁操作哪些文件。

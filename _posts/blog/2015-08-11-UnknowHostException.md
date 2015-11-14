@@ -68,4 +68,4 @@ category: blog
 
 即可。另外还可以选择将`hostname`的值改为`localhost`的方式来解决问题。
 
-![thatslove](/images/unknowhostexception/thatslove.jpeg)
+![thatslove](/images/unknowhostexception/thatslove.jpg)

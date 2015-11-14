@@ -56,15 +56,14 @@
     <p>Etcd中的RPC消息格式都是protobuf格式，Consul的RPC消息格式采用MsgPack格式。</p>
   </li>
   <li>
-    <p>Etcd支持HTTP操作接口，Consul支持HTTP和DNS两种操作接口<br />
-<!-- more --></p>
+    <p>Etcd支持HTTP操作接口，Consul支持HTTP和DNS两种操作接口</p>
   </li>
 </ul>
 
 <h3 id="section-2">2. 架构</h3>
 <ul>
   <li>
-    <p>Etcd不支持多数据中心，consul支持多数据中心</p>
+    <p>Etcd不支持多数据中心，<!-- more -->consul支持多数据中心</p>
   </li>
   <li>
     <p>Etcd集群中的server存在三种角色：leader，candidate和follower；而consul集群中只有agent，agent可以以client和server两种形式存在。</p>
@@ -259,6 +258,8 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/blog/2015/11/14/jetty-deadlock.html">jetty6 deadlock</a></li>
         
             <li><a href="/blog/2015/08/21/linux-of-blockdump.html">linux系统之block_dump</a></li>
         

@@ -53,7 +53,7 @@
 <ul>
   <li><strong>有序</strong>   对于某些事物需要依靠ID来进行比较，同时对于排序查找也方便。</li>
   <li><strong>有意义</strong>  ID也需要包含有意义的信息，比如时间信息,业务信息。</li>
-  <li><strong>分布式</strong> ID的生成也许并不在一台服务器上，可由多台服务器互不干扰的生成ID。如果采用中心式的ID生成，多半会涉及到锁，而锁意味着成本和性能的下降。<!-- more --></li>
+  <li><strong>分布式</strong> ID的生成也许并不在一台服务器上，可由多台服务器互不干扰的生成ID。如果采用中心式的ID生成，多半会涉及到锁，而锁意味着成本<!-- more -->和性能的下降。</li>
   <li><strong>紧凑</strong> 为了性能或者长度的原因，要求ID要保持紧凑。越长的ID可能表达的数字范围越大，但是在存储和网络中要占据更多的空间。因此，设计ID的时候往往是保证在未来的一段时间可用的前提下（查看<a href="https://en.wikipedia.org/wiki/Year_2038_problem">2038</a>问题），尽可能的缩短ID的长度。<code>总之，掌握好长度与时间范围之间的trade-off</code>。</li>
 </ul>
 
@@ -184,6 +184,8 @@ ID大致有序。</li>
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/blog/2015/11/14/jetty-deadlock.html">jetty6 deadlock</a></li>
         
             <li><a href="/blog/2015/08/21/linux-of-blockdump.html">linux系统之block_dump</a></li>
         

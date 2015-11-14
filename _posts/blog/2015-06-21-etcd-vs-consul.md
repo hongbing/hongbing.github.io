@@ -12,10 +12,9 @@ category: blog
 + Etcd中的RPC消息格式都是protobuf格式，Consul的RPC消息格式采用MsgPack格式。
 
 + Etcd支持HTTP操作接口，Consul支持HTTP和DNS两种操作接口
-<!-- more -->
 
 ### 2. 架构
-+ Etcd不支持多数据中心，consul支持多数据中心
++ Etcd不支持多数据中心，<!-- more -->consul支持多数据中心
 
 + Etcd集群中的server存在三种角色：leader，candidate和follower；而consul集群中只有agent，agent可以以client和server两种形式存在。
 
