@@ -192,6 +192,8 @@ footer.inner {
     padding-top:12px;
     padding-bottom:12px;
     background-color:#292929;
+    position: relative;
+    bottom: 0;
 }
 .outer {
 width:100%;
@@ -223,7 +225,8 @@ ul.pager {
 
 .index-content.blog {
     background-color:#F2F2F2;
-
+    height: auto!important;
+    min-height: 525px;
 }
 
 .index-content .aside {
