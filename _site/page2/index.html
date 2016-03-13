@@ -32,7 +32,7 @@
     <ul class="artical-list">
       
       <li>
-        <h2><a href="/monitor-principle">监控模式</a></h2>
+        <h2><a href="/monitor-principle/">监控模式</a></h2>
         <div class="title-desc">本文的内容来自于stop-monitoring-if-service-is-up，表示对文章感兴趣，随性翻译。如有侵权，立马删除。
 
 在作者看来，99%的监控都没搞对。大多数人认为的监控是这样的：
@@ -46,11 +46,11 @@
 
 哦（满头大汗！！！），幸好没整个故障出来。如果对于监控的认识与上面是一致的，那么系统经常会与故障相伴。
 
-&hellip; <a href="/monitor-principle" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/monitor-principle/" style="font-weight:bold;">Read More</a></div>
       </li>
       
       <li>
-        <h2><a href="/jetty-deadlock">jetty6 deadlock</a></h2>
+        <h2><a href="/jetty-deadlock/">jetty6 deadlock</a></h2>
         <div class="title-desc">1 背景
 业务方反应消息队列最近几天输出的消息量变少了（良好的监控系统应该在业务方感知到故障之前将问题暴露出来），进入到前端机发现，多达20多万的TCP连接状态都处于CLOSE_WAIT状态，且TCP socket的RECV-Q中还有100多个包没有被处理。
 我们使用的环境是：
@@ -62,11 +62,11 @@
 java version “1.6.0_24”
 Java(TM) SE Runtime Environment (build 1.6.0_24-b07)
 
-&hellip; <a href="/jetty-deadlock" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/jetty-deadlock/" style="font-weight:bold;">Read More</a></div>
       </li>
       
       <li>
-        <h2><a href="/linux-of-blockdump">linux系统之block_dump</a></h2>
+        <h2><a href="/linux-of-blockdump/">linux系统之block_dump</a></h2>
         <div class="title-desc">当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过iostat，vmstat命令从宏观上来查看系统的一些io参数，比如某设备的读写速度，cpu的使用情况。
 
 #iostat
@@ -84,18 +84,18 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 
 
-&hellip; <a href="/linux-of-blockdump" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/linux-of-blockdump/" style="font-weight:bold;">Read More</a></div>
       </li>
       
       <li>
-        <h2><a href="/linux-of-pdflush">linux系统之pdflush</a></h2>
+        <h2><a href="/linux-of-pdflush/">linux系统之pdflush</a></h2>
         <div class="title-desc">当我们向磁盘文件写入数据时，由于内存与磁盘之间数据读取的差异，操作系统不会直接将数据写透（write through）到磁盘上，而是会写到页高速缓存（page cache）中，真正的写磁盘操作会延迟进行，称为写延迟（write delay）。当page cache中的数据比后端存储中的数据还要新时，称page cache中的数据为脏数据（或者脏页，dirty page）。page cache对被缓存的页面范围的定义非常宽泛，任何基于页的对象，包括各种类型
 
-&hellip; <a href="/linux-of-pdflush" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/linux-of-pdflush/" style="font-weight:bold;">Read More</a></div>
       </li>
       
       <li>
-        <h2><a href="/UnknowHostException">UnknowHostException</a></h2>
+        <h2><a href="/UnknowHostException/">UnknowHostException</a></h2>
         <div class="title-desc">1 问题
 
 团队使用Docker中的测试环境，在新起的测试环境中启动消息队列项目，项目启动失败，抛出如下异常：
@@ -107,11 +107,11 @@ UnknowHostException：
 
 异常信息栈显示抛出异常的地方在：InetAddress localHost = InetAddress.getLocalHost();
 
-&hellip; <a href="/UnknowHostException" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/UnknowHostException/" style="font-weight:bold;">Read More</a></div>
       </li>
       
       <li>
-        <h2><a href="/haproxy-install">haproxy部署</a></h2>
+        <h2><a href="/haproxy-install/">haproxy部署</a></h2>
         <div class="title-desc">1 安装
 
 下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），Fuck GFW。
@@ -126,11 +126,11 @@ cd haproxy-1.5.12
 uname -a
 make TARGET=linux26 PREFIX=/usr/local/haproxy install
 
-&hellip; <a href="/haproxy-install" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/haproxy-install/" style="font-weight:bold;">Read More</a></div>
       </li>
       
       <li>
-        <h2><a href="/maven-introduce">maven实践</a></h2>
+        <h2><a href="/maven-introduce/">maven实践</a></h2>
         <div class="title-desc">1 相关概念
 
 1.1 版本号
@@ -144,11 +144,11 @@ make TARGET=linux26 PREFIX=/usr/local/haproxy install
 
 分支版本号： 一般指功能的变化
 
-&hellip; <a href="/maven-introduce" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/maven-introduce/" style="font-weight:bold;">Read More</a></div>
       </li>
       
       <li>
-        <h2><a href="/etcd-vs-consul">ETCD vs. Consul</a></h2>
+        <h2><a href="/etcd-vs-consul/">ETCD vs. Consul</a></h2>
         <div class="title-desc">异同
 
 1. 协议
@@ -169,11 +169,11 @@ make TARGET=linux26 PREFIX=/usr/local/haproxy install
   Etcd不支持多数据中心，
 
 
-&hellip; <a href="/etcd-vs-consul" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/etcd-vs-consul/" style="font-weight:bold;">Read More</a></div>
       </li>
       
       <li>
-        <h2><a href="/distributed-id-generator">分布式ID生成器</a></h2>
+        <h2><a href="/distributed-id-generator/">分布式ID生成器</a></h2>
         <div class="title-desc">1 什么是ID
 
 ID最大的特点就是唯一，一个ID存在的目的就是唯一性的标识某一个物体，如果唯一性做不到，那么ID也就失去了本质的作用。
@@ -185,11 +185,11 @@ ID最大的特点就是唯一，一个ID存在的目的就是唯一性的标识�
   分布式 ID的生成也许并不在一台服务器上，可由多台服务器互不干扰的生成ID。如果采用中心式的ID生成，多半会涉及到锁，而锁意味着成本
 
 
-&hellip; <a href="/distributed-id-generator" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/distributed-id-generator/" style="font-weight:bold;">Read More</a></div>
       </li>
       
       <li>
-        <h2><a href="/what-is-good-code">什么样的代码才是好的代码</a></h2>
+        <h2><a href="/what-is-good-code/">什么样的代码才是好的代码</a></h2>
         <div class="title-desc">文章来源：http://engineering.intenthq.com/2015/03/what-is-good-code-a-scientific-definition/
 
 文章的统计结果来自于面试过程中对65个开发者的调查，这些开发者大多数使用java或者scala语言，同时多数具有5年以上的开发经验。
@@ -208,11 +208,11 @@ TOP 5
   “Good code is written
 
 
-&hellip; <a href="/what-is-good-code" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/what-is-good-code/" style="font-weight:bold;">Read More</a></div>
       </li>
       
       <li>
-        <h2><a href="/raft-introduce">Raft</a></h2>
+        <h2><a href="/raft-introduce/">Raft</a></h2>
         <div class="title-desc">1 Raft概念
 
 分布式系统中，为了实现一致性，一般采用对称式和非对称式两种server组织方式。
@@ -221,7 +221,7 @@ TOP 5
 
 非对称式：有一个leader作为与外界通信的角色，其余server不与外界通信，leader会将数据的变更同步到所有的其他server中。
 
-&hellip; <a href="/raft-introduce" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/raft-introduce/" style="font-weight:bold;">Read More</a></div>
       </li>
       
 
