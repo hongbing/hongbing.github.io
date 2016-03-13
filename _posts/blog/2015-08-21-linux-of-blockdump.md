@@ -53,10 +53,10 @@ normally there.
 
 从上面的描述可以知道，block_dump是一个调试选项，选项打开的时候，会把当前所有磁盘读写操作的信息输出到内核输出，可以通过`dmesg`来查看输出内容。执行下面的脚本可以在/tmp/diskio.log中看到相关的信息。
 
-```sh
+{% highlight bash%}
 #!/bin/sh
 /etc/init.d/klogd stop
-# clear dmesg 
+# clear dmesg
 dmesg -c 2>/dev/null
 echo 1 > /proc/sys/vm/block_dump
 if [ -f /tmp/diskio.log ]; then
@@ -67,10 +67,10 @@ sleep 5
 dmesg -c >> /tmp/diskio.log
 echo 0 > /proc/sys/vm/block_dump
 /etc/init.d/klogd start
-```
+{% endhighlight%}
 
 下面是从/tmp/diskio.log中截取的一部分内容：
- 
+
  	[88005.820372] jbd2/sda1-8(140): WRITE block 239498592 on sda1 (8 sectors)
 	[88005.821425] jbd2/sda1-8(140): WRITE block 239498600 on sda1 (8 sectors)
 	[88006.732202] kworker/u8:1(13277): WRITE block 2537400 on sda1 (8 sectors)
@@ -127,7 +127,7 @@ Inode	Pathname
 ```
 ![blockdump](/images/linuxofblockdump/blockdump.jpg)
 
-**参考**
+##### 参考
 [1] [http://www.vpsee.com/2009/08/monitor-process-io-activity/](http://www.vpsee.com/2009/08/monitor-process-io-activity/)
 
 [2] [http://www.vpsee.com/2010/07/monitoring-process-io-activity-on-linux-with-block_dump/](http://www.vpsee.com/2010/07/monitoring-process-io-activity-on-linux-with-block_dump/)

@@ -117,21 +117,25 @@ Raft使用联合一致性阶段（joint consensus）来作为过渡阶段实现�
  此时只有拥有 Cold,new 配置的server才会被选为leader。
  如果此时，Cold,new 提交失败，那么重新发送Cold，回滚配置。
 
-+  Cnew 已提交 
++  Cnew 已提交
  如果在这个阶段存在着Leader election，那么只有具有Cnew 配置的server才能被选为Leader，
  Leader将Cnew 配置复制到所有的follower，使得整个集群应用新的配置。
- 
+
  如果Cnew 提交时，leader并不包括在新的配置中，那么leader将降为为follower，且不参与大多数的投票。
 
  如果Cnew  提交失败，则需要复制Cold，回滚配置。如果在回滚配置之前发生了Leader Election，那么leader具有Cnew，则将其复制到新集群。如果leader没有Cnew，则会覆盖其他server中的新配置，回到joint consensus状态。
- 
+
  ![raft_config_change](/images/raft/raft_config_change.png)
- 
+
  ![britney](/images/raft/britney.jpg)
 
 ## 6 参考资料
 [1] [http://raftconsensus.github.io](http://raftconsensus.github.io/)
+
 [2] [http://ramcloud.stanford.edu/raft.pdf](http://ramcloud.stanford.edu/raft.pdf)
+
 [3] [http://raftconsensus.github.io/](http://raftconsensus.github.io/)
+
 [4] [http://raftuserstudy.s3-website-us-west-1.amazonaws.com/raft.mp4](http://raftuserstudy.s3-website-us-west-1.amazonaws.com/raft.mp4)
+
 [5] [http://www.infoq.com/cn/articles/coreos-analyse-etcd/](http://www.infoq.com/cn/articles/coreos-analyse-etcd/)

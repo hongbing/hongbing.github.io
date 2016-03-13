@@ -18,11 +18,11 @@ category: blog
 
 
  > “Good code is written <!-- more --> so that is readable, understandable, covered by automated tests, not over complicated and does well what is intended to do.”
-    
+
 **Readable**应该体现在包，类，方法以及变量的命名上，同时方法调用逻辑，从上到下应该是可读的。写代码就像写故事一样，随着调用链的进行，应该是故事一步一步向前推进的过程。
 
 ## 其它特点
-避免过早优化，[Knuth, Donald](http://en.wikipedia.org/wiki/Donald_Knuth)在40年前就这样说到： 
+避免过早优化，[Knuth, Donald](http://en.wikipedia.org/wiki/Donald_Knuth)在40年前就这样说到：
 
 > “We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil”
 
@@ -31,9 +31,9 @@ category: blog
  同时文中还提到了，self-document和comment，一部分人认为应该代码应该具有自文档性，不应该添加注释（**事实上，没有及时更新或者错误的注释比没有注释还让人烦恼**）; 而另一部分人觉得应该有添加comment，需要让别人知道你在干什么，就是java doc API一样。
 
  代码的自文档性能够提高代码的可读性，同时一定的注释也是必要的。对于那些有特殊默认值的方法，是需要使用注释来解释的，以避免使用者误用。并非所有的功能实现都能简单化，复杂的功能实现应该要有注释说明，甚至表明所使用到的相关理论以及文档，以供后来人参考。
-  
+
 ## 数据不骗人
- 
+
  下面是具体的统计信息：
   ![好代码的特征](/images/goodcode/goodcode_statistics.png)
 

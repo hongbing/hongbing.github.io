@@ -12,17 +12,19 @@ nav:
 我们使用的环境是：
 
 + java
-  java version "1.6.0_24"
-  Java(TM) SE Runtime Environment (build 1.6.0_24-b07)<!-- more -->
-  Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02, mixed mode)
+
+java version "1.6.0_24"
+Java(TM) SE Runtime Environment (build 1.6.0_24-b07)<!-- more -->
+Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02, mixed mode)
 
 + jetty
-  jetty 6.1.26
+
+jetty 6.1.26
 
 ## 2 分析
 看到大量的tcp连接都处于CLOSE_WAIT状态，初步分析了一下网络状况，如果服务端处于CLOSE_WAIT状态，说明是客户端首先发起了关闭请求。但是在这个项目中，客户端与服务端之间采用的是jetty长连接，服务端在服务10分钟之后主动断开连接，客户端重新发起请求。明显，现在出现的情况与设计是不符合的。为了尽快恢复服务状况，释放服务端的连接，于是重启了服务端程序。重启之后，服务暂时恢复正常。在重启之前，使用jstack dump了一份当前java进程的线程栈,发现在dump的文件最后，检测到了deadlock，内容如下：
 
-```
+``` java
  Java stack information for the threads listed above:
 "1854411210@qtp-1306606930-148":
 	at org.mortbay.io.nio.SelectorManager$SelectSet.scheduleIdle(SelectorManager.java:795)
@@ -84,15 +86,15 @@ nav:
 
 对于线程`1854411210@qtp-1306606930-148`，如果没有等待`org.mortbay.io.nio.SelectorManager$SelectSet`解锁，那么会发生什么呢？看看下面的代码：
 
-```java
-   if (!_generator._endp.blockWritable(_maxIdleTime))
-   {
-       _generator._endp.close();
-       throw new EofException("timeout");
-   }
-                
-   _generator.flush();
-```
+{% highlight java%}
+if (!_generator._endp.blockWritable(_maxIdleTime))
+{
+     _generator._endp.close();
+     throw new EofException("timeout");
+}
+
+_generator.flush();
+{% endhighlight %}
 
 等待解锁的调用走到了`_generator._endp.blockWritable()`方法的内部，如果没有形成死锁，那么等到`_maxIdleTime`时间到，要么执行flush操作，将数据传输到对端，要么关闭连接，并抛出**timeoue**异常。因此不会产生前文所描述的服务端的大部分请求连接都处于CLOSE_WAIT状态，导致无法提供服务。
 

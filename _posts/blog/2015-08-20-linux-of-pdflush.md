@@ -10,22 +10,22 @@ tags: linux pdflush
 
 可以在`/proc/meminfo`中查看系统page cache的信息。
 
-```
-	MemTotal:        1943676 kB
-	MemFree:          165132 kB
-	Buffers:           23784 kB
-	Cached:           511048 kB
-	SwapCached:            0 kB
-	......
-	SwapTotal:       1989628 kB
-	SwapFree:        1989360 kB
-	Dirty:                60 kB
-	Writeback:             0 kB
-	AnonPages:       1009132 kB
-	Mapped:           229812 kB
-	Shmem:            195912 kB
-	Slab:             163756 kB
-	......
+``` html
+MemTotal:        1943676 kB
+MemFree:          165132 kB
+Buffers:           23784 kB
+Cached:           511048 kB
+SwapCached:            0 kB
+......
+SwapTotal:       1989628 kB
+SwapFree:        1989360 kB
+Dirty:                60 kB
+Writeback:             0 kB
+AnonPages:       1009132 kB
+Mapped:           229812 kB
+Shmem:            195912 kB
+Slab:             163756 kB
+......
 ```
 
 Cached即表示当前page cache的大小，Dirty表示脏页的大小。
@@ -34,22 +34,23 @@ Cached即表示当前page cache的大小，Dirty表示脏页的大小。
 
 在下面3种情况下，pdflush线程会被唤醒执行：
 
-	 当空闲内存低于一个特定的阈值时;
-	 当脏页在内存中驻留时间超过一个特定的阈值时;
-	 当用户调用sync()和fsync()系统调用时。
-	
++ **当空闲内存低于一个特定的阈值时;**
++ **当脏页在内存中驻留时间超过一个特定的阈值时;**
++ **当用户调用sync()和fsync()系统调用时.**
+
+
 第一种情况保证当空闲内存过低时，脏页回写释放内存；第二种情况保证脏页不会无限期的驻留在内存中，最后一种是应用层主动要求执行脏页刷新，可以认为前两种情况是被动式的，是在满足空间（内存空闲空间）和时间（脏页驻留时间）任一条件下进行的。最后一种是主动式的。
 
 首先看看被动式的空间阈值，空间阈值包括两个，一个是`/proc/sys/vm/dirty_background_ratio`，另一个是`/proc/sys/vm/dirty_ratio`。
 
 查看Kernel version 2.6.29的doc，看看该doc是怎么描述这两个参数的：
 
-```
+{% highlight text %}
 ==============================================================
 dirty_background_ratio
 
-Contains, as a percentage of total available memory that 
-contains free pages and reclaimable pages, the number of pages at 
+Contains, as a percentage of total available memory that
+contains free pages and reclaimable pages, the number of pages at
 which the background kernel flusher threads will start writing out
 dirty data.
 
@@ -58,15 +59,15 @@ The total avaiable memory is not equal to total system memory.
 ==============================================================
 dirty_ratio
 
-Contains, as a percentage of total available memory that 
-contains free pages and reclaimable pages, the number of pages at 
-which a process which is generating disk writes will itself 
+Contains, as a percentage of total available memory that
+contains free pages and reclaimable pages, the number of pages at
+which a process which is generating disk writes will itself
 start writing out dirty data.
 
 The total avaiable memory is not equal to total system memory.
 
 ==============================================================
-```
+{% endhighlight%}
 
 从doc中可以看出，含义都是表示`占可用内存空间的百分比`。但是区别在达到**dirty_background_ratio**这个阈值后，pdflush线程会`异步`执行脏页回写，而当达到**dirty_ratio**阈值时，当时执行写操作的进程会被强制`同步`执行脏页回写操作，此时所有进程的写操作都会被阻塞,直到脏页占比降低到dirty_ratio之下，如果此时的脏页率仍然在dirty_backgroud_radio之上，将调用pdflush执行异步刷新。
 
@@ -84,7 +85,7 @@ vm.dirty_writeback_centisecs = 500
 
 这里有一个需要注意的点，占比依据的是`可用内存`，并不是全部内存。可用内存如何计算？
 
-> MemFree + Cached - Mapped 
+> MemFree + Cached - Mapped
 
 因此，按照前面给出的数字，可用内存为435M，那么当脏页达到21.75M时，就会触发空间阈值。
 
@@ -102,8 +103,8 @@ pdflush唤醒后会调用`background_writeout(int)`函数，该函数需要传�
 ==============================================================
 dirty_expire_centisecs
 
-This tunable is used to define when dirty data is old enough 
-to be eligible for writeout by the kernel flusher threads. 
+This tunable is used to define when dirty data is old enough
+to be eligible for writeout by the kernel flusher threads.
 
 It is expressed in 100 ths of a second.  
 Data which has been dirty in-memory for longer than this interval
@@ -117,7 +118,7 @@ Data which has been dirty in-memory for longer than this interval
 ==============================================================
 dirty_writeback_centisecs
 
-The kernel flusher threads will periodically wake up 
+The kernel flusher threads will periodically wake up
 and write old data out to disk.  
 This tunable expresses the interval between those wakeups,
 in 100 ths of a second.
@@ -138,7 +139,9 @@ Setting this to zero disables periodic writeback altogether.
 ![OMGLookather](/images/linuxofpdflush/OMGLookather.jpg)
 
 
-**参考**：
+##### 参考
 [1] [http://www.westnet.com/~gsmith/content/linux-pdflush.htm](http://www.westnet.com/~gsmith/content/linux-pdflush.htm)
+
 [2] [https://www.kernel.org/doc/](https://www.kernel.org/doc/)
+
 [3] [http://www.oenhan.com/linux-cache-writeback](http://www.oenhan.com/linux-cache-writeback)

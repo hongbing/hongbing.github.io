@@ -1,9 +1,9 @@
 # Where things are
 source:      .
 destination: ./_site
-plugins:     ./_plugins
-layouts:     ./_layouts
-data_source: ./_data
+plugins_dir:     ./_plugins
+layouts_dir:     ./_layouts
+data_dir: ./_data
 collections: null
 
 # Handling Reading
@@ -26,7 +26,7 @@ whitelist: []
 
 # Conversion Kramdown
 markdown: Kramdown
-highlighter: pygments
+highlighter: rouge  #pygments
 lsi:         false
 excerpt_separator: "<!-- more -->"
 
@@ -68,7 +68,7 @@ kramdown:
   toc_levels:     1..6
   smart_quotes:   lsquo,rsquo,ldquo,rdquo
   enable_coderay: false
-  input: GFM  
+  input: GFM
 
   coderay:
     coderay_wrap:              div
@@ -77,3 +77,6 @@ kramdown:
     coderay_tab_width:         4
     coderay_bold_every:        10
     coderay_css:               style
+
+# gems
+gems: [jekyll-paginate]

@@ -1,17 +1,17 @@
 ---
 layout: post
-title: maven实践 
+title: maven实践
 category: blog
 ---
 
 ## 1 相关概念
 
 ### 1.1 版本号
-版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。
 
+版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。
 版本号格式一般分为：
 
-      主版本号.分支版本号.小版本号-里程碑版本号
+`主版本号.分支版本号.小版本号-里程碑版本号`
 
 **主版本号**：一般指框架具有重大变化的版本号，比如struts1，struts2框架的变化
 
@@ -57,23 +57,23 @@ maven远程服务器管理的仓库，地址是[maven中心仓库](http://repo1.
 ### 1.3 项目的发布
 
 在项目中添加  
-
-    <distributeManagement>
-        <snapshotRepository>
-        <id>firehose.0.0.1-snapshot</id>
-        <name>fisehose SNAPSHOT</name>
-        <url>10.30.XXX.XXX/nexus/content/Repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributeManagement>
-
-使用`# mvn deploy`命令即可将项目发布到私有仓库中，也即是上面的url中
+{% highlight maven %}
+<distributeManagement>
+    <snapshotRepository>
+    <id>firehose.0.0.1-snapshot</id>
+    <name>fisehose SNAPSHOT</name>
+    <url>10.30.XXX.XXX/nexus/content/Repositories/snapshots/</url>
+    </snapshotRepository>
+</distributeManagement>
+{% endhighlight %}
+使用`mvn deploy`命令即可将项目发布到私有仓库中，也即是上面的url中
 
 ### 1.4 maven的生命周期
 
 maven的3种独立的生命周期
 
 + **clean**
- 
+
 pre-clean 准备清理工作
 
 clean 清理     
@@ -83,7 +83,7 @@ post-clean 清理后需要做的工作
 + **compile**
 
 validate
- 
+
  generate-sources
 
  process-sources
@@ -96,7 +96,7 @@ compile     编译项目的源代码。
 
 process-classes
 
-generate-test-sources 
+generate-test-sources
 
 process-test-sources
 
@@ -144,29 +144,32 @@ site-deploy     将生成的站点文档部署到特定的服务器上
 ### 2.1 手动添加jar包到仓库
 
 **本地仓库**
-  
-      mvn install:install-file -DgroupId=jar的groupId 
+{% highlight maven %}
+mvn install:install-file -DgroupId=jar的groupId
 -DartifactId=jar的artifactId -Dversion=jar的version
  -Dfile=jar包的路径 -Dpackaging=jar
+{% endhighlight %}
 
 一个命令将二进制，源码和javadoc都上传到本地仓库：
-
-      mvn install:install-file  -DgroupId=jar的groupId 
--DartifactId=jar的artifactId -Dversion=jar的version
--Dfile=二进制jar包的路径  -Dsources=sources jar包的路径 
--Djavadoc=javadoc jar包的路径
-
-**远程仓库**
-
-      mvn deploy:deploy-file  -DgroupId=jar的groupId
+{% highlight maven %}
+mvn install:install-file  -DgroupId=jar的groupId
 -DartifactId=jar的artifactId -Dversion=jar的version
 -Dfile=二进制jar包的路径  -Dsources=sources jar包的路径
 -Djavadoc=javadoc jar包的路径
+{% endhighlight %}
+
+**远程仓库**
+{% highlight maven %}
+mvn deploy:deploy-file  -DgroupId=jar的groupId
+-DartifactId=jar的artifactId -Dversion=jar的version
+-Dfile=二进制jar包的路径  -Dsources=sources jar包的路径
+-Djavadoc=javadoc jar包的路径
+{% endhighlight %}
 
 _注：在上述命令后都可以指定上传的仓库地址，在命令后面添加`-url=file://path/to/repository`，如果没有指定则会依据maven的setting.xml中的配置_
 
 添加到maven库中后，使用该jar包时需要修改maven工程的pom.xml文件，将添加的jar包加入到pom.xml文件中即可使用。
- 
+
 ### 2.2 maven创建web-app
 使用maven创建web-app，需要自行建文件夹src/main/java包。
 
@@ -179,38 +182,38 @@ _注：在上述命令后都可以指定上传的仓库地址，在命令后面�
 + 使用maven project report插件来显示所有的项目依赖关系
 
 在项目pom.xml的<project></project>里添加 maven插件maven-project-info-reports-plugin：
-
-    <reporting>
-      <plugins>
-       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>
-         maven-project-info-reports-plugin
-        </artifactId>
-         <version>2.4</version>
-       </plugin>
-     </plugins>
-     </reporting>
-
-使用这个插件，然后执行：
+{% highlight maven %}
+<reporting>
+  <plugins>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>
+     maven-project-info-reports-plugin
+    </artifactId>
+     <version>2.4</version>
+   </plugin>
+ </plugins>
+ </reporting>
+{% endhighlight %}
+使用这个插件，然后执行命令：
 
 `mvn  project-info-reports:dependencies`
 
 就可以在target/site/dependencies.html里查看依赖报表，通过这个报表就能够找到冲突的版本，然后再使用exclusions来排除相关的包。
-
-    <dependency>
-        <groupId>com.x.y</groupId>
-        <artifactId>xyz</artifactId>
-        <version>1.1.1</version>
-        <exclusions>
-                <exclusion>
-                        <groupId>com.u.v</groupId>
-                        <artifactId>uvw</artifactId>
-                        <version>0.9.1</version>
-                </exclusion>
-        </exclusions>
-    </dependency>
-    
+{% highlight maven %}
+<dependency>
+    <groupId>com.x.y</groupId>
+    <artifactId>xyz</artifactId>
+    <version>1.1.1</version>
+    <exclusions>
+            <exclusion>
+                    <groupId>com.u.v</groupId>
+                    <artifactId>uvw</artifactId>
+                    <version>0.9.1</version>
+            </exclusion>
+    </exclusions>
+</dependency>
+{% endhighlight %}
 另外使用命令
 
 `mvn dependency:analyze`
@@ -218,30 +221,31 @@ _注：在上述命令后都可以指定上传的仓库地址，在命令后面�
 可以分析出显示声明但没有依赖的包，可以将其去除。
 
 + 使用脚本显示循环依赖包
+{% highlight bash %}
+#!/bin/bash
+### find cycle in maven depnedency tree
 
-        #!/bin/bash
-        ### find cycle in maven depnedency tree
-        
-        if [ $# -gt 0 ];then
-            sourcepath=$1
-        else
-            sourcepath=`pwd`
-        fi
-        if [ ! -f "$sourcepath/pom.xml" ]; then
-            echo "$sourcepath is not a vaild maven project!"
-            echo 'Usage : ./findcycle [path]'
-            exit 1;
-        fi
-        mvn=`which mvn`
-        if [ "$mvn" = "" ];then
-            echo "counld not found mvn in PATH,exit!"
-            exit 1;
-        fi
-        
-        cd $sourcepath
-        echo "scan cycle dependency in $sourcepath ..."
-        mvn dependency:tree -Dverbose | awk -F'- ' '{if(index($2,"maven-dependency-plugin")>0){indent=0;}else{indent=length($1);}stack[indent]=$2;if(index($0,"for cycle")>0){print "****found cycle****";for(i=0;i<=indent;i++){if(stack[i]!=null){print "->"stack[i]}}}}'
-        echo "scan finished!"
+if [ $# -gt 0 ];then
+    sourcepath=$1
+else
+    sourcepath=`pwd`
+fi
+if [ ! -f "$sourcepath/pom.xml" ]; then
+    echo "$sourcepath is not a vaild maven project!"
+    echo 'Usage : ./findcycle [path]'
+    exit 1;
+fi
+mvn=`which mvn`
+if [ "$mvn" = "" ];then
+    echo "counld not found mvn in PATH,exit!"
+    exit 1;
+fi
+
+cd $sourcepath
+echo "scan cycle dependency in $sourcepath ..."
+mvn dependency:tree -Dverbose | awk -F'- ' '{if(index($2,"maven-dependency-plugin")>0){indent=0;}else{indent=length($1);}stack[indent]=$2;if(index($0,"for cycle")>0){print "****found cycle****";for(i=0;i<=indent;i++){if(stack[i]!=null){print "->"stack[i]}}}}'
+echo "scan finished!"
+{% endhighlight %}
 
 
 使用上面的脚本（将其放置于工程目录下，或者指定工程路径）检测是否存在循环依赖，如果存在，会输出循环依赖的链。（此脚本取自于@秦迪 [Axb的自我修养](http://blog.2baxb.me)）

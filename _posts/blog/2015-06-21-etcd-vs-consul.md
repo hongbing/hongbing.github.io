@@ -1,7 +1,7 @@
 ---
 layout:     post
 title: ETCD vs. Consul
-category: blog 
+category: blog
 ---
 
 ## 异同
@@ -30,7 +30,7 @@ category: blog
 	完全一致，在处理读请求之前必须经过大多数的follower确认leader的合法性，因此会多一次round trip。
 	+ **stale**
 	允许所有的server支持读请求，不管它是否是leader。
-	
+
 + **默认情况下**，`Etcd集群中的每个member都可以处理client的读请求`，因此增加成员数量可以增大读请求的吞吐量。而写请求必须由leader处理，`每个写请求都需要复制到大多数的follower才可以提交`，因此减少member的数量可以提高写请求的性能。
 
 对于写请求来说，两者都必须经过leader的强一致来处理。但是对于读请求，consul的default模式在etcd被认为是consistent，consul的stale模式在etcd是被当作默认的一致性模式。
@@ -56,7 +56,7 @@ Etcd使用强一致性读需要添加参数`quorum=true`
 ### 7. KV存储
 + Etcd和Consul均采用类似与U/Linux文件目录格式存储，Etcd支持隐藏的目录节点（以`/—`开始的key，不知道做什么用，在V3版可能去掉），etcd存储的value可以直接采用json文件，xml文件，txt文件等。
 
-+ Etcd中的value都是以json格式存储（空间占用比较大，Etcd的V3.0可能支持二进制存储）。 
++ Etcd中的value都是以json格式存储（空间占用比较大，Etcd的V3.0可能支持二进制存储）。
 
 
 ### 8. 变更通知
@@ -82,23 +82,22 @@ Etcd支持三种节点发现功能：
 
   + **static**
 	已知集群节点个数，IP地址等信息，通过-initial-cluster参数指定集群中的节点信息
-
-	-initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 -initial-cluster-state new
-	
+{% highlight text %}
+-initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 -initial-cluster-state new
+{% endhighlight %}
   + **discovery**
 
 	Etcd自身的节点发现功能，使用自定义的注册目录
 
 {% highlight html %}
-   	 curl -X PUT https://myetcd.local/v2/keys/discovery/6c007a14875d53d9bf0ef5a6fc0257c817f0fb83/config/size -d value=3
+curl -X PUT https://myetcd.local/v2/keys/discovery/6c007a14875d53d9bf0ef5a6fc0257c817f0fb83/config/size -d value=3
 
 //注：config前面有下划线
-
 {% endhighlight %}
 
   上面的命令在已有的集群上注册node size，命令表明集群中有3个node，只有当3个node都注册后集群才开始工作，如果注册的node多于3个，那多余的都降为proxy模式启动。
     如果没有权限获取已有的集群信息，可以使用公共的discovery url：`https://discovery.etcd.io`
-	  
+
    + **DNS SRV records**
 
 + Consul通过`join`命令将node加入到集群中，每添加一个node都会加入到gossip pool，通过gossip protocol将新加入的node信息传输到集群中的所有node。
@@ -113,4 +112,3 @@ Etcd支持三种节点发现功能：
 + Etcd和Consul均采用json格式输出
 
 ![etcd](/images/etcd/etcd.jpg)
-
