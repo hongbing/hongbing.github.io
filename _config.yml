@@ -22,6 +22,8 @@ unpublished: false
 
 # Plugins
 whitelist: []
+# gems
+gems: [jekyll-paginate]
 
 
 # Conversion Kramdown
@@ -44,9 +46,8 @@ github: hongbing
 
 # Outputting
 paginate: 5
-permalink: /:title
-#permalink: date
-paginate_path: "page:num"
+permalink: date
+paginate_path: /page:num
 timezone:      null
 
 disqus:
@@ -78,6 +79,3 @@ kramdown:
     coderay_tab_width:         4
     coderay_bold_every:        10
     coderay_css:               style
-
-# gems
-gems: [jekyll-paginate]

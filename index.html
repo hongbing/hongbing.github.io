@@ -29,9 +29,6 @@ layout: home
                 <a href="{{ '/index.html' | prepend: site.baseurl | replace: '//', '/' }}">{{ page }}</a>      &nbsp;
               {% else %}
                 &nbsp;
-                <!--
-                <li class="test">{{ site.paginate_path }}</li>
-                <li class="test">{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' }}</li>-->
                 <a href="{{ '/page:num' | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}">{{ page }}</a>
                 &nbsp;
               {% endif %}
