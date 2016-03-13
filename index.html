@@ -1,49 +1,73 @@
----
-layout: home
----
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=640">
+
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen">
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
+    <title>Hongbing.GitHub.io by hongbing</title>
+  </head>
+
+  <body>
+    <a id="forkme_banner" href="https://github.com/hongbing">View on GitHub</a>
+    <div class="shell">
+
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Hongbing.GitHub.io</h1>
+            <h2></h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
+
+      <div id="no-downloads">
+        <span class="inner">
+        </span>
+      </div>
 
 
-<div class="index-content blog">
-  <div class="section">
-    <ul class="artical-list">
-      {% for post in paginator.posts %}
-      <li>
-        <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-        <div class="title-desc">{{ post.excerpt | strip_html }}&hellip; <a href="{{ post.url }}" style="font-weight:bold;">Read More</a></div>
-      </li>
-      {% endfor %}
+      <span class="banner-fix"></span>
 
-      <ul class="pager">
-        {% if paginator.total_pages > 1 %}
-            {% if paginator.previous_page %}
-              <li class="lastpage"> <a href="{{ paginator.previous_page_path }}">上一页</a></li>
-            {% else %}
-              <li class="dislastpage"> 上一页</li>
-            {% endif %}
-              &nbsp;
-            {% for page in (1..paginator.total_pages) %}
-              {% if page == paginator.page %}
-                <span class="active">{{ page }}</span>
-                &nbsp;
-              {% elsif page == 1 %}
-                <a href="{{ '/index.html' | prepend: site.baseurl | replace: '//', '/' }}">{{ page }}</a>      &nbsp;
-              {% else %}
-                &nbsp;
-                <!--
-                <li class="test">{{ site.paginate_path }}</li>
-                <li class="test">{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' }}</li>-->
-                <a href="{{ '/page:num' | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}">{{ page }}</a>
-                &nbsp;
-              {% endif %}
-            {% endfor %}
-            &nbsp;
-            {% if paginator.next_page %}
-              <li class="nextpage"> <a href="{{ paginator.next_page_path }}">下一页</a></li>
-            {% else %}
-              <li class="disnextpage"> 下一页</li>
-            {% endif %}
-        {% endif %}
-      </ul>
-    </ul>
-  </div>
-</div>
+
+      <section id="main_content">
+        <h1></h1>
+
+<p>hongbing's部落格</p>
+
+<p>可进入<a href="http://hongbing.github.io">hongbing.github.io</a>网页查看相关内容。</p>
+
+<h1></h1>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>Projects by <a href="https://github.com/hongbing">hongbing</a> can be found on <a href="https://github.com/hongbing">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="https://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
