@@ -1,7 +1,7 @@
 ---
 layout: post
 title: jetty6 deadlock
-categories: blog
+categories: posts blog
 nav:
    - name: java
    - link: "#java"

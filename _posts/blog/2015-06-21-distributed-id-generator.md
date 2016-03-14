@@ -1,7 +1,7 @@
 ---
 layout:     post
 title: 分布式ID生成器
-categories: blog
+categories: posts blog
 ---
 
 ## 1 什么是ID

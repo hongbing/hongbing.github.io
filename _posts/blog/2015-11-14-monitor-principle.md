@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 监控模式
-categories: blog
+categories: posts blog
 ---
 
 *本文的内容来自于[stop-monitoring-if-service-is-up](http://everythingsysadmin.com/2013/11/stop-monitoring-if-service-is-up.html)，表示对文章感兴趣，随性翻译。如有侵权，立马删除。*
