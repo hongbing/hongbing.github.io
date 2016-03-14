@@ -37,15 +37,16 @@ detach:  false
 port:    4000
 host:    127.0.0.1
 baseurl: "" # does not include hostname
-url: ""
 
 #github
 github: hongbing
 
+relative_permalinks: false
+
 # Outputting
 paginate: 5
-permalink: /:year-:month-:day-:title
-#permalink: date
+#permalink: /:year-:month-:day-:title
+permalink: date
 paginate_path: /page:num
 timezone:      null
 
