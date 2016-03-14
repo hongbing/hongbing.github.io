@@ -1,7 +1,7 @@
 ---
 layout:     post
 title: haproxy部署
-category: blog
+categories: blog
 ---
 
 ## 1 安装

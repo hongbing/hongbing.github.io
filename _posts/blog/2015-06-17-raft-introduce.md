@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Raft
-category: blog
+categories: blog
 ---
 
 ## 1 Raft概念

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: maven实践
-category: blog
+categories: blog
 ---
 
 ## 1 相关概念

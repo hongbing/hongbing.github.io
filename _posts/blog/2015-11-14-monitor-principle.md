@@ -1,10 +1,10 @@
 ---
 layout: post
 title: 监控模式
-category: blog
+categories: blog
 ---
 
-*本文的内容来自于[stop-monitoring-if-service-is-up](http://everythingsysadmin.com/2013/11/stop-monitoring-if-service-is-up.html)，表示对文章感兴趣，随性翻译。如有侵权，立马删除。* 
+*本文的内容来自于[stop-monitoring-if-service-is-up](http://everythingsysadmin.com/2013/11/stop-monitoring-if-service-is-up.html)，表示对文章感兴趣，随性翻译。如有侵权，立马删除。*
 
 在作者看来，99%的监控都没搞对。大多数人认为的监控是这样的：
 

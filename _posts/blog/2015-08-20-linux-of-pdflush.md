@@ -1,7 +1,7 @@
 ---
 layout: post
 title: linux系统之pdflush
-category: blog
+categories: blog
 tags: linux pdflush
 ---
 

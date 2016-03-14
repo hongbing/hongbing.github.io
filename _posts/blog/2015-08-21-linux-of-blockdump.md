@@ -1,7 +1,7 @@
 ---
 layout: post
 title: linux系统之block_dump
-category: blog
+categories: blog
 nav:
   - name: linux
     link: "#linux"

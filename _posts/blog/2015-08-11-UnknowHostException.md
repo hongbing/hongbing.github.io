@@ -1,7 +1,7 @@
 ---
 layout: post
 title: UnknowHostException
-category: blog
+categories: blog
 ---
 
 ## 1 **问题**

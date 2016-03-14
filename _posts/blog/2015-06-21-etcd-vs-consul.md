@@ -1,7 +1,7 @@
 ---
 layout:     post
 title: ETCD vs. Consul
-category: blog
+categories: blog
 ---
 
 ## 异同
