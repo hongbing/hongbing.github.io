@@ -44,7 +44,7 @@ github: hongbing
 
 # Outputting
 paginate: 5
-permalink: /:year-:month-:day-:title/
+#permalink: /:year-:month-:day-:title/
 paginate_path: /page:num
 timezone:      null
 
