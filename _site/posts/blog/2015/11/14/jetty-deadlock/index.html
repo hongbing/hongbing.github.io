@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jetty6 deadlock </title>
+    <meta name="author" content="hongbing" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="hongbing的部落格" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <link rel="shortcut icon" href="/jinchuan.png" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+      <div id="header_wrap" class="outer">
+        <header class="inner">
+                <div id="project_title" align="center"><a href="/">hongbingの部落格</a></div>
+                <div id="project_tagline" align="center">ONCE A GEEK, FOREVER A GEEK</div>
+    <!--    
+	        <div id="nav" class="navbar">
+                         <div id="home" class="navbar"><a href="/">Home</a></div>
+                         <div id="archive" class="navbar"><a href="/archive">Archive</a></div>
+                         <div id="about" class="navbar"><a href="/about">About</a></div>
+                </div>
+-->	</header>
+</div>
+ 
+         <link rel="stylesheet" href="/js/prettify/prettify.css" />
+<style type="text/css">
+    body { background:#e8e8e8; }
+    @media screen and (max-width: 750px){
+        body { background:#fff; }
+    }
+    @media screen and (max-width: 1020px){
+        body { background:#fff; }
+    }
+</style>
+
+<div id="content">
+    <div class="entry">
+        <h1 class="entry-title"><a href="/posts/blog/2015/11/14/jetty-deadlock/" title="jetty6 deadlock">jetty6 deadlock</a></h1>
+        <p class="entry-date">2015-11-14</p>
+<!--	
+	
+        <ul id="pagenav">
+           
+               <li><a href="">java</a></li>
+           
+               <li><a href="#java"></a></li>
+           
+        </ul>
+        
+-->	
+	<h2 id="section">1 背景</h2>
+<p>业务方反应消息队列最近几天输出的消息量变少了（良好的监控系统应该在业务方感知到故障之前将问题暴露出来），进入到前端机发现，多达20多万的TCP连接状态都处于<code class="highlighter-rouge">CLOSE_WAIT</code>状态，且TCP socket的RECV-Q中还有100多个包没有被处理。
+我们使用的环境是：</p>
+
+<ul>
+  <li>java</li>
+</ul>
+
+<p>java version “1.6.0_24”
+Java(TM) SE Runtime Environment (build 1.6.0_24-b07)<!-- more -->
+Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02, mixed mode)</p>
+
+<ul>
+  <li>jetty</li>
+</ul>
+
+<p>jetty 6.1.26</p>
+
+<h2 id="section-1">2 分析</h2>
+<p>看到大量的tcp连接都处于CLOSE_WAIT状态，初步分析了一下网络状况，如果服务端处于CLOSE_WAIT状态，说明是客户端首先发起了关闭请求。但是在这个项目中，客户端与服务端之间采用的是jetty长连接，服务端在服务10分钟之后主动断开连接，客户端重新发起请求。明显，现在出现的情况与设计是不符合的。为了尽快恢复服务状况，释放服务端的连接，于是重启了服务端程序。重启之后，服务暂时恢复正常。在重启之前，使用jstack dump了一份当前java进程的线程栈,发现在dump的文件最后，检测到了deadlock，内容如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> <span class="n">Java</span> <span class="n">stack</span> <span class="n">information</span> <span class="k">for</span> <span class="n">the</span> <span class="n">threads</span> <span class="n">listed</span> <span class="nl">above:</span>
+<span class="s">"1854411210@qtp-1306606930-148"</span><span class="o">:</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectorManager</span><span class="n">$SelectSet</span><span class="o">.</span><span class="na">scheduleIdle</span><span class="o">(</span><span class="n">SelectorManager</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">795</span><span class="o">)</span>
+	<span class="o">-</span> <span class="n">waiting</span> <span class="n">to</span> <span class="n">lock</span> <span class="o">&lt;</span><span class="mh">0x00000006fd82b228</span><span class="o">&gt;</span> <span class="o">(</span><span class="n">a</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectorManager</span><span class="n">$SelectSet</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectChannelEndPoint</span><span class="o">.</span><span class="na">scheduleIdle</span><span class="o">(</span><span class="n">SelectChannelEndPoint</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">159</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectChannelEndPoint</span><span class="o">.</span><span class="na">blockWritable</span><span class="o">(</span><span class="n">SelectChannelEndPoint</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">293</span><span class="o">)</span>
+	<span class="o">-</span> <span class="n">locked</span> <span class="o">&lt;</span><span class="mh">0x0000000777e8d338</span><span class="o">&gt;</span> <span class="o">(</span><span class="n">a</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectChannelConnector</span><span class="n">$ConnectorEndPoint</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">AbstractGenerator</span><span class="n">$Output</span><span class="o">.</span><span class="na">blockForOutput</span><span class="o">(</span><span class="n">AbstractGenerator</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">544</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">AbstractGenerator</span><span class="n">$Output</span><span class="o">.</span><span class="na">flush</span><span class="o">(</span><span class="n">AbstractGenerator</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">571</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">HttpConnection</span><span class="n">$Output</span><span class="o">.</span><span class="na">flush</span><span class="o">(</span><span class="n">HttpConnection</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">1010</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">cn</span><span class="o">.</span><span class="na">xxxx</span><span class="o">.</span><span class="na">xxxxx</span><span class="o">.</span><span class="na">channel</span><span class="o">.</span><span class="na">DataOutputChannel</span><span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="n">DataOutputChannel</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">23</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">cn</span><span class="o">.</span><span class="na">xxxx</span><span class="o">.</span><span class="na">xxxxx</span><span class="o">.</span><span class="na">channel</span><span class="o">.</span><span class="na">DataChannel</span><span class="o">.</span><span class="na">handler</span><span class="o">(</span><span class="n">DataChannel</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">40</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">cn</span><span class="o">.</span><span class="na">xxxx</span><span class="o">.</span><span class="na">xxxxx</span><span class="o">.</span><span class="na">channel</span><span class="o">.</span><span class="na">DataChannelFactory</span><span class="o">.</span><span class="na">handler</span><span class="o">(</span><span class="n">DataChannelFactory</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">27</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">cn</span><span class="o">.</span><span class="na">xxxx</span><span class="o">.</span><span class="na">xxxxx</span><span class="o">.</span><span class="na">processor</span><span class="o">.</span><span class="na">ClientProcessor</span><span class="o">.</span><span class="na">outputDataMessage</span><span class="o">(</span><span class="n">ClientProcessor</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">287</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">cn</span><span class="o">.</span><span class="na">xxxx</span><span class="o">.</span><span class="na">xxxxx</span><span class="o">.</span><span class="na">processor</span><span class="o">.</span><span class="na">ClientProcessor</span><span class="o">.</span><span class="na">outputDataMessage</span><span class="o">(</span><span class="n">ClientProcessor</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">259</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">cn</span><span class="o">.</span><span class="na">xxxx</span><span class="o">.</span><span class="na">xxxxx</span><span class="o">.</span><span class="na">processor</span><span class="o">.</span><span class="na">ClientProcessor</span><span class="o">.</span><span class="na">handler</span><span class="o">(</span><span class="n">ClientProcessor</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">82</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">cn</span><span class="o">.</span><span class="na">xxxx</span><span class="o">.</span><span class="na">xxxxx</span><span class="o">.</span><span class="na">web</span><span class="o">.</span><span class="na">DataServlet</span><span class="o">.</span><span class="na">service</span><span class="o">(</span><span class="n">DataServlet</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">34</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">javax</span><span class="o">.</span><span class="na">servlet</span><span class="o">.</span><span class="na">http</span><span class="o">.</span><span class="na">HttpServlet</span><span class="o">.</span><span class="na">service</span><span class="o">(</span><span class="n">HttpServlet</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">820</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">servlet</span><span class="o">.</span><span class="na">ServletHolder</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">ServletHolder</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">511</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">servlet</span><span class="o">.</span><span class="na">ServletHandler</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">ServletHandler</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">390</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">SecurityHandler</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">SecurityHandler</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">216</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">servlet</span><span class="o">.</span><span class="na">SessionHandler</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">SessionHandler</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">182</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">handler</span><span class="o">.</span><span class="na">ContextHandler</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">ContextHandler</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">765</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">webapp</span><span class="o">.</span><span class="na">WebAppContext</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">WebAppContext</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">440</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">handler</span><span class="o">.</span><span class="na">ContextHandlerCollection</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">ContextHandlerCollection</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">230</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">handler</span><span class="o">.</span><span class="na">HandlerCollection</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">HandlerCollection</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">114</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">handler</span><span class="o">.</span><span class="na">HandlerWrapper</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">HandlerWrapper</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">152</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">Server</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">Server</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">326</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">HttpConnection</span><span class="o">.</span><span class="na">handleRequest</span><span class="o">(</span><span class="n">HttpConnection</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">542</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">HttpConnection</span><span class="n">$RequestHandler</span><span class="o">.</span><span class="na">headerComplete</span><span class="o">(</span><span class="n">HttpConnection</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">926</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">HttpParser</span><span class="o">.</span><span class="na">parseNext</span><span class="o">(</span><span class="n">HttpParser</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">549</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">HttpParser</span><span class="o">.</span><span class="na">parseAvailable</span><span class="o">(</span><span class="n">HttpParser</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">212</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">HttpConnection</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">HttpConnection</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">404</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectChannelEndPoint</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">SelectChannelEndPoint</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">410</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">thread</span><span class="o">.</span><span class="na">QueuedThreadPool</span><span class="n">$PoolThread</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">QueuedThreadPool</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">582</span><span class="o">)</span>
+
+<span class="s">"965223859@qtp-1306606930-25 - Acceptor14 SelectChannelConnector@0.0.0.0:8082"</span><span class="o">:</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectChannelEndPoint</span><span class="o">.</span><span class="na">updateKey</span><span class="o">(</span><span class="n">SelectChannelEndPoint</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">322</span><span class="o">)</span>
+	<span class="o">-</span> <span class="n">waiting</span> <span class="n">to</span> <span class="n">lock</span> <span class="o">&lt;</span><span class="mh">0x0000000777e8d338</span><span class="o">&gt;</span> <span class="o">(</span><span class="n">a</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectChannelConnector</span><span class="n">$ConnectorEndPoint</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectChannelEndPoint</span><span class="o">.</span><span class="na">close</span><span class="o">(</span><span class="n">SelectChannelEndPoint</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">456</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectChannelConnector</span><span class="n">$ConnectorEndPoint</span><span class="o">.</span><span class="na">close</span><span class="o">(</span><span class="n">SelectChannelConnector</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">362</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectChannelEndPoint</span><span class="o">.</span><span class="na">idleExpired</span><span class="o">(</span><span class="n">SelectChannelEndPoint</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">174</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectChannelEndPoint</span><span class="n">$IdleTask</span><span class="o">.</span><span class="na">expire</span><span class="o">(</span><span class="n">SelectChannelEndPoint</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">489</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">thread</span><span class="o">.</span><span class="na">Timeout</span><span class="o">.</span><span class="na">tick</span><span class="o">(</span><span class="n">Timeout</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">137</span><span class="o">)</span>
+	<span class="o">-</span> <span class="n">locked</span> <span class="o">&lt;</span><span class="mh">0x00000006fd82b228</span><span class="o">&gt;</span> <span class="o">(</span><span class="n">a</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectorManager</span><span class="n">$SelectSet</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">thread</span><span class="o">.</span><span class="na">Timeout</span><span class="o">.</span><span class="na">tick</span><span class="o">(</span><span class="n">Timeout</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">153</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectorManager</span><span class="n">$SelectSet</span><span class="o">.</span><span class="na">doSelect</span><span class="o">(</span><span class="n">SelectorManager</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">762</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectorManager</span><span class="o">.</span><span class="na">doSelect</span><span class="o">(</span><span class="n">SelectorManager</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">192</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">SelectChannelConnector</span><span class="o">.</span><span class="na">accept</span><span class="o">(</span><span class="n">SelectChannelConnector</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">124</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">jetty</span><span class="o">.</span><span class="na">AbstractConnector</span><span class="n">$Acceptor</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">AbstractConnector</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">708</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">mortbay</span><span class="o">.</span><span class="na">thread</span><span class="o">.</span><span class="na">QueuedThreadPool</span><span class="n">$PoolThread</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">QueuedThreadPool</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">582</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>另一方面，跟业务方要了一份客户端的代码。发现客户端确实在应用层面主动关闭了连接（why，不按照设计来？？），这样也解释了为什么会在服务端出现CLOSE_WAIT状态。</p>
+
+<p>接下来看看服务端代码的deadlock:</p>
+
+<p>跟踪调用链路可以看到死锁的发生，一个线程锁在了<code class="highlighter-rouge">org.mortbay.io.nio.SelectorManager$SelectSet</code>上，并且等待<code class="highlighter-rouge">rg.mortbay.jetty.nio.SelectChannelConnector$ConnectorEndPoint</code>的解锁，另一个则相反。</p>
+
+<p>对于线程<code class="highlighter-rouge">1854411210@qtp-1306606930-148</code>，如果没有等待<code class="highlighter-rouge">org.mortbay.io.nio.SelectorManager$SelectSet</code>解锁，那么会发生什么呢？看看下面的代码：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">if</span> <span class="o">(!</span><span class="n">_generator</span><span class="o">.</span><span class="na">_endp</span><span class="o">.</span><span class="na">blockWritable</span><span class="o">(</span><span class="n">_maxIdleTime</span><span class="o">))</span>
+<span class="o">{</span>
+     <span class="n">_generator</span><span class="o">.</span><span class="na">_endp</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+     <span class="k">throw</span> <span class="k">new</span> <span class="n">EofException</span><span class="o">(</span><span class="s">"timeout"</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="n">_generator</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span></code></pre></figure>
+
+<p>等待解锁的调用走到了<code class="highlighter-rouge">_generator._endp.blockWritable()</code>方法的内部，如果没有形成死锁，那么等到<code class="highlighter-rouge">_maxIdleTime</code>时间到，要么执行flush操作，将数据传输到对端，要么关闭连接，并抛出<strong>timeoue</strong>异常。因此不会产生前文所描述的服务端的大部分请求连接都处于CLOSE_WAIT状态，导致无法提供服务。</p>
+
+<p>知道了产生问题的原因，在网上搜索关键词<strong>jetty6 deadlock</strong>会有不少这方面的bug report。网上也一直以为是<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=357318">jetty6的bug</a>，然而经过jetty相关开发人员的验证，最终由oracle方面证实是<a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7130796">jdk的bug</a>，且该bug已经在jdk8-b28得到修复。</p>
+
+<p>接下来我们需要做的就是升级系统到jdk8-b28及其以上，同时将jetty升级到jetty8。</p>
+
+<p><img src="/images/jettydeadlock/jettydeadlock.jpg" alt="deadlock" /></p>
+
+	<ul class="pager">
+            
+            <li class="previous"><a href="/posts/blog/2015/08/21/linux-of-blockdump/" title="linux系统之block_dump">上一篇 linux系统之block_dump</a></li>
+	    
+
+            
+            <li class="next"><a href="/posts/blog/2015/11/14/monitor-principle/" title="监控模式">下一篇 监控模式</a></li>
+            
+	</ul>
+	<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hongbing.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    </div>
+
+    <div class="sidenav">
+	<iframe width="100%" height="85" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=85&fansRow=2&ptype=1&speed=0&skin=1&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=2702608131&verifier=f3af5509&dpc=1"></iframe>	
+    </div>
+	
+    <div class="sidenav">
+        <h2>Blog</h2>
+        <ul class="artical-list">
+        
+            <li><a href="/posts/blog/2015/11/14/monitor-principle/">监控模式</a></li>
+        
+            <li><a href="/posts/blog/2015/11/14/jetty-deadlock/">jetty6 deadlock</a></li>
+        
+            <li><a href="/posts/blog/2015/08/21/linux-of-blockdump/">linux系统之block_dump</a></li>
+        
+            <li><a href="/posts/blog/2015/08/20/linux-of-pdflush/">linux系统之pdflush</a></li>
+        
+            <li><a href="/posts/blog/2015/08/11/UnknowHostException/">UnknowHostException</a></li>
+        
+            <li><a href="/posts/blog/2015/08/02/haproxy-install/">haproxy部署</a></li>
+        
+            <li><a href="/posts/blog/2015/07/25/maven-introduce/">maven实践</a></li>
+        
+            <li><a href="/posts/blog/2015/06/21/etcd-vs-consul/">ETCD vs. Consul</a></li>
+        
+            <li><a href="/posts/blog/2015/06/21/distributed-id-generator/">分布式ID生成器</a></li>
+        
+            <li><a href="/posts/blog/2015/06/17/what-is-good-code/">什么样的代码才是好的代码</a></li>
+        
+            <li><a href="/posts/blog/2015/06/17/raft-introduce/">Raft</a></li>
+        
+        </ul>
+<!--
+        <h2>Opinion</h2>
+        <ul class="artical-list">
+        
+        </ul>
+
+        <h2>Project</h2>
+        <ul class="artical-list">
+        
+        </ul>-->
+     </div>
+</div>
+<script src="/js/jquery-1.7.1.min.js"" type="text/javascript"></script>
+<script src="/js/post.js" type="text/javascript"></script>
+
+      
+
+</body>
+</html>
