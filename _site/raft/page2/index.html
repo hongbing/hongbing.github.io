@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="author" content="hongbing" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="hongbing的部落格" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <link rel="shortcut icon" href="/jinchuan.png" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+      <div id="header_wrap" class="outer">
+        <header class="inner">
+                <div id="project_title" align="center"><a href="/">hongbingの部落格</a></div>
+                <div id="project_tagline" align="center">ONCE A GEEK, FOREVER A GEEK.</div>
+        </header>
+</div>
+ 
+         <div class="index-content blog">
+    <div class="section">
+        <ul class="artical-list">
+        
+            <li>
+                <h2><a href="/blog/2015/06/21/etcd-vs-consul.html">ETCD vs. Consul</a></h2>
+                <!--<div class="title-desc"></div>-->
+		<div class="title-desc">异同
+
+1. 协议
+
+  
+    Etcd和consul均采用raft协议来保证server之间的数据一致性，但是consul还采用了gossip协议管理成员和传播消息。
+  
+  
+    Etcd中的RPC消息格式都是protobuf格式，Consul的RPC消息格式采用MsgPack格式。
+  
+  
+    Etcd支持HTTP操作接口，Consul支持HTTP和DNS两种操作接口
+  
+
+
+&hellip; <a href="/blog/2015/06/21/etcd-vs-consul.html" style="font-weight:bold;">Read More</a></div>
+	     </li>
+        
+            <li>
+                <h2><a href="/blog/2015/06/21/distributed-id-generator.html">分布式ID生成器</a></h2>
+                <!--<div class="title-desc"></div>-->
+		<div class="title-desc">1 什么是ID
+
+ID最大的特点就是唯一，一个ID存在的目的就是唯一性的标识某一个物体，如果唯一性做不到，那么ID也就失去了本质的作用。
+另外ID还需要保持其它特性：
+
+
+  有序   对于某些事物需要依靠ID来进行比较，同时对于排序查找也方便。
+  有意义  ID也需要包含有意义的信息，比如时间信息,业务信息。
+  分布式 ID的生成也许并不在一台服务器上，可由多台服务器互不干扰的生成ID。如果采用中心式的ID生成，多半会涉及到锁，而锁意味着成本和性能的下降。
+
+
+&hellip; <a href="/blog/2015/06/21/distributed-id-generator.html" style="font-weight:bold;">Read More</a></div>
+	     </li>
+        
+            <li>
+                <h2><a href="/blog/2015/06/17/what-is-good-code.html">什么样的代码才是好的代码</a></h2>
+                <!--<div class="title-desc"></div>-->
+		<div class="title-desc">文章来源：http://engineering.intenthq.com/2015/03/what-is-good-code-a-scientific-definition/
+
+文章的统计结果来自于面试过程中对65个开发者的调查，这些开发者大多数使用java或者scala语言，同时多数具有5年以上的开发经验。
+
+TOP 5
+
+
+  Readable（可读性）
+  Tested/Testable（可测试性）
+  Simple（简单）
+  Works（功能良好）
+  Maintainable（可维护性）
+
+
+&hellip; <a href="/blog/2015/06/17/what-is-good-code.html" style="font-weight:bold;">Read More</a></div>
+	     </li>
+        
+            <li>
+                <h2><a href="/blog/2015/06/17/raft-introduce.html">Raft</a></h2>
+                <!--<div class="title-desc"></div>-->
+		<div class="title-desc">1 Raft概念
+
+分布式系统中，为了实现一致性，一般采用对称式和非对称式两种server组织方式。
+
+对称式：所有的server都具有相同的功能，客户端可以和任意一个server通信。
+
+非对称式：有一个leader作为与外界通信的角色，其余server不与外界通信，leader会将数据的变更同步到所有的其他server中。
+
+&hellip; <a href="/blog/2015/06/17/raft-introduce.html" style="font-weight:bold;">Read More</a></div>
+	     </li>
+        
+        
+        <ul class="pager">	
+	
+	    
+	      <li class="lastpage"> <a href="/index.html">上一页</a></li>
+	    
+	       &nbsp;
+            
+    		
+      	             <a href="/index.html">1</a>      &nbsp;
+    		
+      	    
+    		
+      	             <span class="active">2</span>&nbsp;
+    		
+      	    
+                &nbsp;
+	    
+		<li class="disnextpage"> 下一页</li>
+	    
+	
+	   </ul>
+	</ul>
+    </div>
+</div>
+
+<div id="footer_wrap" class="outer">
+  <footer class="inner">
+      Powered by <a href="https://github.com/jekyll/jekyll">Jekyll</a>
+      on
+      
+      GitHub
+      
+  </footer>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        function animateBar($item,noAni){
+            var spanLeft = $item.find('span').offset().left;
+            var conLeft = $item.parent().offset().left;
+            var left = spanLeft - conLeft;
+            var width = $item.find('span').width() + 8;
+
+            if(noAni){
+                $('#cateBar').css({left:left,width:width})
+            }else{
+                $('#cateBar').stop().animate({left:left,width:width},300)
+            }
+        }
+
+        var waitForFinalEvent = (function () {
+            var timers = {};
+            return function (callback, ms, uniqueId) {
+                if (!uniqueId) {
+                    uniqueId = "Don't call this twice without a uniqueId";
+                }
+                if (timers[uniqueId]) {
+                    clearTimeout (timers[uniqueId]);
+                }
+                timers[uniqueId] = setTimeout(callback, ms);
+            };
+        })();
+
+        $('.artical-cate li').mouseenter(function(){
+            animateBar($(this));
+        }).mouseleave(function(){
+            animateBar($('.artical-cate .on'));
+        });
+
+        $(window).resize(function(e){
+            waitForFinalEvent(function(){
+                animateBar($('.artical-cate .on'));
+            })
+        })
+        animateBar($('.artical-cate .on'),true);
+    });
+</script>
+
+      
+
+</body>
+</html>

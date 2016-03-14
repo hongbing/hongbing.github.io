@@ -1,9 +1,9 @@
 # Where things are
 source:      .
 destination: ./_site
-plugins_dir:     ./_plugins
-layouts_dir:     ./_layouts
-data_dir: ./_data
+plugins:     ./_plugins
+layouts:     ./_layouts
+data_source: ./_data
 collections: null
 
 # Handling Reading
@@ -22,13 +22,11 @@ unpublished: false
 
 # Plugins
 whitelist: []
-# gems
-gems: [jekyll-paginate]
 
 
 # Conversion Kramdown
 markdown: Kramdown
-highlighter: rouge  #pygments
+highlighter: rouge
 lsi:         false
 excerpt_separator: "<!-- more -->"
 
@@ -37,15 +35,17 @@ detach:  false
 port:    4000
 host:    127.0.0.1
 baseurl: "" # does not include hostname
-url: "http://hongbing.github.io"
+
+# Backwards-compatibility
+relative_permalinks: false
 
 #github
 github: hongbing
 
 # Outputting
 paginate: 5
-#permalink: /:year-:month-:day-:title
-paginate_path: /page:num
+permalink:     date
+paginate_path: "page:num"
 timezone:      null
 
 disqus:
@@ -68,7 +68,7 @@ kramdown:
   toc_levels:     1..6
   smart_quotes:   lsquo,rsquo,ldquo,rdquo
   enable_coderay: false
-  input: GFM
+  input: GFM  
 
   coderay:
     coderay_wrap:              div
