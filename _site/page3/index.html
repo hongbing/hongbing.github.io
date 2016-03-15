@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="author" content="hongbing" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="hongbing的部落格" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <link rel="shortcut icon" href="/jinchuan.png" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+      <div id="header_wrap" class="outer">
+        <header class="inner">
+                <div id="project_title" align="center"><a href="/">hongbingの部落格</a></div>
+                <div id="project_tagline" align="center">ONCE A GEEK, FOREVER A GEEK</div>
+    <!--    
+	        <div id="nav" class="navbar">
+                         <div id="home" class="navbar"><a href="/">Home</a></div>
+                         <div id="archive" class="navbar"><a href="/archive">Archive</a></div>
+                         <div id="about" class="navbar"><a href="/about">About</a></div>
+                </div>
+-->	</header>
+</div>
+ 
+         <div class="index-content blog">
+  <div class="section">
+    <ul class="artical-list">
+      
+      <li>
+        <h2><a href="/posts/blog/2015/06/17/raft-introduce.html">Raft</a></h2>
+        <div class="title-desc">1 Raft概念
+
+分布式系统中，为了实现一致性，一般采用对称式和非对称式两种server组织方式。
+
+对称式：所有的server都具有相同的功能，客户端可以和任意一个server通信。
+
+非对称式：有一个leader作为与外界通信的角色，其余server不与外界通信，leader会将数据的变更同步到所有的其他server中。
+
+&hellip; <a href="/posts/blog/2015/06/17/raft-introduce.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+
+      <ul class="pager">
+        
+            
+              <li class="lastpage"> <a href="/page2">上一页</a></li>
+            
+              &nbsp;
+            
+              
+                <a href="/index.html">1</a>      &nbsp;
+              
+            
+              
+                &nbsp;
+                <a href="/page2">2</a>
+                &nbsp;
+              
+            
+              
+                <span class="active">3</span>
+                &nbsp;
+              
+            
+            &nbsp;
+            
+              <li class="disnextpage"> 下一页</li>
+            
+        
+      </ul>
+    </ul>
+  </div>
+</div>
+
+<div id="footer_wrap" class="outer">
+  <footer class="inner">
+      Copyright © 2015 hongbing - 
+      Powered by <a href="https://github.com/jekyll/jekyll">Jekyll</a>
+      on
+      
+      GitHub.
+      
+      Page theme based on <a href="https://github.com/beiyuu/Github-Pages-Example">BeiYuu</a>.
+  </footer>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        function animateBar($item,noAni){
+            var spanLeft = $item.find('span').offset().left;
+            var conLeft = $item.parent().offset().left;
+            var left = spanLeft - conLeft;
+            var width = $item.find('span').width() + 8;
+
+            if(noAni){
+                $('#cateBar').css({left:left,width:width})
+            }else{
+                $('#cateBar').stop().animate({left:left,width:width},300)
+            }
+        }
+
+        var waitForFinalEvent = (function () {
+            var timers = {};
+            return function (callback, ms, uniqueId) {
+                if (!uniqueId) {
+                    uniqueId = "Don't call this twice without a uniqueId";
+                }
+                if (timers[uniqueId]) {
+                    clearTimeout (timers[uniqueId]);
+                }
+                timers[uniqueId] = setTimeout(callback, ms);
+            };
+        })();
+
+        $('.artical-cate li').mouseenter(function(){
+            animateBar($(this));
+        }).mouseleave(function(){
+            animateBar($('.artical-cate .on'));
+        });
+
+        $(window).resize(function(e){
+            waitForFinalEvent(function(){
+                animateBar($('.artical-cate .on'));
+            })
+        })
+        animateBar($('.artical-cate .on'),true);
+    });
+</script>
+
+      
+
+</body>
+</html>
