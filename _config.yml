@@ -4,11 +4,11 @@ destination: ./_site
 plugins_dir:     ./_plugins
 layouts_dir:     ./_layouts
 data_dir: ./_data
-#collections: null
-collections:
-  posts:
-  output: true
-  permalink: /posts/blog/:short_year/:month/:day/:title:output_ext
+collections: null
+#collections:
+#  posts:
+#  output: true
+#  permalink: /posts/blog/:short_year/:month/:day/:title:output_ext
 
 # Handling Reading
 safe:         false
