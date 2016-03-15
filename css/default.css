@@ -112,12 +112,13 @@ blockquote {
     margin-bottom: 10px;
     font-style: italic;
     color: #373737;
-    border: #797878;
     border-width: 1.5px;
-    border-style: solid;
-    border-radius: 0.7em;
+    border-radius: 0.4em;
     margin-left: 25px;
-    font-size: large;
+    font-size: medium;
+    border: none;
+    border-left-style: inset;
+    border-left-width: thick;
 }
 
 blockquote p {

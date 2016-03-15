@@ -144,7 +144,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02, mixed mode)</p>
 
 <span class="n">_generator</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span></code></pre></figure>
 
-<p>等待解锁的调用走到了<code class="highlighter-rouge">_generator._endp.blockWritable()</code>方法的内部，如果没有形成死锁，那么等到<code class="highlighter-rouge">_maxIdleTime</code>时间到，要么执行flush操作，将数据传输到对端，要么关闭连接，并抛出<strong>timeoue</strong>异常。因此不会产生前文所描述的服务端的大部分请求连接都处于CLOSE_WAIT状态，导致无法提供服务。</p>
+<p>等待解锁的调用走到了<code class="highlighter-rouge">_generator._endp.blockWritable()</code>方法的内部，如果没有形成死锁，那么等到<code class="highlighter-rouge">_maxIdleTime</code>时间到，要么执行flush操作，将数据传输到对端，要么关闭连接，并抛出<strong>timeout</strong>异常。因此不会产生前文所描述的服务端的大部分请求连接都处于CLOSE_WAIT状态，导致无法提供服务。</p>
 
 <p>知道了产生问题的原因，在网上搜索关键词<strong>jetty6 deadlock</strong>会有不少这方面的bug report。网上也一直以为是<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=357318">jetty6的bug</a>，然而经过jetty相关开发人员的验证，最终由oracle方面证实是<a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7130796">jdk的bug</a>，且该bug已经在jdk8-b28得到修复。</p>
 

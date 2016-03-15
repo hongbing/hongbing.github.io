@@ -96,7 +96,7 @@ if (!_generator._endp.blockWritable(_maxIdleTime))
 _generator.flush();
 {% endhighlight %}
 
-等待解锁的调用走到了`_generator._endp.blockWritable()`方法的内部，如果没有形成死锁，那么等到`_maxIdleTime`时间到，要么执行flush操作，将数据传输到对端，要么关闭连接，并抛出**timeoue**异常。因此不会产生前文所描述的服务端的大部分请求连接都处于CLOSE_WAIT状态，导致无法提供服务。
+等待解锁的调用走到了`_generator._endp.blockWritable()`方法的内部，如果没有形成死锁，那么等到`_maxIdleTime`时间到，要么执行flush操作，将数据传输到对端，要么关闭连接，并抛出**timeout**异常。因此不会产生前文所描述的服务端的大部分请求连接都处于CLOSE_WAIT状态，导致无法提供服务。
 
 知道了产生问题的原因，在网上搜索关键词**jetty6 deadlock**会有不少这方面的bug report。网上也一直以为是[jetty6的bug](https://bugs.eclipse.org/bugs/show_bug.cgi?id=357318)，然而经过jetty相关开发人员的验证，最终由oracle方面证实是[jdk的bug](http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7130796)，且该bug已经在jdk8-b28得到修复。
 
