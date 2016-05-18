@@ -57,8 +57,9 @@
 <p><strong>主版本号</strong>：一般指框架具有重大变化的版本号，比如struts1，struts2框架的变化</p>
 
 <p><strong>分支版本号</strong>： 一般指功能的变化
-<!-- more -->
-<strong>小版本号</strong>：bug的修复</p>
+<!-- more --></p>
+
+<p><strong>小版本号</strong>：bug的修复</p>
 
 <p><strong>里程碑版本号</strong>：<code class="highlighter-rouge">SNAPSHOT</code>–&gt;<code class="highlighter-rouge">RELEASAE</code>–&gt;<code class="highlighter-rouge">FINAL</code></p>
 
@@ -109,7 +110,7 @@
 <figure class="highlight"><pre><code class="language-maven" data-lang="maven">&lt;distributeManagement&gt;
     &lt;snapshotRepository&gt;
     &lt;id&gt;firehose.0.0.1-snapshot&lt;/id&gt;
-    &lt;name&gt;fisehose SNAPSHOT&lt;/name&gt;
+    &lt;name&gt;firehose-SNAPSHOT&lt;/name&gt;
     &lt;url&gt;10.30.XXX.XXX/nexus/content/Repositories/snapshots/&lt;/url&gt;
     &lt;/snapshotRepository&gt;
 &lt;/distributeManagement&gt;</code></pre></figure>
@@ -349,6 +350,8 @@ mvn dependency:tree -Dverbose | awk -F<span class="s1">'- '</span> <span class="
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/posts/blog/2016/04/17/a-oom-problem.html">一次oom的排查过程</a></li>
         
             <li><a href="/posts/blog/2015/11/14/monitor-principle.html">监控模式</a></li>
         

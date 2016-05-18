@@ -32,6 +32,22 @@
     <ul class="artical-list">
       
       <li>
+        <h2><a href="/posts/blog/2015/08/11/UnknowHostException.html">UnknowHostException</a></h2>
+        <div class="title-desc">1 问题
+
+团队使用Docker中的测试环境，在新起的测试环境中启动消息队列项目，项目启动失败，抛出如下异常：
+
+UnknowHostException：
+	java.net.UnknownHostException: e7a05a2abfc5: e7a05a2abfc5: 未知的名称或服务
+
+2 分析
+
+异常信息栈显示抛出异常的地方在：InetAddress localHost = InetAddress.getLocalHost();
+
+&hellip; <a href="/posts/blog/2015/08/11/UnknowHostException.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
         <h2><a href="/posts/blog/2015/08/02/haproxy-install.html">haproxy部署</a></h2>
         <div class="title-desc">1 安装
 
@@ -107,29 +123,6 @@ ID最大的特点就是唯一，一个ID存在的目的就是唯一性的标识�
 
 
 &hellip; <a href="/posts/blog/2015/06/21/distributed-id-generator.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/2015/06/17/what-is-good-code.html">什么样的代码才是好的代码</a></h2>
-        <div class="title-desc">文章来源：http://engineering.intenthq.com/2015/03/what-is-good-code-a-scientific-definition/
-
-文章的统计结果来自于面试过程中对65个开发者的调查，这些开发者大多数使用java或者scala语言，同时多数具有5年以上的开发经验。
-
-TOP 5
-
-
-  Readable（可读性）
-  Tested/Testable（可测试性）
-  Simple（简单）
-  Works（功能良好）
-  Maintainable（可维护性）
-
-
-
-  “Good code is written
-
-
-&hellip; <a href="/posts/blog/2015/06/17/what-is-good-code.html" style="font-weight:bold;">Read More</a></div>
       </li>
       
 

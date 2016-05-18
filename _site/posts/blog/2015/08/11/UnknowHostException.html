@@ -58,7 +58,7 @@
 <!-- more -->
   跟踪源代码发现<code class="highlighter-rouge">InetAddress.getLocalHost()</code>会调用<strong>Inet6AddressImpl</strong>或者<strong>Inet4AddressImpl</strong>的native方法：</p>
 
- 	public native String getLocalHostName() throws UnknownHostException;
+<figure class="highlight"><pre><code class="language-java" data-lang="java"> 	<span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span> <span class="nf">getLocalHostName</span><span class="p">(</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">UnknownHostException</span><span class="o">;</span></code></pre></figure>
 
 <p>该native方法直接执行linux的系统调用gethostname。系统调用gethostname与在终端执行<code class="highlighter-rouge">$ hostname</code>或者<code class="highlighter-rouge">$ cat /etc/hostname</code>的结果一致。获得hostname后，比较该hostname的值，如果为localhost，则执行<code class="highlighter-rouge">impl.loopbackAddress();</code>获得localhost对应的ip地址。</p>
 
@@ -153,6 +153,8 @@
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/posts/blog/2016/04/17/a-oom-problem.html">一次oom的排查过程</a></li>
         
             <li><a href="/posts/blog/2015/11/14/monitor-principle.html">监控模式</a></li>
         

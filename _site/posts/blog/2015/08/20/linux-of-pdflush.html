@@ -85,7 +85,7 @@ Slab:             163756 kB
 
 <p>查看Kernel version 2.6.29的doc，看看该doc是怎么描述这两个参数的：</p>
 
-<figure class="highlight"><pre><code class="language-text" data-lang="text">==============================================================
+<div class="highlighter-rouge"><pre class="highlight"><code>==============================================================
 dirty_background_ratio
 
 Contains, as a percentage of total available memory that
@@ -105,7 +105,9 @@ start writing out dirty data.
 
 The total avaiable memory is not equal to total system memory.
 
-==============================================================</code></pre></figure>
+==============================================================
+</code></pre>
+</div>
 
 <p>从doc中可以看出，含义都是表示<code class="highlighter-rouge">占可用内存空间的百分比</code>。但是区别在达到<strong>dirty_background_ratio</strong>这个阈值后，pdflush线程会<code class="highlighter-rouge">异步</code>执行脏页回写，而当达到<strong>dirty_ratio</strong>阈值时，当时执行写操作的进程会被强制<code class="highlighter-rouge">同步</code>执行脏页回写操作，此时所有进程的写操作都会被阻塞,直到脏页占比降低到dirty_ratio之下，如果此时的脏页率仍然在dirty_backgroud_radio之上，将调用pdflush执行异步刷新。</p>
 
@@ -153,7 +155,7 @@ Data which has been dirty in-memory for longer than this interval
 </code></pre>
 </div>
 
-<p><strong>dirty_expire_centisecs</strong>表示脏页在内存中驻留的时间阈值，该值的单位为1/100 秒。另外还有一个参数<code class="highlighter-rouge">dirty_writeback_centisecs</code></p>
+<p><strong>dirty_expire_centisecs</strong> 表示脏页在内存中驻留的时间阈值，该值的单位为1/100 秒。另外还有一个参数<code class="highlighter-rouge">dirty_writeback_centisecs</code></p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>==============================================================
 dirty_writeback_centisecs
@@ -226,6 +228,8 @@ Setting this to zero disables periodic writeback altogether.
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/posts/blog/2016/04/17/a-oom-problem.html">一次oom的排查过程</a></li>
         
             <li><a href="/posts/blog/2015/11/14/monitor-principle.html">监控模式</a></li>
         

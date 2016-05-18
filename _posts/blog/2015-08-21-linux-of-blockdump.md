@@ -81,7 +81,7 @@ echo 0 > /proc/sys/vm/block_dump
 
 通过下面的命令可以统计io最频繁的进程名：
 
-```sh
+``` bash
 cat /tmp/diskio.log | awk -F"[() \t]" '/(READ|WRITE|dirtied)/ {activity[$2]++} END {for (x in activity) print x, activity[x]}'| sort -nr -k2
 ```
 
@@ -99,7 +99,9 @@ cat /tmp/diskio.log | awk -F"[() \t]" '/(READ|WRITE|dirtied)/ {activity[$2]++} E
 
 我们分析kworker的一条记录
 
- 	[88006.732202] kworker/u8:1(13277): WRITE block 2537400 on sda1 (8 sectors)
+```
+[88006.732202] kworker/u8:1(13277): WRITE block 2537400 on sda1 (8 sectors)
+```
 
 扇区号：2537400，文件块号：2537400/8=317175
 

@@ -17,6 +17,7 @@ categories: posts blog
 
 **分支版本号**： 一般指功能的变化
 <!-- more -->
+
 **小版本号**：bug的修复
 
 **里程碑版本号**：`SNAPSHOT`-->`RELEASAE`-->`FINAL`
@@ -61,7 +62,7 @@ maven远程服务器管理的仓库，地址是[maven中心仓库](http://repo1.
 <distributeManagement>
     <snapshotRepository>
     <id>firehose.0.0.1-snapshot</id>
-    <name>fisehose SNAPSHOT</name>
+    <name>firehose-SNAPSHOT</name>
     <url>10.30.XXX.XXX/nexus/content/Repositories/snapshots/</url>
     </snapshotRepository>
 </distributeManagement>

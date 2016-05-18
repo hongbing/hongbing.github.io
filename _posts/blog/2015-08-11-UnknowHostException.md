@@ -18,7 +18,9 @@ UnknowHostException：
 <!-- more -->
   跟踪源代码发现`InetAddress.getLocalHost()`会调用**Inet6AddressImpl**或者**Inet4AddressImpl**的native方法：
 
+{% highlight java %}
  	public native String getLocalHostName() throws UnknownHostException;
+{% endhighlight %}
 
   该native方法直接执行linux的系统调用gethostname。系统调用gethostname与在终端执行`$ hostname`或者`$ cat /etc/hostname`的结果一致。获得hostname后，比较该hostname的值，如果为localhost，则执行`impl.loopbackAddress();`获得localhost对应的ip地址。
 

@@ -111,4 +111,7 @@ curl -X PUT https://myetcd.local/v2/keys/discovery/6c007a14875d53d9bf0ef5a6fc025
 ### 13. 输出信息格式
 + Etcd和Consul均采用json格式输出
 
+
+*注:由于文章没有及时跟进consul和etcd的变化，可能存在文内内容与当前版本功能不符的情况。*
+
 ![etcd](/images/etcd/etcd.jpg)
