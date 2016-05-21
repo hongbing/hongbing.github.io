@@ -32,6 +32,31 @@
     <ul class="artical-list">
       
       <li>
+        <h2><a href="/posts/blog/2015/06/21/etcd-vs-consul.html">ETCD vs. Consul</a></h2>
+        <div class="title-desc">异同
+
+1. 协议
+
+  
+    Etcd和consul均采用raft协议来保证server之间的数据一致性，但是consul还采用了gossip协议管理成员和传播消息。
+  
+  
+    Etcd中的RPC消息格式都是protobuf格式，Consul的RPC消息格式采用MsgPack格式。
+  
+  
+    Etcd支持HTTP操作接口，Consul支持HTTP和DNS两种操作接口
+  
+
+
+2. 架构
+
+  Etcd不支持多数据中心，
+
+
+&hellip; <a href="/posts/blog/2015/06/21/etcd-vs-consul.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
         <h2><a href="/posts/blog/2015/06/21/distributed-id-generator.html">分布式ID生成器</a></h2>
         <div class="title-desc">1 什么是ID
 

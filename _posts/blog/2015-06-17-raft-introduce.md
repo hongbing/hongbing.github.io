@@ -15,25 +15,26 @@ categories: posts blog
 <!-- more -->
 
 raft采用的第二种方式，也就是leader—based。
-raft算法中集群中server的角色分为：
+raft算法的集群中server共有三种角色，他们分别是：
 
 >`follower`：负责跟随leader，不会主动跟客户端通信，会随着election timeout变成candidate
 
->`candidate`: candidate为选举过程中的中间状态，当candidate得到大多数的follower的投票，会将自己升级为leader。同时，当已经存在leader后，candidate会将自己将为follower。
+>`candidate`: candidate为选举过程中的中间状态，当candidate得到大多数的follower的投票，会将自己升级为leader。同时，当已经存在leader后，candidate会将自己降为follower。
 
->`leader`: 负责与client打交道，每一个term中**至多**存在一个leader。一个term表示一轮选举。
+>`leader`: 负责与client打交道，一个term表示一轮选举，每一个term中**至多**存在一个leader，也即可能存在某一个term中选举不出leader来，在这个term的时间范围内，整个集群是无法对外提供服务的。
 
-可以将follower，candidate，leader的角色与美国选举中的角色对应起来。
-follower表示议员，candidate表示总统候选人，leader表示总统。
-遵循的原则为：
+可以将follower，candidate，leader与美国大选中的角色对应起来。
+follower代表议员，candidate代表总统候选人，leader代表总统。
+
+选举过程中遵循的原则为：
 
 + 每一任期（term）中最多只有一个总统
 
-+ 如果总统挂掉，其余某个或某些议员会升级为总统候选人，候选人得到多数选票则变成总统，如果同时几个候选人都未得到多数选票，候选人重新参与选举（term number自增），直到选出总统。
++ 总统卸任，举行下一次大选，其余某个或某些议员会被推举为总统候选人，候选人得到多数选票则变成总统，如果同时几个候选人都未得到多数选票，候选人重新选举，重新计票，直到选出总统。
 
 + 总统的提议只有得到议会大多数赞成票才能通过（对比commit）。如果有议员没有回复总统的提议，会一直向该议员传达，直到回复为止。
 
-+ 如果候选人遇到总统，总统的term number**不小于**候选人的term number，则候选人将自己将为议员。否则，不管总统，说明总统是前一任期的总统，而候选人是最新的候选人，候选人继续参与选举。
++ 如果候选人遇到总统，总统的term number**不小于**候选人的term number，则候选人将自己降为议员。否则，证明这个总统是前一任期的总统，而候选人是最新的候选人，候选人继续参与选举。
 
 + 如果两个总统相遇，则term number小的总统将自己降为议员（follower）。
 
@@ -46,7 +47,7 @@ server之间通过RPC通信，三种角色转换图：
 
 系统刚开始启动的时候，会从所有follower中选择一个或几个candidate（依据哪个follower的timeout先到），然后其余follower为candidate投票（每个follower只能投一票），从candidate中选出leader，leader负责与client通信（所有到follower的请求也会重新指向leader），同时负责向follower发送appendEntry。
 
-如果存在AppendEntry需要发送，那么发送该AppendEntry，如果没有变更命令，则定时发送HeartBeat（没有内容的AppendEntry）给所有的follower，告知它们leader仍然存在，“**普天之下，莫非王土；率土之滨，莫非王臣**”，不要称王。
+如果存在AppendEntry需要发送，那么发送该AppendEntry，如果没有变更命令，则定时发送HeartBeat（没有内容的AppendEntry）给所有的follower，告知它们leader仍然存在。follower收到leader的心跳就会继续保持follower的角色。
 
 Leader发送给follower的AppendEntry只有得到大多数的回复后，leader自身状态机才能执行entry提交，并将结果返回给客户端。同时，leader会向follower发送heartbeat告知follower可以将上一次接收到的log entry提交。
 
@@ -74,7 +75,7 @@ Leader发送给follower的AppendEntry只有得到大多数的回复后，leader�
 +  如果选举出的leader属于少数接收到entry中的一个，那么情形与`情况1`中的第一种结果一样。
 
 
-follower收到leader的heartbeat，则回复leader，“你是哥”。如果在follower的timout之后，仍然没有收到leader的heartbeat，follower认为leader已挂，“**国不可一日无君**”，因此推举自己为candidate，向所有server发送AppendVote RPC为自己拉票。此时存在这三种情况：
+follower收到leader的heartbeat，则回复leader。如果在follower的timout之后，仍然没有收到leader的heartbeat，follower认为leader已挂，“**国不可一日无君**”，因此推举自己为candidate，向所有server发送AppendVote RPC为自己拉票。此时存在这三种情况：
 
 **1)** 自身拉票成功，成为leader。
 
