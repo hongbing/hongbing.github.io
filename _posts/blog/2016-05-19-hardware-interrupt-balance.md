@@ -109,6 +109,8 @@ RPS可以看做是RSS的软件实现。原理简单描述为对`数据流hash分
 
 注意RPS和RFS在linux 内核版本2.6.35才被引入，2.6.38及其以上才包含XPS。
 
+![hardware-interrupt](/images/hardwareinterrupt/hardware-interrupt.png)
+
 ##### 参考
 
 [1] [http://blog.netzhou.net/?p=181](http://blog.netzhou.net/?p=181)
