@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>监控模式 </title>
+    <title>存在感 </title>
     <meta name="author" content="hongbing" />
     <meta name="renderer" content="webkit">
     <meta name="description" content="hongbing的部落格" />
@@ -40,65 +40,16 @@
 
 <div id="content">
     <div class="entry">
-        <h1 class="entry-title"><a href="/posts/blog/2015/11/14/monitor-principle.html" title="监控模式">监控模式</a></h1>
-        <p class="entry-date">2015-11-14</p>
+        <h1 class="entry-title"><a href="/posts/blog/:short_year/:month/:day/.html" title="存在感">存在感</a></h1>
+        <p class="entry-date"></p>
 <!--
 	
 -->
-	<p><em>文章来源<a href="http://everythingsysadmin.com/2013/11/stop-monitoring-if-service-is-up.html">stop-monitoring-if-service-is-up</a></em><br />
-由于最近组内在对各个项目的监控做梳理，并完善各个项目的监控报警，所以对监控方面关注的比较多些。</p>
-
-<p>在作者看来，99%的监控都没搞对。大多数人认为的监控是这样的：</p>
-
-<ul>
-  <li><strong>1.系统有什么东西出问题了。</strong></li>
-  <li><strong>2.报警给我。</strong></li>
-  <li>3.以最快的速度解决。</li>
-  <li>4.快到小于RTO（recovery time objective）。</li>
-</ul>
-
-<p>哦（满头大汗！！！），幸好没整个故障出来。如果对于监控的认识与上面是一致的，那么系统经常会与故障相伴。<br />
-<!-- more --><br />
-作者理解的监控是这样的：</p>
-
-<ul>
-  <li><strong>1.收到报警有的东西不在状态，需要修复，否则会出故障。</strong></li>
-  <li><strong>2.在出故障之前修复掉。</strong></li>
-  <li>3.轻松搞定。</li>
-  <li>4.用户无感知。</li>
-</ul>
-
-<p>也许你已经看明白了，作者理解的监控与大多数人认为的监控的差别，第1步与第2步的顺序，然而不止如此，它们是对于监控两种不同的认知。一个是出问题了，监控告知，快速修复的对问题的反应式方式，另一个是监控显示可能某处会出问题，快速处理的主动出击的方式。一个略显被动的处理问题，一个却是<code>主动</code>的，在问题出现之前就化解了。<br />
-那么怎样做到作者提出的监控的模式？</p>
-
-<ul>
-  <li><strong>1.删除监控系统中的所有报警(略显暴力哈)</strong></li>
-  <li><strong>2.每次遇到故障，思考什么样的监控数据可以预测到这种故障的发生</strong></li>
-  <li><strong>3.更新监控，收集监控数据，添加必要的报警</strong></li>
-  <li><strong>4.重复上面的操作。最终利用报警阻止故障的发生，而不是应对故障。</strong></li>
-</ul>
-
-<p>所以，在设计监控报警的时候，应该将报警设置在最底层，离最终用户越远，越能尽快发现并解决问题。当然，监控项除了报警还有一个作用就是问题的排查，这个就需要在各个关键路径都有相应数据的监控指标。</p>
-
-<p>当然，没有完美的监控，并不能将所有的情况都早早的监控到，因此在我们设计系统的时候，都应该将监控思考进去，一些可能的点包括但不限于：</p>
-
-<blockquote>
-  <p>多条网络线路，其中一条无效，报警；存储使用raid，其中一块硬盘出故障，报警；<br />
-监控磁盘空间，ram使用，设置冗余，超过就报警；使用负载均衡器来转发web sever的请求；<br />
-……</p>
-</blockquote>
-
-<p>监控，一定要是显示在界面上，能够让外行轻易看懂的才叫监控，在日志里面的只能称之为数据，不叫监控。</p>
-
-<p><img src="/images/monitor/monitor.jpg" alt="monitor" /></p>
+	<p>http://eskipaper.com/girls/</p>
 
 	<ul class="pager">
             
-            <li class="previous"><a href="/posts/blog/2015/11/14/jetty-deadlock.html" title="jetty6 deadlock">上一篇 jetty6 deadlock</a></li>
-	    
 
-            
-            <li class="next"><a href="/posts/blog/2016/04/17/a-oom-problem.html" title="一次oom的排查过程">下一篇 一次oom的排查过程</a></li>
             
 	</ul>
 	<div id="disqus_thread"></div>
