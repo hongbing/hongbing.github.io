@@ -32,6 +32,7 @@
     <ul class="artical-list">
       
       <li>
+<<<<<<< HEAD
         <h2><a href="/posts/blog/2015/11/14/monitor-principle.html">监控模式</a></h2>
         <div class="title-desc">文章来源stop-monitoring-if-service-is-up
 由于最近组内在对各个项目的监控做梳理，并完善各个项目的监控报警，所以对监控方面关注的比较多些。
@@ -67,6 +68,8 @@ Java(TM) SE Runtime Environment (build 1.6.0_24-b07)
       </li>
       
       <li>
+=======
+>>>>>>> parent of 6c51ec1... add nginx_lua
         <h2><a href="/posts/blog/2015/08/21/linux-of-blockdump.html">linux系统之block_dump</a></h2>
         <div class="title-desc">当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过iostat，vmstat命令从宏观上来查看系统的一些io参数，比如某设备的读写速度，cpu的使用情况。
 
@@ -81,6 +84,7 @@ sda               1.86        22.79        17.90    4910899    3857428
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
  0  0 619448 167984   5728 366044   12   13    52    40  125  393 18  3 78  1  0
+
 
 
 
@@ -110,11 +114,51 @@ UnknowHostException：
 &hellip; <a href="/posts/blog/2015/08/11/UnknowHostException.html" style="font-weight:bold;">Read More</a></div>
       </li>
       
+<<<<<<< HEAD
+=======
+      <li>
+        <h2><a href="/posts/blog/2015/08/02/haproxy-install.html">haproxy部署</a></h2>
+        <div class="title-desc">1 安装
+
+下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），Fuck GFW。
+ 可以通过直接访问http://www.haproxy.org/download/1.5/src/地址，选择相应的版本下载。或者使用wget命令
+
+ wget http://www.haproxy.org/download/1.5/src/haproxy-1.5.12.tar.gz
+
+
+下载，下载完成后，将其解压。
+
+cd haproxy-1.5.12
+uname -a
+make TARGET=linux26 PREFIX=/usr/local/haproxy install
+
+&hellip; <a href="/posts/blog/2015/08/02/haproxy-install.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
+        <h2><a href="/posts/blog/2015/07/25/maven-introduce.html">maven实践</a></h2>
+        <div class="title-desc">1 相关概念
+
+1.1 版本号
+
+版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。
+版本号格式一般分为：
+
+主版本号.分支版本号.小版本号-里程碑版本号
+
+主版本号：一般指框架具有重大变化的版本号，比如struts1，struts2框架的变化
+
+分支版本号： 一般指功能的变化
+
+&hellip; <a href="/posts/blog/2015/07/25/maven-introduce.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+>>>>>>> parent of 6c51ec1... add nginx_lua
 
       <ul class="pager">
         
             
-              <li class="lastpage"> <a href="/index.html">上一页</a></li>
+              <li class="lastpage"> <a href="/">上一页</a></li>
             
               &nbsp;
             

@@ -47,22 +47,22 @@
 -->
 	<h2 id="id">1 什么是ID</h2>
 
-<p>ID最大的特点就是<strong>唯一</strong>，一个ID存在的目的就是唯一性的标识某一个物体，如果唯一性做不到，那么ID也就失去了本质的作用。<br />
+<p>ID最大的特点就是<strong>唯一</strong>，一个ID存在的目的就是唯一性的标识某一个物体，如果唯一性做不到，那么ID也就失去了本质的作用。
 另外ID还需要保持其它特性：</p>
 
 <ul>
   <li><strong>有序</strong>   对于某些事物需要依靠ID来进行比较，同时对于排序查找也方便。</li>
   <li><strong>有意义</strong>  ID也需要包含有意义的信息，比如时间信息,业务信息。</li>
   <li><strong>分布式</strong> ID的生成也许并不在一台服务器上，可由多台服务器互不干扰的生成ID。如果采用中心式的ID生成，多半会涉及到锁，而锁意味着成本<!-- more -->和性能的下降。</li>
-  <li><strong>紧凑</strong> 为了性能或者长度的原因，要求ID要保持紧凑。越长的ID可能表达的数字范围越大，但是在存储和网络中要占据更多的空间。因此，设计ID的时候往往是保证在未来的一段时间可用的前提下（查看<a href="https://en.wikipedia.org/wiki/Year_2038_problem">2038</a>问题），尽可能的缩短ID的长度。<code>总之，掌握好长度与时间范围之间的trade-off</code>。</li>
+  <li><strong>紧凑</strong> 为了性能或者长度的原因，要求ID要保持紧凑。越长的ID可能表达的数字范围越大，但是在存储和网络中要占据更多的空间。因此，设计ID的时候往往是保证在未来的一段时间可用的前提下（查看<a href="https://en.wikipedia.org/wiki/Year_2038_problem">2038</a>问题），尽可能的缩短ID的长度。<code class="highlighter-rouge">总之，掌握好长度与时间范围之间的trade-off</code>。</li>
 </ul>
 
 <p>另外，参考原新浪weibo通讯技术专家 宇鹏的<a href="http://weibo.com/p/1001603800404851831206?from=page_100505_profile&amp;wvr=6&amp;mod=wenzhangmod">业务系统需要怎样的全局唯一ID</a>博文,文中还提到了另外两个特点：</p>
 
 <ul>
-  <li><strong>可反解</strong><br />
+  <li><strong>可反解</strong>
 反解ID可以为排错提供良好的线索，ID从什么时候生成，在哪个机房生成的等等情况都可以一一了解到。</li>
-  <li><strong>可制造</strong><br />
+  <li><strong>可制造</strong>
 可制造针对的是当业务系统失败了，后续需要恢复数据重新进入业务系统，依赖于时间的数据需要在将来的时间段产生过去的时间数据。</li>
 </ul>
 
@@ -76,13 +76,13 @@
 <h2 id="section">3 竞品分析</h2>
 
 <h3 id="snowflake">3.1 SnowFlake</h3>
-<p><a href="http://engineering.twitter.com/2010/06/announcing-snowflake.html">SnowFlake</a>是为了解决Twitter在分布式环境下的全局ID的问题。<br />
+<p><a href="http://engineering.twitter.com/2010/06/announcing-snowflake.html">SnowFlake</a>是为了解决Twitter在分布式环境下的全局ID的问题。
 生成的ID需要满足两个要求：</p>
 
 <ul>
-  <li><strong>数据量</strong><br />
+  <li><strong>数据量</strong>
 每秒能产生数十万个ID，来标识不同的推文</li>
-  <li><strong>K-Sorted</strong><br />
+  <li><strong>K-Sorted</strong>
 ID大致有序。</li>
 </ul>
 
@@ -104,17 +104,17 @@ ID大致有序。</li>
 
 <p>Icicle的ID设计思路来源于SnowFlake，因此与SnowFlake的ID结构有很大的相似性。</p>
 
-<p><strong>Sign</strong><br />
+<p><strong>Sign</strong>
 第一位为符号保留位，不使用，文中给出的解释为</p>
 
 <blockquote>
   <p>which we chose not to use because some platforms make it difficult to get at and it messes with ordering</p>
 </blockquote>
 
-<p><strong>Time:</strong><br />
+<p><strong>Time:</strong>
 时间占41位。</p>
 
-<p><strong>Shard ID:</strong><br />
+<p><strong>Shard ID:</strong>
 由于Icicle是部署在redis上的，redis不支持分布式模式，因此shard id用来标记每一个redis实例，可支持1024个实例。</p>
 
 <p><strong>Sequence ID:</strong> 与SnowFlake类似。</p>
@@ -185,10 +185,13 @@ ID大致有序。</li>
         <h2>Blog</h2>
         <ul class="artical-list">
         
+<<<<<<< HEAD
             <li><a href="/posts/blog/2017/02/12/spring-session.html">spring session源码解析</a></li>
         
             <li><a href="/posts/blog/2016/06/15/nginx-lua.html">openresty memcached实践</a></li>
         
+=======
+>>>>>>> parent of 6c51ec1... add nginx_lua
             <li><a href="/posts/blog/2016/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
         
             <li><a href="/posts/blog/2016/05/19/hardware-interrupt-balance.html">硬件中断均衡</a></li>
