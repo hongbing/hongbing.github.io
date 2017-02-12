@@ -53,12 +53,12 @@
 
 <!-- more -->
 
-<p>spring session通过注解<code>@EnableRedisHttpSession</code>或者xml配置</p>
+<p>spring session通过注解<code class="highlighter-rouge">@EnableRedisHttpSession</code>或者xml配置</p>
 
-<pre><code>&lt;bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/&gt;
-</code></pre>
+<div class="highlighter-rouge">&lt;bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/&gt;
+</div>
 
-<p>来创建名为springSessionRepositoryFilter的SessionRepositoryFilter类。该类实现了Sevlet Filter接口，当请求穿越sevlet filter链时应该首先经过springSessionRepositoryFilter，这样在后面获取session的时候，得到的将是spring session。为了springSessonRepositoryFilter作为filter链中的第一个，spring session提供了<code>AbstractHttpSessionApplicationInitializer</code>类， 它实现了<code>WebApplicationInitializer</code>类，在onStartup方法中将springSessionRepositoryFilter加入到其他fitler链前面。</p>
+<p>来创建名为springSessionRepositoryFilter的SessionRepositoryFilter类。该类实现了Sevlet Filter接口，当请求穿越sevlet filter链时应该首先经过springSessionRepositoryFilter，这样在后面获取session的时候，得到的将是spring session。为了springSessonRepositoryFilter作为filter链中的第一个，spring session提供了<code class="highlighter-rouge">AbstractHttpSessionApplicationInitializer</code>类， 它实现了<code class="highlighter-rouge">WebApplicationInitializer</code>类，在onStartup方法中将springSessionRepositoryFilter加入到其他fitler链前面。</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">AbstractHttpSessionApplicationInitializer</span>
 		<span class="kd">implements</span> <span class="n">WebApplicationInitializer</span> <span class="o">{</span>
@@ -97,7 +97,7 @@
 
 <p>RedisSession在创建时设置3个变量creationTime，maxInactiveInterval，lastAccessedTime。maxInactiveI    nterval默认值为1800，表示间隔1800s之内该session没有被再次使用，则删除session。每次访问都更新last    AccessedTime的值。</p>
 
-<pre><code>/**
+<div class="highlighter-rouge">/**
 * Creates a new instance ensuring to mark all of the new attributes to be
 * persisted in the next save operation.
 */
@@ -113,7 +113,7 @@ RedisSession() {
 public MapSession() {
 	this(UUID.randomUUID().toString());
 }
-</code></pre>
+</div>
 
 <p>RedisSession在创建时设置3个变量creationTime，maxInactiveInterval，lastAccessedTime。maxInactiveInterval默认值为1800，表示间隔1800s之内该session没有被再次使用，则删除session。每次访问都更新lastAccessedTime的值。</p>
 
@@ -123,7 +123,7 @@ public MapSession() {
 
 <p>另， 从request取sessionId依赖具体的HttpSessionStrategy的实现，spring session给了两个默认的实现CookieHttpSessionStrategy和HeaderHttpSessionStrategy，即从cookie和header中取出sessionId。</p>
 
-<pre><code>@Override
+<div class="highlighter-rouge">@Override
 public HttpSessionWrapper getSession(boolean create) {
 	HttpSessionWrapper currentSession = getCurrentSession();
 	if (currentSession != null) {
@@ -157,7 +157,7 @@ public HttpSessionWrapper getSession(boolean create) {
 	setCurrentSession(currentSession);
 	return currentSession;
 }
-</code></pre>
+</div>
 
 <h3 id="session-1">4 session有效期与删除</h3>
 
@@ -192,7 +192,7 @@ session保存的数据，记录了creationTime，maxInactiveInterval，lastAcces
 
 <p>还有一点是，查看三个数据结构的TTL时间，spring:session:sessions:[sessionId]和spring:session:expireations:[min]比真正的有效期大5分钟，目的是确保当expire key数据过期后，还能查看到session数据。</p>
 
-<pre><code>@Scheduled(cron = "${spring.session.cleanup.cron.expression:0 * * * * *}")
+<div class="highlighter-rouge">@Scheduled(cron = "${spring.session.cleanup.cron.expression:0 * * * * *}")
 public void cleanupExpiredSessions() {
 	this.expirationPolicy.cleanExpiredSessions();
 }
@@ -213,11 +213,11 @@ public void cleanExpiredSessions() {
 		touch(sessionKey);
 	}
 }
-</code></pre>
+</div>
 
 <p>每一次请求，spring session都会通过onExpirationUpdated()方法来更新session的过期时间， 具体的信息看下面源码的注释。</p>
 
-<pre><code>public void onExpirationUpdated(Long originalExpirationTimeInMilli,
+<div class="highlighter-rouge">public void onExpirationUpdated(Long originalExpirationTimeInMilli,
 			ExpiringSession session) {
 	String keyToExpire = "expires:" + session.getId();
 	long toExpire = roundUpToNextMinute(expiresInMillis(session));
@@ -264,7 +264,7 @@ public void cleanExpiredSessions() {
 	this.redis.boundHashOps(getSessionKey(session.getId()))
 			.expire(fiveMinutesAfterExpires, TimeUnit.SECONDS);
 }
-</code></pre>
+</div>
 
 <h3 id="section">参考</h3>
 

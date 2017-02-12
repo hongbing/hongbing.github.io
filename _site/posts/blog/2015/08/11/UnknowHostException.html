@@ -54,13 +54,13 @@
 
 <h2 id="section-1">2 <strong>分析</strong></h2>
 
-<p>异常信息栈显示抛出异常的地方在：<code>InetAddress localHost = InetAddress.getLocalHost();</code><br />
+<p>异常信息栈显示抛出异常的地方在：<code class="highlighter-rouge">InetAddress localHost = InetAddress.getLocalHost();</code><br />
 <!-- more --><br />
-  跟踪源代码发现<code>InetAddress.getLocalHost()</code>会调用<strong>Inet6AddressImpl</strong>或者<strong>Inet4AddressImpl</strong>的native方法：</p>
+  跟踪源代码发现<code class="highlighter-rouge">InetAddress.getLocalHost()</code>会调用<strong>Inet6AddressImpl</strong>或者<strong>Inet4AddressImpl</strong>的native方法：</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span> <span class="nf">getLocalHostName</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">UnknownHostException</span><span class="o">;</span></code></pre></div>
 
-<p>该native方法直接执行linux的系统调用gethostname。系统调用gethostname与在终端执行<code>$ hostname</code>或者<code>$ cat /etc/hostname</code>的结果一致。获得hostname后，比较该hostname的值，如果为localhost，则执行<code>impl.loopbackAddress();</code>获得localhost对应的ip地址。</p>
+<p>该native方法直接执行linux的系统调用gethostname。系统调用gethostname与在终端执行<code class="highlighter-rouge">$ hostname</code>或者<code class="highlighter-rouge">$ cat /etc/hostname</code>的结果一致。获得hostname后，比较该hostname的值，如果为localhost，则执行<code class="highlighter-rouge">impl.loopbackAddress();</code>获得localhost对应的ip地址。</p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">if</span> <span class="o">(</span><span class="n">local</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"localhost"</span><span class="o">))</span> <span class="o">{</span>
               <span class="k">return</span> <span class="n">impl</span><span class="o">.</span><span class="na">loopbackAddress</span><span class="o">();</span>
@@ -100,15 +100,15 @@
           <span class="o">}</span>
 <span class="o">}</span></code></pre></div>
 
-<p>如果不是localhost，则会读取缓存;如果缓存不存在，调用<code>InetAddress.getAddressesFromNameService(local, null)</code>。该方法调用native的<code>lookupAllHostAddr</code>方法，该方法会在/etc/hosts里面查找对应host的ip地址，如果没有则抛出UnknowHostException。</p>
+<p>如果不是localhost，则会读取缓存;如果缓存不存在，调用<code class="highlighter-rouge">InetAddress.getAddressesFromNameService(local, null)</code>。该方法调用native的<code class="highlighter-rouge">lookupAllHostAddr</code>方法，该方法会在/etc/hosts里面查找对应host的ip地址，如果没有则抛出UnknowHostException。</p>
 
 <h2 id="section-2">3 <strong>解决方法</strong></h2>
 
 <p>知道了异常发生的原因，那么解决方法只需要在/etc/hosts里面添加一项</p>
 
-<p><code>127.0.0.1 e7a05a2abfc5</code></p>
+<p><code class="highlighter-rouge">127.0.0.1 e7a05a2abfc5</code></p>
 
-<p>即可。另外还可以选择将<code>hostname</code>的值改为<code>localhost</code>的方式来解决问题。</p>
+<p>即可。另外还可以选择将<code class="highlighter-rouge">hostname</code>的值改为<code class="highlighter-rouge">localhost</code>的方式来解决问题。</p>
 
 <p><img src="/images/unknowhostexception/thatslove.jpg" alt="thatslove" /></p>
 

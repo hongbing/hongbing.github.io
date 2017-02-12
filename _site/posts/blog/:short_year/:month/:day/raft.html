@@ -59,15 +59,15 @@
 raft算法的集群中server共有三种角色，他们分别是：</p>
 
 <blockquote>
-  <p><code>follower</code>：负责跟随leader，不会主动跟客户端通信，会随着election timeout变成candidate</p>
+  <p><code class="highlighter-rouge">follower</code>：负责跟随leader，不会主动跟客户端通信，会随着election timeout变成candidate</p>
 </blockquote>
 
 <blockquote>
-  <p><code>candidate</code>: candidate为选举过程中的中间状态，当candidate得到大多数的follower的投票，会将自己升级为leader。同时，当已经存在leader后，candidate会将自己降为follower。</p>
+  <p><code class="highlighter-rouge">candidate</code>: candidate为选举过程中的中间状态，当candidate得到大多数的follower的投票，会将自己升级为leader。同时，当已经存在leader后，candidate会将自己降为follower。</p>
 </blockquote>
 
 <blockquote>
-  <p><code>leader</code>: 负责与client打交道，一个term表示一轮选举，每一个term中<strong>至多</strong>存在一个leader，也即可能存在某一个term中选举不出leader来，在这个term的时间范围内，整个集群是无法对外提供服务的。</p>
+  <p><code class="highlighter-rouge">leader</code>: 负责与client打交道，一个term表示一轮选举，每一个term中<strong>至多</strong>存在一个leader，也即可能存在某一个term中选举不出leader来，在这个term的时间范围内，整个集群是无法对外提供服务的。</p>
 </blockquote>
 
 <p>可以将follower，candidate，leader与美国大选中的角色对应起来。<br />
@@ -110,12 +110,12 @@ follower代表议员，candidate代表总统候选人，leader代表总统。</p
 如果leader将appendEntry发送给follower后就挂了，那么应该怎么处理?<br />
 分两种情况：</p>
 
-<p><code>1）：大多数follower已经接收到AppendEntry</code></p>
+<p><code class="highlighter-rouge">1）：大多数follower已经接收到AppendEntry</code></p>
 
-<p><code>2）：大多数follower没有接收到AppendEntry</code></p>
+<p><code class="highlighter-rouge">2）：大多数follower没有接收到AppendEntry</code></p>
 
 <p>接下来应该重新选举，<br />
-对于<code>情况1</code></p>
+对于<code class="highlighter-rouge">情况1</code></p>
 
 <ul>
   <li>
@@ -128,14 +128,14 @@ follower代表议员，candidate代表总统候选人，leader代表总统。</p
   </li>
 </ul>
 
-<p>对于<code>情况2</code></p>
+<p>对于<code class="highlighter-rouge">情况2</code></p>
 
 <ul>
   <li>
     <p>如果选举出的leader属于大多数没有接收到Entry中的一个。由于前一个leader挂掉了，因此客户端知道此次命令执行失败，会选择重试或者放弃等策略（主要看客户端的处理逻辑）。现在的leader也不含这条命令，因此相当于这条命令在集群中执行失败，而集群的状态还是一致的。</p>
   </li>
   <li>
-    <p>如果选举出的leader属于少数接收到entry中的一个，那么情形与<code>情况1</code>中的第一种结果一样。</p>
+    <p>如果选举出的leader属于少数接收到entry中的一个，那么情形与<code class="highlighter-rouge">情况1</code>中的第一种结果一样。</p>
   </li>
 </ul>
 
@@ -160,7 +160,7 @@ log中的一个单元称为<strong>Entry</strong>，每个Entry包含了command�
 
 <p><strong>保证在非Byzantine条件下，无论是网络延时，分区，丢包，包重复以及无序等情况下，都能返回正确的结果。</strong></p>
 
-<p>需要<code>保证新的leader保存所有前任leader的所有提交</code>。因此，每一任leader中的log都能保证整个系统自启动以来的所有变更，因此状态机执行的时候总能保证分布式环境下的一致性。</p>
+<p>需要<code class="highlighter-rouge">保证新的leader保存所有前任leader的所有提交</code>。因此，每一任leader中的log都能保证整个系统自启动以来的所有变更，因此状态机执行的时候总能保证分布式环境下的一致性。</p>
 
 <p>实现方式：<br />
 在leader选举时，对于log比自己的log旧的candidate，follower拒绝为其投票，由于leader会根据自己的log内容重写follower中的log，因此避免了前任leader的提交记录被修改，使得集群整体状态被改变。比较的方式为：<br />

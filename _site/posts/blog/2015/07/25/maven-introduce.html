@@ -52,7 +52,7 @@
 <p>版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。<br />
 版本号格式一般分为：</p>
 
-<p><code>主版本号.分支版本号.小版本号-里程碑版本号</code></p>
+<p><code class="highlighter-rouge">主版本号.分支版本号.小版本号-里程碑版本号</code></p>
 
 <p><strong>主版本号</strong>：一般指框架具有重大变化的版本号，比如struts1，struts2框架的变化</p>
 
@@ -61,7 +61,7 @@
 
 <p><strong>小版本号</strong>：bug的修复</p>
 
-<p><strong>里程碑版本号</strong>：<code>SNAPSHOT</code>–&gt;<code>RELEASAE</code>–&gt;<code>FINAL</code></p>
+<p><strong>里程碑版本号</strong>：<code class="highlighter-rouge">SNAPSHOT</code>–&gt;<code class="highlighter-rouge">RELEASAE</code>–&gt;<code class="highlighter-rouge">FINAL</code></p>
 
 <h3 id="section-2">1.2 仓库分类</h3>
 
@@ -115,7 +115,7 @@
     &lt;/snapshotRepository&gt;
 &lt;/distributeManagement&gt;</code></pre></div>
 
-<p>使用<code>mvn deploy</code>命令即可将项目发布到私有仓库中，也即是上面的url中</p>
+<p>使用<code class="highlighter-rouge">mvn deploy</code>命令即可将项目发布到私有仓库中，也即是上面的url中</p>
 
 <h3 id="maven">1.4 maven的生命周期</h3>
 
@@ -217,7 +217,7 @@
 -Dfile=二进制jar包的路径  -Dsources=sources jar包的路径
 -Djavadoc=javadoc jar包的路径</code></pre></div>
 
-<p><em>注：在上述命令后都可以指定上传的仓库地址，在命令后面添加<code>-url=file://path/to/repository</code>，如果没有指定则会依据maven的setting.xml中的配置</em></p>
+<p><em>注：在上述命令后都可以指定上传的仓库地址，在命令后面添加<code class="highlighter-rouge">-url=file://path/to/repository</code>，如果没有指定则会依据maven的setting.xml中的配置</em></p>
 
 <p>添加到maven库中后，使用该jar包时需要修改maven工程的pom.xml文件，将添加的jar包加入到pom.xml文件中即可使用。</p>
 
@@ -250,7 +250,7 @@
 
 <p>使用这个插件，然后执行命令：</p>
 
-<p><code>mvn  project-info-reports:dependencies</code></p>
+<p><code class="highlighter-rouge">mvn  project-info-reports:dependencies</code></p>
 
 <p>就可以在target/site/dependencies.html里查看依赖报表，通过这个报表就能够找到冲突的版本，然后再使用exclusions来排除相关的包。</p>
 
@@ -269,7 +269,7 @@
 
 <p>另外使用命令</p>
 
-<p><code>mvn dependency:analyze</code></p>
+<p><code class="highlighter-rouge">mvn dependency:analyze</code></p>
 
 <p>可以分析出显示声明但没有依赖的包，可以将其去除。</p>
 
