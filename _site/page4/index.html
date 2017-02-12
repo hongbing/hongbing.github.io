@@ -32,59 +32,28 @@
     <ul class="artical-list">
       
       <li>
-        <h2><a href="/posts/blog/2017/02/12/spring-session.html">spring session源码解析</a></h2>
-        <div class="title-desc">最近要在项目中做用户踢线的功能，由于项目使用spring session来管理用户session，因此特地翻了翻spring session的源码，看看spring session是如何管理的。我们使用redis来存储session，因此本文只对session在redis中的存储结构以及管理做解析。
+        <h2><a href="/posts/blog/2015/06/17/raft-introduce.html">Raft</a></h2>
+        <div class="title-desc">1 Raft概念
 
-1 spring session使用
+分布式系统中，为了实现一致性，一般采用对称式和非对称式两种server组织方式。
 
-Spring Session对HTTP的支持是通过标准的servlet filter来实现的，这个filter必须要配置为拦截所有的web应用请求，并且它应该是filter链中的第一个filter。Spring Session filter会确保随后调用javax.servlet.http.HttpServletRequest的getSession()方法时，都会返回Spring Session的HttpSession实例，而不是应用服务器默认的HttpSession。
+对称式：所有的server都具有相同的功能，客户端可以和任意一个server通信。
 
-&hellip; <a href="/posts/blog/2017/02/12/spring-session.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/2016/06/15/nginx-lua.html">openresty memcached实践</a></h2>
-        <div class="title-desc">最近在做系统的升级改造，准备把两个相似功能的系统合二为一，降低维护两个系统的负担，同时节省机器成本。
+非对称式：有一个leader作为与外界通信的角色，其余server不与外界通信，leader会将数据的变更同步到所有的其他server中。
 
-1.方案设计
-
-两个系统均为消息队列，不同之处在于A系统采用了http协议的推，B是memcache协议的拉；A系统使用mysql作为存储，B是文件存储。升级的目的是使B系统也支持http协议，从而下线A系统。当时组内讨论有2种方案，一个是在B系统内部支持多协议，一个是采用proxy的模式，让proxy把http转换成memcache发给B。
-
-&hellip; <a href="/posts/blog/2016/06/15/nginx-lua.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/2016/05/21/linux-common-command.html">工作中常用的linux命令</a></h2>
-        <div class="title-desc">本文记录了在工作中常用的linux命令
-
-&hellip; <a href="/posts/blog/2016/05/21/linux-common-command.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/2016/05/19/hardware-interrupt-balance.html">硬件中断均衡</a></h2>
-        <div class="title-desc">硬件与cpu沟通有两种方式，一种是中断，另一种是轮询。中断是硬件主动，产生中断信号，中断控制器将信号传递给cpu，cpu停下手中的工作，执行中断任务；轮询则为cpu主动，定时查询硬件设备的状态，是否处理硬件请求。
-
-&hellip; <a href="/posts/blog/2016/05/19/hardware-interrupt-balance.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/2016/04/17/a-oom-problem.html">一次oom的排查过程</a></h2>
-        <div class="title-desc">最近对平台内部的消息中间件添加了从kafka读取数据的功能（平台内部存在着多个消息中间件，主要是由不同的使用场景与历史沿革造成的）。原有逻辑是从mcq中读取消息，现在需要新增从kafka读取消息。
-
-&hellip; <a href="/posts/blog/2016/04/17/a-oom-problem.html" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/posts/blog/2015/06/17/raft-introduce.html" style="font-weight:bold;">Read More</a></div>
       </li>
       
 
       <ul class="pager">
         
             
-              <li class="dislastpage"> 上一页</li>
+              <li class="lastpage"> <a href="/page3">上一页</a></li>
             
               &nbsp;
             
               
-                <span class="active">1</span>
-                &nbsp;
+                <a href="/index.html">1</a>      &nbsp;
               
             
               
@@ -100,14 +69,13 @@ Spring Session对HTTP的支持是通过标准的servlet filter来实现的，这
               
             
               
-                &nbsp;
-                <a href="/page4">4</a>
+                <span class="active">4</span>
                 &nbsp;
               
             
             &nbsp;
             
-              <li class="nextpage"> <a href="/page2">下一页</a></li>
+              <li class="disnextpage"> 下一页</li>
             
         
       </ul>
