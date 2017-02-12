@@ -51,9 +51,9 @@
         </ul>
         
 -->
-	<p>当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过<code class="highlighter-rouge">iostat</code>，<code class="highlighter-rouge">vmstat</code>命令从宏观上来查看系统的一些io参数，比如某设备的读写速度，cpu的使用情况。</p>
+	<p>当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过<code>iostat</code>，<code>vmstat</code>命令从宏观上来查看系统的一些io参数，比如某设备的读写速度，cpu的使用情况。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>#iostat
+<pre><code>#iostat
 avg-cpu:  %user   %nice %system %iowait  %steal   %idle
           17.62    0.02    3.20    1.37    0.00   77.80
 
@@ -66,40 +66,39 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  0  0 619448 167984   5728 366044   12   13    52    40  125  393 18  3 78  1  0
 
 </code></pre>
-</div>
 <!-- more -->
 <p>但是宏观的信息只能帮助我们得到当前系统的现状，无法了解到具体是哪些进程在频繁执行io操作，以及具体操作的文件是什么。</p>
 
-<p>如果使用的linux内核版本 &gt;= 2.6.20，且内核开启了  CONFIG_TASK_DELAY_ACCT,   CONFIG_TASK_IO_ACCOUNTING,   CONFIG_TASKSTATS   and  CONFIG_VM_EVENT_COUNTERS 选项，python版本在2.5及其以上，我们可以使用<code class="highlighter-rouge">iotop -P</code>来查看I/O调度器（I/O Scheduler）管理的所有进程，不使用<code class="highlighter-rouge">-P</code>选项，默认显示所有的线程（注意<code class="highlighter-rouge">iotop</code>命令需要在root权限下运行）。然后可以使用<code class="highlighter-rouge">lsof -p [pid]</code>来分析到底该进程正在频繁操作哪些文件。</p>
+<p>如果使用的linux内核版本 &gt;= 2.6.20，且内核开启了  CONFIG_TASK_DELAY_ACCT,   CONFIG_TASK_IO_ACCOUNTING,   CONFIG_TASKSTATS   and  CONFIG_VM_EVENT_COUNTERS 选项，python版本在2.5及其以上，我们可以使用<code>iotop -P</code>来查看I/O调度器（I/O Scheduler）管理的所有进程，不使用<code>-P</code>选项，默认显示所有的线程（注意<code>iotop</code>命令需要在root权限下运行）。然后可以使用<code>lsof -p [pid]</code>来分析到底该进程正在频繁操作哪些文件。</p>
 
 <p>但是如果使用的系统内核版本 &lt; 2.6.20，需要搞清楚哪些进程在进行大量的io操作，又该如何呢？</p>
 
-<p>可以使用linux内核提供的<code class="highlighter-rouge">block_dump</code>参数。linux doc对block_dump的描述：</p>
+<p>可以使用linux内核提供的<code>block_dump</code>参数。linux doc对block_dump的描述：</p>
 
 <blockquote>
-  <p>block_dump
-block_dump enables block I/O debugging when set to a nonzero value. More
+  <p>block_dump<br />
+block_dump enables block I/O debugging when set to a nonzero value. More<br />
 information on block I/O debugging is in Documentation/laptops/laptop-mode.txt.</p>
 </blockquote>
 
 <p>下面是laptop-mode.txt中对block_dump的描述：</p>
 
 <blockquote>
-  <p>If you want to find out which process caused the disk to spin up, you can
-gather information by setting the flag /proc/sys/vm/block_dump. When this flag
-is set, Linux reports all disk read and write operations that take place, and
-all block dirtyings done to files. This makes it possible to debug why a disk
-needs to spin up, and to increase battery life even more. The output of
-block_dump is written to the kernel output, and it can be retrieved using
-“dmesg”. When you use block_dump and your kernel logging level also includes
-kernel debugging messages, you probably want to turn off klogd, otherwise
-the output of block_dump will be logged, causing disk activity that is not
+  <p>If you want to find out which process caused the disk to spin up, you can<br />
+gather information by setting the flag /proc/sys/vm/block_dump. When this flag<br />
+is set, Linux reports all disk read and write operations that take place, and<br />
+all block dirtyings done to files. This makes it possible to debug why a disk<br />
+needs to spin up, and to increase battery life even more. The output of<br />
+block_dump is written to the kernel output, and it can be retrieved using<br />
+“dmesg”. When you use block_dump and your kernel logging level also includes<br />
+kernel debugging messages, you probably want to turn off klogd, otherwise<br />
+the output of block_dump will be logged, causing disk activity that is not<br />
 normally there.</p>
 </blockquote>
 
-<p>从上面的描述可以知道，block_dump是一个调试选项，选项打开的时候，会把当前所有磁盘读写操作的信息输出到内核输出，可以通过<code class="highlighter-rouge">dmesg</code>来查看输出内容。执行下面的脚本可以在/tmp/diskio.log中看到相关的信息。</p>
+<p>从上面的描述可以知道，block_dump是一个调试选项，选项打开的时候，会把当前所有磁盘读写操作的信息输出到内核输出，可以通过<code>dmesg</code>来查看输出内容。执行下面的脚本可以在/tmp/diskio.log中看到相关的信息。</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/sh</span>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/sh</span>
 /etc/init.d/klogd stop
 <span class="c"># clear dmesg</span>
 dmesg -c 2&gt;/dev/null
@@ -111,59 +110,54 @@ dmesg -c 2&gt;/dev/null
 sleep 5
 dmesg -c &gt;&gt; /tmp/diskio.log
 <span class="nb">echo </span>0 &gt; /proc/sys/vm/block_dump
-/etc/init.d/klogd start</code></pre></figure>
+/etc/init.d/klogd start</code></pre></div>
 
 <p>下面是从/tmp/diskio.log中截取的一部分内容：</p>
 
- 	[88005.820372] jbd2/sda1-8(140): WRITE block 239498592 on sda1 (8 sectors)
-<div class="highlighter-rouge"><pre class="highlight"><code>[88005.821425] jbd2/sda1-8(140): WRITE block 239498600 on sda1 (8 sectors)
+ 	[88005.820372] jbd2/sda1-8(140): WRITE block 239498592 on sda1 (8 sectors)<br />
+<pre><code>[88005.821425] jbd2/sda1-8(140): WRITE block 239498600 on sda1 (8 sectors)
 [88006.732202] kworker/u8:1(13277): WRITE block 2537400 on sda1 (8 sectors)
 [88006.732327] kworker/u8:1(13277): WRITE block 25003008 on sda1 (16 sectors)
 [88006.732354] kworker/u8:1(13277): WRITE block 1599768 on sda1 (8 sectors)
 </code></pre>
-</div>
 
 <p>解释一下输出的内容，[88005.820372]是机器启动到现在的时间，单位为秒， jbd2/sda1-8(140)进程名和pid，后面的内容为磁盘写数据的内容，block后面的数字表示的不是文件层面的block，而是硬件层面的block（也即是扇区），扇区的大小为512B，而大多数文件系统的block大小为4K，因此转换为文件系统的block只需要将后面的值除以8。</p>
 
 <p>通过下面的命令可以统计io最频繁的进程名：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cat /tmp/diskio.log | awk -F<span class="s2">"[() </span><span class="se">\t</span><span class="s2">]"</span> <span class="s1">'/(READ|WRITE|dirtied)/ {activity[$2]++} END {for (x in activity) print x, activity[x]}'</span>| sort -nr -k2
+<pre><code class="language-bash">cat /tmp/diskio.log | awk -F"[() \t]" '/(READ|WRITE|dirtied)/ {activity[$2]++} END {for (x in activity) print x, activity[x]}'| sort -nr -k2
 </code></pre>
-</div>
 
 <p>结果为：</p>
 
- 	jbd2/sda1-8 21
-<div class="highlighter-rouge"><pre class="highlight"><code>kworker/u8:1 7
+ 	jbd2/sda1-8 21<br />
+<pre><code>kworker/u8:1 7
 rs:main 3
 sh 2
 </code></pre>
-</div>
 
-<p>仅仅凭上面的信息是无法知道具体在写哪一个文件。要知道哪个文件是io操作大户，一种方式是前面提到的通过<code class="highlighter-rouge">lsof -p [pid]</code>命令来分析进程打开的文件，找到正在频繁操作的文件。
+<p>仅仅凭上面的信息是无法知道具体在写哪一个文件。要知道哪个文件是io操作大户，一种方式是前面提到的通过<code>lsof -p [pid]</code>命令来分析进程打开的文件，找到正在频繁操作的文件。<br />
 另一种方式是通过<a href="https://en.wikipedia.org/wiki/Debugfs">debugfs</a>工具来分析。</p>
 
 <p>首先根据扇区号，得到文件块号，然后利用debugfs得到inode号，最后通过inode得出文件名。</p>
 
 <p>我们分析kworker的一条记录</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[88006.732202] kworker/u8:1(13277): WRITE block 2537400 on sda1 (8 sectors)
+<pre><code>[88006.732202] kworker/u8:1(13277): WRITE block 2537400 on sda1 (8 sectors)
 </code></pre>
-</div>
 
 <p>扇区号：2537400，文件块号：2537400/8=317175</p>
 
 <p>在使用debugfs之前，需要先挂载。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$sudo mount -t debugfs none /sys/kernel/debug
+<pre><code>$sudo mount -t debugfs none /sys/kernel/debug
 mount：none 已挂载或 /sys/kernel/debug 忙
 mount：根据 mtab，none 已挂载于 /sys/kernel/debug
 </code></pre>
-</div>
 
 <p>挂载完成后，就可以调用icheck和ncheck来分别得到inode号和文件名了。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$sudo debugfs -R 'open /dev/sda1'
+<pre><code>$sudo debugfs -R 'open /dev/sda1'
 debugfs 1.42.9 (4-Feb-2014)
 $sudo debugfs -R 'icheck 317175' /dev/sda1
 debugfs 1.42.9 (4-Feb-2014)
@@ -174,7 +168,6 @@ debugfs 1.42.9 (4-Feb-2014)
 Inode	Pathname
 3545002	/home/hongbing/.cache/google-chrome/Default/Cache/data_1
 </code></pre>
-</div>
 <p><img src="/images/linuxofblockdump/blockdump.jpg" alt="blockdump" /></p>
 
 <h5 id="section">参考</h5>
@@ -230,16 +223,8 @@ Inode	Pathname
         <h2>Blog</h2>
         <ul class="artical-list">
         
-<<<<<<< HEAD
-<<<<<<< HEAD
             <li><a href="/posts/blog/2017/02/12/spring-session.html">spring session源码解析</a></li>
         
-            <li><a href="/posts/blog/2016/06/15/nginx-lua.html">openresty memcached实践</a></li>
-        
-=======
->>>>>>> parent of 6c51ec1... add nginx_lua
-=======
->>>>>>> parent of 6c51ec1... add nginx_lua
             <li><a href="/posts/blog/2016/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
         
             <li><a href="/posts/blog/2016/05/19/hardware-interrupt-balance.html">硬件中断均衡</a></li>

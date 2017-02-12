@@ -78,21 +78,21 @@
 
 <h3 id="section-3">3. 数据处理</h3>
 <ul>
-  <li><code class="highlighter-rouge">Consul集群中的所有请求都会重定向到server，对于非leader的server会将写请求转发给leader处理</code>。对于读请求支持3种一致性模式：
+  <li><code>Consul集群中的所有请求都会重定向到server，对于非leader的server会将写请求转发给leader处理</code>。对于读请求支持3种一致性模式：
     <ul>
-      <li><strong>default</strong>
+      <li><strong>default</strong><br />
   给leader一个time window，在这个时间内可能出现两个leader（split-brain情况下），旧的leader仍然支持读的请求，会出现不一致的情况。</li>
-      <li><strong>consistent</strong>
+      <li><strong>consistent</strong><br />
   完全一致，在处理读请求之前必须经过大多数的follower确认leader的合法性，因此会多一次round trip。</li>
-      <li><strong>stale</strong>
+      <li><strong>stale</strong><br />
   允许所有的server支持读请求，不管它是否是leader。</li>
     </ul>
   </li>
-  <li><strong>默认情况下</strong>，<code class="highlighter-rouge">Etcd集群中的每个member都可以处理client的读请求</code>，因此增加成员数量可以增大读请求的吞吐量。而写请求必须由leader处理，<code class="highlighter-rouge">每个写请求都需要复制到大多数的follower才可以提交</code>，因此减少member的数量可以提高写请求的性能。</li>
+  <li><strong>默认情况下</strong>，<code>Etcd集群中的每个member都可以处理client的读请求</code>，因此增加成员数量可以增大读请求的吞吐量。而写请求必须由leader处理，<code>每个写请求都需要复制到大多数的follower才可以提交</code>，因此减少member的数量可以提高写请求的性能。</li>
 </ul>
 
-<p>对于写请求来说，两者都必须经过leader的强一致来处理。但是对于读请求，consul的default模式在etcd被认为是consistent，consul的stale模式在etcd是被当作默认的一致性模式。
-Etcd使用强一致性读需要添加参数<code class="highlighter-rouge">quorum=true</code></p>
+<p>对于写请求来说，两者都必须经过leader的强一致来处理。但是对于读请求，consul的default模式在etcd被认为是consistent，consul的stale模式在etcd是被当作默认的一致性模式。<br />
+Etcd使用强一致性读需要添加参数<code>quorum=true</code></p>
 
 <h3 id="section-4">4. 健康检测</h3>
 <ul>
@@ -127,7 +127,7 @@ Etcd使用强一致性读需要添加参数<code class="highlighter-rouge">quoru
 <h3 id="kv">7. KV存储</h3>
 <ul>
   <li>
-    <p>Etcd和Consul均采用类似与U/Linux文件目录格式存储，Etcd支持隐藏的目录节点（以<code class="highlighter-rouge">/—</code>开始的key，不知道做什么用，在V3版可能去掉），etcd存储的value可以直接采用json文件，xml文件，txt文件等。</p>
+    <p>Etcd和Consul均采用类似与U/Linux文件目录格式存储，Etcd支持隐藏的目录节点（以<code>/—</code>开始的key，不知道做什么用，在V3版可能去掉），etcd存储的value可以直接采用json文件，xml文件，txt文件等。</p>
   </li>
   <li>
     <p>Etcd中的value都是以json格式存储（空间占用比较大，Etcd的V3.0可能支持二进制存储）。</p>
@@ -140,8 +140,8 @@ Etcd使用强一致性读需要添加参数<code class="highlighter-rouge">quoru
     <p>Etcd使用long polling监听某一个key的变化，当变化发生时将变化key的相关信息推送给监听key的client。同时，还可以监听最近1000次以内的key的变化情况（X-Etcd-Index表示当前获取的key的index）。</p>
   </li>
   <li>
-    <p>Consul可以监听<code class="highlighter-rouge">key</code>, <code class="highlighter-rouge">keyprefix</code>, <code class="highlighter-rouge">services</code>, <code class="highlighter-rouge">service</code>, <code class="highlighter-rouge">event</code>, <code class="highlighter-rouge">checks</code>, <code class="highlighter-rouge">nodes</code>。当监听到变更发生后，使用外部的handler处理。handler可以是任意可执行的进程，比如python脚本等等。
-Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index位置发生变化。long polling也可以使用<code class="highlighter-rouge">wait</code>参数设置监听的时间（默认10min）</p>
+    <p>Consul可以监听<code>key</code>, <code>keyprefix</code>, <code>services</code>, <code>service</code>, <code>event</code>, <code>checks</code>, <code>nodes</code>。当监听到变更发生后，使用外部的handler处理。handler可以是任意可执行的进程，比如python脚本等等。<br />
+Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index位置发生变化。long polling也可以使用<code>wait</code>参数设置监听的时间（默认10min）</p>
   </li>
 </ul>
 
@@ -170,11 +170,11 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
 <p>Etcd支持三种节点发现功能：</p>
 
 <ul>
-  <li><strong>static</strong>
+  <li><strong>static</strong><br />
 已知集群节点个数，IP地址等信息，通过-initial-cluster参数指定集群中的节点信息</li>
 </ul>
 
-<figure class="highlight"><pre><code class="language-text" data-lang="text">-initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 -initial-cluster-state new</code></pre></figure>
+<div class="highlight"><pre><code class="language-text" data-lang="text">-initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 -initial-cluster-state new</code></pre></div>
 
 <ul>
   <li>
@@ -184,19 +184,19 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
   </li>
 </ul>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html">curl -X PUT https://myetcd.local/v2/keys/discovery/6c007a14875d53d9bf0ef5a6fc0257c817f0fb83/config/size -d value=3
+<div class="highlight"><pre><code class="language-html" data-lang="html">curl -X PUT https://myetcd.local/v2/keys/discovery/6c007a14875d53d9bf0ef5a6fc0257c817f0fb83/config/size -d value=3
 
-//注：config前面有下划线</code></pre></figure>
+//注：config前面有下划线</code></pre></div>
 
-<p>上面的命令在已有的集群上注册node size，命令表明集群中有3个node，只有当3个node都注册后集群才开始工作，如果注册的node多于3个，那多余的都降为proxy模式启动。
-    如果没有权限获取已有的集群信息，可以使用公共的discovery url：<code class="highlighter-rouge">https://discovery.etcd.io</code></p>
+<p>上面的命令在已有的集群上注册node size，命令表明集群中有3个node，只有当3个node都注册后集群才开始工作，如果注册的node多于3个，那多余的都降为proxy模式启动。<br />
+    如果没有权限获取已有的集群信息，可以使用公共的discovery url：<code>https://discovery.etcd.io</code></p>
 
 <ul>
   <li>
     <p><strong>DNS SRV records</strong></p>
   </li>
   <li>
-    <p>Consul通过<code class="highlighter-rouge">join</code>命令将node加入到集群中，每添加一个node都会加入到gossip pool，通过gossip protocol将新加入的node信息传输到集群中的所有node。</p>
+    <p>Consul通过<code>join</code>命令将node加入到集群中，每添加一个node都会加入到gossip pool，通过gossip protocol将新加入的node信息传输到集群中的所有node。</p>
   </li>
 </ul>
 
@@ -261,16 +261,8 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
         <h2>Blog</h2>
         <ul class="artical-list">
         
-<<<<<<< HEAD
-<<<<<<< HEAD
             <li><a href="/posts/blog/2017/02/12/spring-session.html">spring session源码解析</a></li>
         
-            <li><a href="/posts/blog/2016/06/15/nginx-lua.html">openresty memcached实践</a></li>
-        
-=======
->>>>>>> parent of 6c51ec1... add nginx_lua
-=======
->>>>>>> parent of 6c51ec1... add nginx_lua
             <li><a href="/posts/blog/2016/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
         
             <li><a href="/posts/blog/2016/05/19/hardware-interrupt-balance.html">硬件中断均衡</a></li>

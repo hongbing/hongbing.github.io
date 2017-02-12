@@ -45,7 +45,7 @@
 <!--
 	
 -->
-	<p><em>文章来源<a href="http://everythingsysadmin.com/2013/11/stop-monitoring-if-service-is-up.html">stop-monitoring-if-service-is-up</a></em>
+	<p><em>文章来源<a href="http://everythingsysadmin.com/2013/11/stop-monitoring-if-service-is-up.html">stop-monitoring-if-service-is-up</a></em><br />
 由于最近组内在对各个项目的监控做梳理，并完善各个项目的监控报警，所以对监控方面关注的比较多些。</p>
 
 <p>在作者看来，99%的监控都没搞对。大多数人认为的监控是这样的：</p>
@@ -57,8 +57,8 @@
   <li>4.快到小于RTO（recovery time objective）。</li>
 </ul>
 
-<p>哦（满头大汗！！！），幸好没整个故障出来。如果对于监控的认识与上面是一致的，那么系统经常会与故障相伴。
-<!-- more -->
+<p>哦（满头大汗！！！），幸好没整个故障出来。如果对于监控的认识与上面是一致的，那么系统经常会与故障相伴。<br />
+<!-- more --><br />
 作者理解的监控是这样的：</p>
 
 <ul>
@@ -68,7 +68,7 @@
   <li>4.用户无感知。</li>
 </ul>
 
-<p>也许你已经看明白了，作者理解的监控与大多数人认为的监控的差别，第1步与第2步的顺序，然而不止如此，它们是对于监控两种不同的认知。一个是出问题了，监控告知，快速修复的对问题的反应式方式，另一个是监控显示可能某处会出问题，快速处理的主动出击的方式。一个略显被动的处理问题，一个却是<code class="highlighter-rouge">主动</code>的，在问题出现之前就化解了。
+<p>也许你已经看明白了，作者理解的监控与大多数人认为的监控的差别，第1步与第2步的顺序，然而不止如此，它们是对于监控两种不同的认知。一个是出问题了，监控告知，快速修复的对问题的反应式方式，另一个是监控显示可能某处会出问题，快速处理的主动出击的方式。一个略显被动的处理问题，一个却是<code>主动</code>的，在问题出现之前就化解了。<br />
 那么怎样做到作者提出的监控的模式？</p>
 
 <ul>
@@ -83,8 +83,8 @@
 <p>当然，没有完美的监控，并不能将所有的情况都早早的监控到，因此在我们设计系统的时候，都应该将监控思考进去，一些可能的点包括但不限于：</p>
 
 <blockquote>
-  <p>多条网络线路，其中一条无效，报警；存储使用raid，其中一块硬盘出故障，报警；
-监控磁盘空间，ram使用，设置冗余，超过就报警；使用负载均衡器来转发web sever的请求；
+  <p>多条网络线路，其中一条无效，报警；存储使用raid，其中一块硬盘出故障，报警；<br />
+监控磁盘空间，ram使用，设置冗余，超过就报警；使用负载均衡器来转发web sever的请求；<br />
 ……</p>
 </blockquote>
 
@@ -134,16 +134,8 @@
         <h2>Blog</h2>
         <ul class="artical-list">
         
-<<<<<<< HEAD
-<<<<<<< HEAD
             <li><a href="/posts/blog/2017/02/12/spring-session.html">spring session源码解析</a></li>
         
-            <li><a href="/posts/blog/2016/06/15/nginx-lua.html">openresty memcached实践</a></li>
-        
-=======
->>>>>>> parent of 6c51ec1... add nginx_lua
-=======
->>>>>>> parent of 6c51ec1... add nginx_lua
             <li><a href="/posts/blog/2016/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
         
             <li><a href="/posts/blog/2016/05/19/hardware-interrupt-balance.html">硬件中断均衡</a></li>

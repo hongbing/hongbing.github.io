@@ -49,19 +49,19 @@
 
 <h3 id="section-1">1.1 版本号</h3>
 
-<p>版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。
+<p>版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。<br />
 版本号格式一般分为：</p>
 
-<p><code class="highlighter-rouge">主版本号.分支版本号.小版本号-里程碑版本号</code></p>
+<p><code>主版本号.分支版本号.小版本号-里程碑版本号</code></p>
 
 <p><strong>主版本号</strong>：一般指框架具有重大变化的版本号，比如struts1，struts2框架的变化</p>
 
-<p><strong>分支版本号</strong>： 一般指功能的变化
+<p><strong>分支版本号</strong>： 一般指功能的变化<br />
 <!-- more --></p>
 
 <p><strong>小版本号</strong>：bug的修复</p>
 
-<p><strong>里程碑版本号</strong>：<code class="highlighter-rouge">SNAPSHOT</code>–&gt;<code class="highlighter-rouge">RELEASAE</code>–&gt;<code class="highlighter-rouge">FINAL</code></p>
+<p><strong>里程碑版本号</strong>：<code>SNAPSHOT</code>–&gt;<code>RELEASAE</code>–&gt;<code>FINAL</code></p>
 
 <h3 id="section-2">1.2 仓库分类</h3>
 
@@ -75,7 +75,7 @@
 
 <h4 id="section-4">1.2.2 私有仓库</h4>
 
-<p>局域网内部的仓库，当本地仓库没有项目中所需要的jar包时，从私有仓库中找，如果存在，就将其下载到本地仓库中。同时，针对多人协作开发，可以将不同的开发版本deploy到私有仓库中。
+<p>局域网内部的仓库，当本地仓库没有项目中所需要的jar包时，从私有仓库中找，如果存在，就将其下载到本地仓库中。同时，针对多人协作开发，可以将不同的开发版本deploy到私有仓库中。<br />
 私有仓库的作用为：提升查找jar包的速度，进行项目版本管理。</p>
 
 <p>（注：使用commit and push命令只会将本地的代码提交到仓库中，使用deploy才会在仓库中为此项目打一个jar或者war包。）</p>
@@ -107,15 +107,15 @@
 
 <p>在项目中添加</p>
 
-<figure class="highlight"><pre><code class="language-maven" data-lang="maven">&lt;distributeManagement&gt;
+<div class="highlight"><pre><code class="language-maven" data-lang="maven">&lt;distributeManagement&gt;
     &lt;snapshotRepository&gt;
     &lt;id&gt;firehose.0.0.1-snapshot&lt;/id&gt;
     &lt;name&gt;firehose-SNAPSHOT&lt;/name&gt;
     &lt;url&gt;10.30.XXX.XXX/nexus/content/Repositories/snapshots/&lt;/url&gt;
     &lt;/snapshotRepository&gt;
-&lt;/distributeManagement&gt;</code></pre></figure>
+&lt;/distributeManagement&gt;</code></pre></div>
 
-<p>使用<code class="highlighter-rouge">mvn deploy</code>命令即可将项目发布到私有仓库中，也即是上面的url中</p>
+<p>使用<code>mvn deploy</code>命令即可将项目发布到私有仓库中，也即是上面的url中</p>
 
 <h3 id="maven">1.4 maven的生命周期</h3>
 
@@ -199,25 +199,25 @@
 
 <p><strong>本地仓库</strong></p>
 
-<figure class="highlight"><pre><code class="language-maven" data-lang="maven">mvn install:install-file -DgroupId=jar的groupId
+<div class="highlight"><pre><code class="language-maven" data-lang="maven">mvn install:install-file -DgroupId=jar的groupId
 -DartifactId=jar的artifactId -Dversion=jar的version
- -Dfile=jar包的路径 -Dpackaging=jar</code></pre></figure>
+ -Dfile=jar包的路径 -Dpackaging=jar</code></pre></div>
 
 <p>一个命令将二进制，源码和javadoc都上传到本地仓库：</p>
 
-<figure class="highlight"><pre><code class="language-maven" data-lang="maven">mvn install:install-file  -DgroupId=jar的groupId
+<div class="highlight"><pre><code class="language-maven" data-lang="maven">mvn install:install-file  -DgroupId=jar的groupId
 -DartifactId=jar的artifactId -Dversion=jar的version
 -Dfile=二进制jar包的路径  -Dsources=sources jar包的路径
--Djavadoc=javadoc jar包的路径</code></pre></figure>
+-Djavadoc=javadoc jar包的路径</code></pre></div>
 
 <p><strong>远程仓库</strong></p>
 
-<figure class="highlight"><pre><code class="language-maven" data-lang="maven">mvn deploy:deploy-file  -DgroupId=jar的groupId
+<div class="highlight"><pre><code class="language-maven" data-lang="maven">mvn deploy:deploy-file  -DgroupId=jar的groupId
 -DartifactId=jar的artifactId -Dversion=jar的version
 -Dfile=二进制jar包的路径  -Dsources=sources jar包的路径
--Djavadoc=javadoc jar包的路径</code></pre></figure>
+-Djavadoc=javadoc jar包的路径</code></pre></div>
 
-<p><em>注：在上述命令后都可以指定上传的仓库地址，在命令后面添加<code class="highlighter-rouge">-url=file://path/to/repository</code>，如果没有指定则会依据maven的setting.xml中的配置</em></p>
+<p><em>注：在上述命令后都可以指定上传的仓库地址，在命令后面添加<code>-url=file://path/to/repository</code>，如果没有指定则会依据maven的setting.xml中的配置</em></p>
 
 <p>添加到maven库中后，使用该jar包时需要修改maven工程的pom.xml文件，将添加的jar包加入到pom.xml文件中即可使用。</p>
 
@@ -236,7 +236,7 @@
 
 <p>在项目pom.xml的<project></project>里添加 maven插件maven-project-info-reports-plugin：</p>
 
-<figure class="highlight"><pre><code class="language-maven" data-lang="maven">&lt;reporting&gt;
+<div class="highlight"><pre><code class="language-maven" data-lang="maven">&lt;reporting&gt;
   &lt;plugins&gt;
    &lt;plugin&gt;
     &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
@@ -246,15 +246,15 @@
      &lt;version&gt;2.4&lt;/version&gt;
    &lt;/plugin&gt;
  &lt;/plugins&gt;
- &lt;/reporting&gt;</code></pre></figure>
+ &lt;/reporting&gt;</code></pre></div>
 
 <p>使用这个插件，然后执行命令：</p>
 
-<p><code class="highlighter-rouge">mvn  project-info-reports:dependencies</code></p>
+<p><code>mvn  project-info-reports:dependencies</code></p>
 
 <p>就可以在target/site/dependencies.html里查看依赖报表，通过这个报表就能够找到冲突的版本，然后再使用exclusions来排除相关的包。</p>
 
-<figure class="highlight"><pre><code class="language-maven" data-lang="maven">&lt;dependency&gt;
+<div class="highlight"><pre><code class="language-maven" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;com.x.y&lt;/groupId&gt;
     &lt;artifactId&gt;xyz&lt;/artifactId&gt;
     &lt;version&gt;1.1.1&lt;/version&gt;
@@ -265,11 +265,11 @@
                     &lt;version&gt;0.9.1&lt;/version&gt;
             &lt;/exclusion&gt;
     &lt;/exclusions&gt;
-&lt;/dependency&gt;</code></pre></figure>
+&lt;/dependency&gt;</code></pre></div>
 
 <p>另外使用命令</p>
 
-<p><code class="highlighter-rouge">mvn dependency:analyze</code></p>
+<p><code>mvn dependency:analyze</code></p>
 
 <p>可以分析出显示声明但没有依赖的包，可以将其去除。</p>
 
@@ -277,7 +277,7 @@
   <li>使用脚本显示循环依赖包</li>
 </ul>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash
 </span>
 <span class="c">### find cycle in maven depnedency tree
 </span>
@@ -301,7 +301,7 @@ if</span> <span class="o">[</span> ! -f <span class="s2">"</span><span class="nv
 </span><span class="nb">cd</span> <span class="nv">$sourcepath</span>
 <span class="nb">echo</span> <span class="s2">"scan cycle dependency in </span><span class="nv">$sourcepath</span><span class="s2"> ..."</span>
 mvn dependency:tree -Dverbose | awk -F<span class="s1">'- '</span> <span class="s1">'{if(index($2,"maven-dependency-plugin")&gt;0){indent=0;}else{indent=length($1);}stack[indent]=$2;if(index($0,"for cycle")&gt;0){print "****found cycle****";for(i=0;i&lt;=indent;i++){if(stack[i]!=null){print "-&gt;"stack[i]}}}}'</span>
-<span class="nb">echo</span> <span class="s2">"scan finished!"</span></code></pre></figure>
+<span class="nb">echo</span> <span class="s2">"scan finished!"</span></code></pre></div>
 
 <p>使用上面的脚本（将其放置于工程目录下，或者指定工程路径）检测是否存在循环依赖，如果存在，会输出循环依赖的链。（此脚本取自于@秦迪 <a href="http://blog.2baxb.me">Axb的自我修养</a>）</p>
 
@@ -351,16 +351,8 @@ mvn dependency:tree -Dverbose | awk -F<span class="s1">'- '</span> <span class="
         <h2>Blog</h2>
         <ul class="artical-list">
         
-<<<<<<< HEAD
-<<<<<<< HEAD
             <li><a href="/posts/blog/2017/02/12/spring-session.html">spring session源码解析</a></li>
         
-            <li><a href="/posts/blog/2016/06/15/nginx-lua.html">openresty memcached实践</a></li>
-        
-=======
->>>>>>> parent of 6c51ec1... add nginx_lua
-=======
->>>>>>> parent of 6c51ec1... add nginx_lua
             <li><a href="/posts/blog/2016/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
         
             <li><a href="/posts/blog/2016/05/19/hardware-interrupt-balance.html">硬件中断均衡</a></li>

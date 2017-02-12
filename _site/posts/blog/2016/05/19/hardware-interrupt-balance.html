@@ -45,7 +45,7 @@
 <!--
 	
 -->
-	<p>硬件与cpu沟通有两种方式，一种是中断，另一种是轮询。中断是硬件主动，产生中断信号，中断控制器将信号传递给cpu，cpu停下手中的工作，执行中断任务；轮询则为cpu主动，定时查询硬件设备的状态，是否处理硬件请求。
+	<p>硬件与cpu沟通有两种方式，一种是中断，另一种是轮询。中断是硬件主动，产生中断信号，中断控制器将信号传递给cpu，cpu停下手中的工作，执行中断任务；轮询则为cpu主动，定时查询硬件设备的状态，是否处理硬件请求。<br />
 <!-- more --></p>
 
 <p>硬件中断又分为两类：</p>
@@ -60,14 +60,14 @@
   <li><strong>Maskable interrupts（可屏蔽中断）</strong></li>
 </ul>
 
-<p>对于IO密集型的服务来说，网卡中断会非常的频繁，每一次硬件中断都需要CPU作出响应，大量的中断其实是一件比较消耗CPU的操作。
+<p>对于IO密集型的服务来说，网卡中断会非常的频繁，每一次硬件中断都需要CPU作出响应，大量的中断其实是一件比较消耗CPU的操作。<br />
 如果中断又都集中在某一个cpu上，那么对服务的影响就比较大，这时就需要将中断分散到各个cpu上均衡处理，由此就有了下面要介绍的网卡多队列,以及相关的优化技术。</p>
 
 <h4 id="rssreceive-side-scaling">1. RSS（Receive Side Scaling）</h4>
-<p>RSS需要硬件支持，通过<code class="highlighter-rouge">lspci -vvv | grep -i msi-x</code>命令来查看Ethernet controller中是否有MSI-X，Enable+，TabSize &gt; 1来判断是否硬件支持。</p>
+<p>RSS需要硬件支持，通过<code>lspci -vvv | grep -i msi-x</code>命令来查看Ethernet controller中是否有MSI-X，Enable+，TabSize &gt; 1来判断是否硬件支持。</p>
 
-<p>RSS的原理，简单描述就是<strong>通过过滤规则将网络包分发到不同的队列，每个队列通过关联的中断由指定的不同CPU处理。</strong>
-使用RSS，既能缩短单个队列长度（降低延迟），又能均衡cpu的处理能力（不至于某个cpu达到瓶颈）。
+<p>RSS的原理，简单描述就是<strong>通过过滤规则将网络包分发到不同的队列，每个队列通过关联的中断由指定的不同CPU处理。</strong><br />
+使用RSS，既能缩短单个队列长度（降低延迟），又能均衡cpu的处理能力（不至于某个cpu达到瓶颈）。<br />
 下面一一解释上面的关键字：过滤规则，队列，中断，CPU</p>
 
 <ul>
@@ -80,9 +80,9 @@
   <li><strong>队列关联中断号</strong></li>
 </ul>
 
-<p>通过<code class="highlighter-rouge">cat /proc/interrupts</code>查看网卡队列对应的中断号。</p>
+<p>通过<code>cat /proc/interrupts</code>查看网卡队列对应的中断号。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>//查看各cpu中断类型
+<pre><code>//查看各cpu中断类型
 [root@XX-0-79-core ~]# cat /proc/interrupts
             CPU0       CPU1       CPU2       CPU3
    0:         57          0          0          0   IO-APIC-edge      timer
@@ -95,7 +95,6 @@
   62:          0         208711        0         0   PCI-MSI-edge      eth0-1
   63:         0          0                 0     147535          PCI-MSI-edge      eth0-2
 </code></pre>
-</div>
 
 <p>第1栏表示中断号，第2-5栏表示在CPU0-3上处理的中断数量，第6栏表示中断控制器，APIC表示高级可编程中断控制器。不支持APIC的控制器，不能完成中断绑定，默认发往cpu0：</p>
 
@@ -113,7 +112,7 @@
 
 <p>中断号的大小即决定了CPU处理中断请求的优先级，中断号越小，优先级越高。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>IRQ 0 — **system timer (cannot be changed)**
+<pre><code>IRQ 0 — **system timer (cannot be changed)**
 IRQ 1 — **keyboard controller (cannot be changed)**
 IRQ 3 — serial port controller for serial port 2 (shared with serial port 4, if present);
 IRQ 4 — serial port controller for serial port 1 (shared with serial port 3, if present);
@@ -121,9 +120,8 @@ IRQ 5 — parallel port 2 and 3 or sound card;
 IRQ 6 — floppy disk controller;
 IRQ 7 — parallel port 1. It is used for printers or for any parallel port if a printer is not present.
 </code></pre>
-</div>
 
-<p>如果手动设置了CPU亲和度绑定，需要将irqbalance后台进程关掉（<code class="highlighter-rouge">service irqbalance status；service irqbalance stop</code>），因为它会自动将不同的中断交给各个cpu处理，会覆盖掉手动设置值。</p>
+<p>如果手动设置了CPU亲和度绑定，需要将irqbalance后台进程关掉（<code>service irqbalance status；service irqbalance stop</code>），因为它会自动将不同的中断交给各个cpu处理，会覆盖掉手动设置值。</p>
 
 <p>对于延迟特别敏感，或者接收中断处理已经成为瓶颈的系统应该开启RSS。但是应该控制队列在cpu物理核上的数量。</p>
 
@@ -133,24 +131,23 @@ IRQ 7 — parallel port 1. It is used for printers or for any parallel port if a
 
 <h4 id="rpsreceive-packet-steering">2. RPS（Receive Packet Steering）</h4>
 
-<p>RPS可以看做是RSS的软件实现。原理简单描述为对<code class="highlighter-rouge">数据流hash分类</code>，并将软中断负载均衡到各CPU。不会增加网卡的硬中断速率，但是引入了处理器间的中断。</p>
+<p>RPS可以看做是RSS的软件实现。原理简单描述为对<code>数据流hash分类</code>，并将软中断负载均衡到各CPU。不会增加网卡的硬中断速率，但是引入了处理器间的中断。</p>
 
 <p><strong>优化方式：</strong></p>
 
-<p>调整<code class="highlighter-rouge">/sys/class/net/[device]/queues/rx-[num]/rps_cpus</code>的值,rps_cpus默认为0000，每一位表示16进制位。000f表示使用cpu0，cpu1，cpu2，cpu3。</p>
+<p>调整<code>/sys/class/net/[device]/queues/rx-[num]/rps_cpus</code>的值,rps_cpus默认为0000，每一位表示16进制位。000f表示使用cpu0，cpu1，cpu2，cpu3。</p>
 
 <h4 id="rfsreceive-flow-steering">3. RFS（Receive Flow Steering）</h4>
 
-<p>解决处理网卡数据流的cpu与接受该数据流的应用程序所运行的cpu不一致，造成cpu切换的问题。保证程序运行的CPU和软中断处理CPU是同一个，<code class="highlighter-rouge">提升CPU缓存命中率，降低网络延迟</code>。</p>
+<p>解决处理网卡数据流的cpu与接受该数据流的应用程序所运行的cpu不一致，造成cpu切换的问题。保证程序运行的CPU和软中断处理CPU是同一个，<code>提升CPU缓存命中率，降低网络延迟</code>。</p>
 
 <p><strong>优化方式：</strong></p>
 
 <p>要开启RFS，需要修改两个参数，</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/proc/sys/net/core/rps_sock_flow_entries
+<pre><code>/proc/sys/net/core/rps_sock_flow_entries
 /sys/class/net/[device]/queues/rx-[num]/rps_flow_cnt
 </code></pre>
-</div>
 <p>设置rps_sock_flow_entries的值为期望获得的最大并发连接的数量（该值必须为2的幂，如果不是，系统设置为向上最接近的2的幂），rps_flow_cnt的值为rps_sock_flow_entries/N，N表示设备接收队列的数量，对于单队列两者设置为同一值。</p>
 
 <h4 id="xpstransmit-packet-steering">4. XPS（Transmit Packet Steering）</h4>
@@ -159,7 +156,7 @@ IRQ 7 — parallel port 1. It is used for printers or for any parallel port if a
 
 <p><strong>优化方式：</strong></p>
 
-<p>修改<code class="highlighter-rouge">/sys/class/net/[device]/queues/tx-[num]/xps_cpus</code></p>
+<p>修改<code>/sys/class/net/[device]/queues/tx-[num]/xps_cpus</code></p>
 
 <p>注意RPS和RFS在linux 内核版本2.6.35才被引入，2.6.38及其以上才包含XPS。</p>
 
@@ -218,16 +215,8 @@ IRQ 7 — parallel port 1. It is used for printers or for any parallel port if a
         <h2>Blog</h2>
         <ul class="artical-list">
         
-<<<<<<< HEAD
-<<<<<<< HEAD
             <li><a href="/posts/blog/2017/02/12/spring-session.html">spring session源码解析</a></li>
         
-            <li><a href="/posts/blog/2016/06/15/nginx-lua.html">openresty memcached实践</a></li>
-        
-=======
->>>>>>> parent of 6c51ec1... add nginx_lua
-=======
->>>>>>> parent of 6c51ec1... add nginx_lua
             <li><a href="/posts/blog/2016/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
         
             <li><a href="/posts/blog/2016/05/19/hardware-interrupt-balance.html">硬件中断均衡</a></li>
