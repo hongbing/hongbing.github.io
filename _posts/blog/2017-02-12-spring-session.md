@@ -15,9 +15,9 @@ Spring Session对HTTP的支持是通过标准的servlet filter来实现的，这
 
 spring session通过注解`@EnableRedisHttpSession`或者xml配置
 
-```
+{% highlight java %}
 <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/>
-```
+{% endhighlight %}
 
 来创建名为springSessionRepositoryFilter的SessionRepositoryFilter类。该类实现了Sevlet Filter接口，当请求穿越sevlet filter链时应该首先经过springSessionRepositoryFilter，这样在后面获取session的时候，得到的将是spring session。为了springSessonRepositoryFilter作为filter链中的第一个，spring session提供了`AbstractHttpSessionApplicationInitializer`类， 它实现了`WebApplicationInitializer`类，在onStartup方法中将springSessionRepositoryFilter加入到其他fitler链前面。
 
@@ -60,7 +60,7 @@ public abstract class AbstractHttpSessionApplicationInitializer
 
 RedisSession在创建时设置3个变量creationTime，maxInactiveInterval，lastAccessedTime。maxInactiveI    nterval默认值为1800，表示间隔1800s之内该session没有被再次使用，则删除session。每次访问都更新last    AccessedTime的值。
 
-```
+{% highlight java %}
 /**
 * Creates a new instance ensuring to mark all of the new attributes to be
 * persisted in the next save operation.
@@ -77,7 +77,7 @@ RedisSession() {
 public MapSession() {
 	this(UUID.randomUUID().toString());
 }
-```
+{% endhighlight %}
 
 RedisSession在创建时设置3个变量creationTime，maxInactiveInterval，lastAccessedTime。maxInactiveInterval默认值为1800，表示间隔1800s之内该session没有被再次使用，则删除session。每次访问都更新lastAccessedTime的值。
 
@@ -87,7 +87,7 @@ RedisSession在创建时设置3个变量creationTime，maxInactiveInterval，las
 
 另， 从request取sessionId依赖具体的HttpSessionStrategy的实现，spring session给了两个默认的实现CookieHttpSessionStrategy和HeaderHttpSessionStrategy，即从cookie和header中取出sessionId。
 
-```
+{% highlight java %}
 @Override
 public HttpSessionWrapper getSession(boolean create) {
 	HttpSessionWrapper currentSession = getCurrentSession();
@@ -122,7 +122,7 @@ public HttpSessionWrapper getSession(boolean create) {
 	setCurrentSession(currentSession);
 	return currentSession;
 }
-```
+{% endhighlight %}
 
 ### 4 session有效期与删除
 
@@ -151,7 +151,7 @@ redis是以懒性删除+定期删除组合策略来实现过期键删除，也�
 
 还有一点是，查看三个数据结构的TTL时间，spring:session:sessions:[sessionId]和spring:session:expireations:[min]比真正的有效期大5分钟，目的是确保当expire key数据过期后，还能查看到session数据。
 
-```
+{% highlight java %}
 @Scheduled(cron = "${spring.session.cleanup.cron.expression:0 * * * * *}")
 public void cleanupExpiredSessions() {
 	this.expirationPolicy.cleanExpiredSessions();
@@ -173,11 +173,11 @@ public void cleanExpiredSessions() {
 		touch(sessionKey);
 	}
 }
-```
+{% endhighlight %}
 
 每一次请求，spring session都会通过onExpirationUpdated()方法来更新session的过期时间， 具体的信息看下面源码的注释。
 
-```
+{% highlight java %}
 public void onExpirationUpdated(Long originalExpirationTimeInMilli,
 			ExpiringSession session) {
 	String keyToExpire = "expires:" + session.getId();
@@ -225,7 +225,7 @@ public void onExpirationUpdated(Long originalExpirationTimeInMilli,
 	this.redis.boundHashOps(getSessionKey(session.getId()))
 			.expire(fiveMinutesAfterExpires, TimeUnit.SECONDS);
 }
-```
+{% endhighlight %}
 
 ### 参考
 
