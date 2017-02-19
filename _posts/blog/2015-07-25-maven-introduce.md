@@ -1,6 +1,6 @@
 ---
 layout: post
-title: maven实践
+title: maven介绍
 categories: posts blog
 ---
 
@@ -58,7 +58,7 @@ maven远程服务器管理的仓库，地址是[maven中心仓库](http://repo1.
 ### 1.3 项目的发布
 
 在项目中添加  
-{% highlight maven %}
+{% highlight xml %}
 <distributeManagement>
     <snapshotRepository>
     <id>firehose.0.0.1-snapshot</id>
@@ -137,7 +137,7 @@ post-site     执行一些需要在生成站点文档之后完成的工作，并
 
 site-deploy     将生成的站点文档部署到特定的服务器上
 
-**clean**、**compile**和**site**这三个生命周期是不相关的。执行每一个生命周期，其前面的所有阶段都会被执行。生命周期中的每一个操作都是以插件机制完成的。
+**clean**、**compile** 和 **site** 这三个生命周期是不相关的。执行每一个生命周期，其前面的所有阶段都会被执行。生命周期中的每一个操作都是以插件机制完成的。
 
 
 ## 2 maven实践

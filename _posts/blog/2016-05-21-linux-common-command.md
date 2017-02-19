@@ -7,6 +7,10 @@ categories: posts blog
 
 本文记录了在工作中常用的linux命令<!-- more -->。
 
++ 文件保护，禁止编辑
+`chattr +i filename`
+使用`lsattr`显示文件的隐藏属性
+
 + 查找某个端口运行的程序
 
 ```
@@ -70,7 +74,7 @@ cid表示需要绑定的cpu id号，pid为进程号。参数没有cid表示查�
 `cat /proc/cpuinfo | grep processor`查看当前的cpu核数.
 
  绑定过后，使用`pidstat 2 | grep [pid]`查看绑定的进程是否跑在绑定的那个核上。
- 
+
 + 查看某一个进程占用的内存大小：
 
 ```
@@ -105,7 +109,7 @@ history | grep "mysql"
 
 + 查看某一个文件中的字符串出现的次数
 
-``` 
+```
 grep -o 'helolo' info.txt | wc -l
 ```
 
@@ -142,10 +146,10 @@ sort -n -k2 out.txt
 ```bash
 sort -k2 sort.log | awk '{
     n=a[$2]++;
-    if (n==0) 
+    if (n==0)
 	v=$0;
     else {
-	if (n==1) 
+	if (n==1)
 	    print v;
 	print $0
     }
@@ -247,4 +251,3 @@ lsof -n | grep deleted
 在执行`df -h`查看磁盘空间的时候，看见磁盘空间已满，但是通过`du -sh *`查看目录下的文件，却没有大的文件。这时可以通过lsof命令查看是否存在已经删除了（在磁盘上已经看不到文件的存在了），但是仍然被某进程打开着的文件，找到打开该文件的进程号，kill掉，就可以释放空间了。
 
 ![linux-command](/images/linuxcommand/linux-command.png)
-

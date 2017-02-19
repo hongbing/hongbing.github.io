@@ -13,13 +13,13 @@ nav:
 
 + java
 
-java version "1.6.0_24"
+>java version "1.6.0_24"
 Java(TM) SE Runtime Environment (build 1.6.0_24-b07)<!-- more -->
 Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02, mixed mode)
 
 + jetty
 
-jetty 6.1.26
+> jetty 6.1.26
 
 ## 2 分析
 看到大量的tcp连接都处于CLOSE_WAIT状态，初步分析了一下网络状况，如果服务端处于CLOSE_WAIT状态，说明是客户端首先发起了关闭请求。但是在这个项目中，客户端与服务端之间采用的是jetty长连接，服务端在服务10分钟之后主动断开连接，客户端重新发起请求。明显，现在出现的情况与设计是不符合的。为了尽快恢复服务状况，释放服务端的连接，于是重启了服务端程序。重启之后，服务暂时恢复正常。在重启之前，使用jstack dump了一份当前java进程的线程栈,发现在dump的文件最后，检测到了deadlock，内容如下：
