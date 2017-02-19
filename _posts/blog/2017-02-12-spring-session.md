@@ -58,7 +58,7 @@ public abstract class AbstractHttpSessionApplicationInitializer
 
 ### 2 创建spring session
 
-RedisSession在创建时设置3个变量creationTime，maxInactiveInterval，lastAccessedTime。maxInactiveI    nterval默认值为1800，表示间隔1800s之内该session没有被再次使用，则删除session。每次访问都更新last    AccessedTime的值。
+RedisSession在创建时设置3个变量creationTime，maxInactiveInterval，lastAccessedTime。maxInactiveInterval默认值为1800，表示间隔1800s之内该session没有被再次使用，则删除session。每次访问都更新lastAccessedTime的值。
 
 ```
 /**
@@ -95,7 +95,7 @@ spring session在redis里面保存的数据包括：
 
   session保存的数据，记录了creationTime，maxInactiveInterval，lastAccessedTime，attribute。前两个数据是用于session过期管理的辅助数据结构。
 
-应用通过getSession(boolean create)方法来获取session数据。getSession方法首先从请求的“.CURRENT_SESSION”属性来获取currentSession，没有currentSession，则从request取出sessionId，然后读取spring:session:sessions:[sessionId]的值，同时根据lastAccessedTime和MMaxInactiveIntervalInSeconds来判断这个session是否过期。如果request中没有sessonId，说明该用户是第一次访问，会根据不同的实现，如RedisSession，MongoExpiringSession，GemFireSession等来创建一个新的session。
+应用通过getSession(boolean create)方法来获取session数据。getSession方法首先从请求的“.CURRENT_SESSION”属性来获取currentSession，没有currentSession，则从request取出sessionId，然后读取spring:session:sessions:[sessionId]的值，同时根据lastAccessedTime和MaxInactiveIntervalInSeconds来判断这个session是否过期。如果request中没有sessionId，说明该用户是第一次访问，会根据不同的实现，如RedisSession，MongoExpiringSession，GemFireSession等来创建一个新的session。
 
 另， 从request取sessionId依赖具体的HttpSessionStrategy的实现，spring session给了两个默认的实现CookieHttpSessionStrategy和HeaderHttpSessionStrategy，即从cookie和header中取出sessionId。
 
@@ -142,17 +142,17 @@ spring session的有效期指的是访问有效期，每一次访问都会更新
 
 对于过期数据，一般有三种删除策略：
 
-1）定时删除，即在设置键的过期时间的同时，创建一个定时器， 当键的过期时间到来时，立即删除。
+1）**定时删除**，即在设置键的过期时间的同时，创建一个定时器， 当键的过期时间到来时，立即删除。
 
-2）惰性删除，即在访问键的时候，判断键是否过期，过期则删除，否则返回该键值。
+2）**惰性删除**，即在访问键的时候，判断键是否过期，过期则删除，否则返回该键值。
 
-3）定期删除，即每隔一段时间，程序就对数据库进行一次检查，删除里面的过期键。至于要删除多少过期键，以及要检查多少个数据库，则由算法决定。
+3）**定期删除**，即每隔一段时间，程序就对数据库进行一次检查，删除里面的过期键。至于要删除多少过期键，以及要检查多少个数据库，则由算法决定。
 
-redis是以懒性删除+定期删除组合策略来实现过期键删除，也就是数据过期了并不会及时被删除。为了实现session过期的及时性，spring session采用了定时删除的策略，但它并不是如上描述在设置键的同时设置定时器，而是采用固定频率（1分钟）轮询删除过期值，这里的删除是惰性删除。
+redis删除过期数据采用的是懒性删除+定期删除组合策略，也就是数据过期了并不会及时被删除。为了实现session过期的及时性，spring session采用了定时删除的策略，但它并不是如上描述在设置键的同时设置定时器，而是采用固定频率（1分钟）轮询删除过期值，这里的删除是惰性删除。
 
 轮询操作并没有去扫描所有的spring:session:sessions:[sessionId]的过期时间，而是在当前分钟数检查前一分钟应该过期的数据，即spring:session:expireations:[min]的members，然后delete掉spring:session:expirations:[min]，惰性删除spring:session:sessions:expires:[sessionId]。
 
-还有一点是，查看三个数据结构的TTL时间，spring:session:sessions:[sessionId]和spring:session:expireations:[min]比真正的有效期大5分钟，目的是确保当expire key数据过期后，客户端还能获取到session数据。
+还有一点是，查看三个数据结构的TTL时间，spring:session:sessions:[sessionId]和spring:session:expireations:[min]比真正的有效期大5分钟，目的是确保当expire key数据过期后，还能获取到session保存的原始数据。
 
 ```
 @Scheduled(cron = "${spring.session.cleanup.cron.expression:0 * * * * *}")
@@ -178,7 +178,7 @@ public void cleanExpiredSessions() {
 }
 ```
 
-每一次请求，spring session都会通过onExpirationUpdated()方法来更新session的过期时间， 具体的信息看下面源码的注释。
+每一次请求，spring session都会通过onExpirationUpdated()方法来更新session的过期时间， 具体的操作看下面源码的注释。
 
 ```
 public void onExpirationUpdated(Long originalExpirationTimeInMilli,
@@ -230,7 +230,7 @@ public void onExpirationUpdated(Long originalExpirationTimeInMilli,
 }
 ```
 
-### 参考
+### 5 参考
 
 [1] [spring-session官网](http://docs.spring.io/spring-session/docs/current/reference/html5/)
 
@@ -238,4 +238,4 @@ public void onExpirationUpdated(Long originalExpirationTimeInMilli,
 
 [3] [SpringSession原理解析](https://segmentfault.com/a/1190000004369392)
 
-[] [spring-session github](https://github.com/spring-projects/spring-session)
+[4] [spring-session github](https://github.com/spring-projects/spring-session)
