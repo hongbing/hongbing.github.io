@@ -7,7 +7,7 @@ categories: posts blog
 
 最近要在项目中做用户踢线的功能，由于项目使用spring session来管理用户session，因此特地翻了翻spring session的源码，看看spring session是如何管理的。我们使用redis来存储session，因此本文只对session在redis中的存储结构以及管理做解析。
 
-### 1 spring session使用
+## 1 spring session使用
 
 Spring Session对HTTP的支持是通过标准的servlet filter来实现的，这个filter必须要配置为拦截所有的web应用请求，并且它应该是filter链中的第一个filter。Spring Session filter会确保随后调用javax.servlet.http.HttpServletRequest的getSession()方法时，都会返回Spring Session的HttpSession实例，而不是应用服务器默认的HttpSession。
 
@@ -56,7 +56,7 @@ public abstract class AbstractHttpSessionApplicationInitializer
 
 或者也可以在web.xml里面将springSessionRepositoryFilter加入到filter配置的第一个。
 
-### 2 创建spring session
+## 2 创建spring session
 
 RedisSession在创建时设置3个变量creationTime，maxInactiveInterval，lastAccessedTime。maxInactiveInterval默认值为1800，表示间隔1800s之内该session没有被再次使用，则删除session。每次访问都更新lastAccessedTime的值。
 
@@ -79,7 +79,7 @@ public MapSession() {
 }
 ```
 
-### 3 获取session
+## 3 获取session
 
 spring session在redis里面保存的数据包括：
 
