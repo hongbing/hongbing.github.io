@@ -7,6 +7,7 @@ categories: posts blog
 
 前一篇博客解析了spring session源码，分析了spring session的内部结构。本篇将扩展spring session使用分片redis。在使用spring-session一段时间后，发现spring-session后端redis实例的内存容量不断增长，从刚开始的8G（阿里云ECS），一直扩容到现在的64G。阿里云ECS单机最大容量就到64G，集群版可支持256G。经过对redis rdb的分析，使用spring-session，每个用户占用约2K的内存。由于session key里面保存数据的差异，以及使用不同的序列化方式，每个用户占用内存大小对于不同的业务来说是不一样的。
 
+<!-- more -->
 如果看过前一篇博客，应该知道spring-session保存到redis中的数据都会过期，过期时间取决于maxInactiveInSeconds的大小，我们业务上使用的时间是1个月。因此，我们redis的内存容量可以简单的计算： 月活 * 2K
 
 上面说过，阿里云ecs单实例最大64G，当我们月活到3000万的时候就撑不住了。3000万，很远吗？
