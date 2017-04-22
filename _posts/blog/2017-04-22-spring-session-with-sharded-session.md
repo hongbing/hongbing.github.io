@@ -96,6 +96,6 @@ public class RedisSerializerOperations {
 {% endhighlight %}
 RedisSerializerOperations与RedisTemplate中的序列化实现方式一致，采用JdkSerializationRedisSerializer作为默认的序列化方式，用户可以根据自己需要，对key和value配置不同的序列化方式。
 
-有上面所说的几个类实现的功能（`注解类`，`配置类`，`实现SessionRepository的session管理类`，`分片redis client`，`redis序列化类`）就可以扩展spring session，实现自定义的redis实现方式。
+有上面所说的几个类实现的功能（`注解类-EnableShardedRedisHttpSession`，`配置类-ShardedRedisHttpSessionConfigurati`，`实现SessionRepository的session管理类`，`分片redis client`，`redis序列化类`）就可以扩展spring session，实现自定义的redis实现方式。
 
 
