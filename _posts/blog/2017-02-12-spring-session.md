@@ -1,7 +1,7 @@
 ---
 layout: post
 title: spring session源码解析
-description: 存在感对于每个人的生活有多么的重要，可能平时并不是太关，其实他就是生活的全部
+description: spring session解析
 categories: posts blog
 ---
 
@@ -9,7 +9,7 @@ categories: posts blog
 
 ## 1 spring session使用
 
-Spring Session对HTTP的支持是通过标准的servlet filter来实现的，这个filter必须要配置为拦截所有的web应用请求，并且它应该是filter链中的第一个filter。Spring Session filter会确保随后调用javax.servlet.http.HttpServletRequest的getSession()方法时，都会返回Spring Session的HttpSession实例，而不是应用服务器默认的HttpSession。
+Spring Session对HTTP的支持是通过标准的servlet filter来实现的，这个filter必须要配置为拦截所有的web应用请求，并且它最好是filter链中的第一个filter。Spring Session filter会确保随后调用javax.servlet.http.HttpServletRequest的getSession()方法时，都会返回Spring Session的HttpSession实例，而不是应用服务器默认的HttpSession。
 
 <!-- more -->
 
@@ -18,8 +18,10 @@ spring session通过注解`@EnableRedisHttpSession`或者xml配置
 ```
 <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/>
 ```
+ 
+来设置spring session的一些参数，比如session的最大活跃时间（maxInactiveIntervalInSeconds），redis命名空间（redisNamespace），session写入到redis的时机（FlushMode）以及如何序列化写到redis中的session value等等。
 
-来创建名为springSessionRepositoryFilter的`SessionRepositoryFilter`类。该类实现了Sevlet Filter接口，当请求穿越sevlet filter链时应该首先经过springSessionRepositoryFilter，这样在后面获取session的时候，得到的将是spring session。为了springSessonRepositoryFilter作为filter链中的第一个，spring session提供了`AbstractHttpSessionApplicationInitializer`类， 它实现了`WebApplicationInitializer`类，在onStartup方法中将springSessionRepositoryFilter加入到其他fitler链前面。
+要想使用spring session，还需要创建名为springSessionRepositoryFilter的`SessionRepositoryFilter`类。该类实现了Sevlet Filter接口，当请求穿越sevlet filter链时应该首先经过springSessionRepositoryFilter，这样在后面获取session的时候，得到的将是spring session。为了springSessonRepositoryFilter作为filter链中的第一个，spring session提供了`AbstractHttpSessionApplicationInitializer`类， 它实现了`WebApplicationInitializer`类，在onStartup方法中将springSessionRepositoryFilter加入到其他fitler链前面。
 
 ```
 public abstract class AbstractHttpSessionApplicationInitializer
@@ -58,13 +60,13 @@ public abstract class AbstractHttpSessionApplicationInitializer
 
 ## 2 创建spring session
 
-RedisSession在创建时设置3个变量creationTime，maxInactiveInterval，lastAccessedTime。maxInactiveInterval默认值为1800，表示间隔1800s之内该session没有被再次使用，则删除session。每次访问都更新lastAccessedTime的值。
+RedisSession在创建时设置3个变量creationTime，maxInactiveInterval，lastAccessedTime。maxInactiveInterval默认值为1800，表示1800s之内该session没有被再次使用，则表明该session已过期。每次session被访问都会更新lastAccessedTime的值，session的过期计算公式：`当前时间-lastAccessedTime > maxInactiveInterval`.
 
 ```
 /**
 * Creates a new instance ensuring to mark all of the new attributes to be
 * persisted in the next save operation.
-*/
+**/
 RedisSession() {
 	this(new MapSession());
 	this.delta.put(CREATION_TIME_ATTR, getCreationTime());
@@ -78,6 +80,9 @@ public MapSession() {
 	this(UUID.randomUUID().toString());
 }
 ```
+
+flushImmediateIfNecessary判断session是否需要立即写入后端存储。
+
 
 ## 3 获取session
 
@@ -136,6 +141,8 @@ public HttpSessionWrapper getSession(boolean create) {
 }
 ```
 
+spring session为什么会使用3个key，而不是一个key？接下来回答。
+
 ## 4 session有效期与删除
 
 spring session的有效期指的是访问有效期，每一次访问都会更新lastAccessedTime的值，过期时间为lastAccessedTime + maxInactiveInterval，也即在有效期内每访问一次，有效期就向后延长maxInactiveInterval。
@@ -152,7 +159,7 @@ redis删除过期数据采用的是`懒性删除+定期删除`组合策略，也
 
 轮询操作并没有去扫描所有的spring:session:sessions:[sessionId]的过期时间，而是在当前分钟数检查前一分钟应该过期的数据，即spring:session:expirations:[min]的members，然后delete掉spring:session:expirations:[min]，惰性删除spring:session:sessions:expires:[sessionId]。
 
-还有一点是，查看三个数据结构的TTL时间，spring:session:sessions:[sessionId]和spring:session:expirations:[min]比真正的有效期大5分钟，目的是确保当expire key数据过期后，还能获取到session保存的原始数据。
+还有一点是，查看三个数据结构的TTL时间，spring:session:sessions:[sessionId]和spring:session:expirations:[min]比真正的有效期大5分钟，目的是确保当expire key数据过期后，监听事件还能获取到session保存的原始数据。
 
 ```
 @Scheduled(cron = "${spring.session.cleanup.cron.expression:0 * * * * *}")
@@ -178,7 +185,11 @@ public void cleanExpiredSessions() {
 }
 ```
 
-每一次请求，spring session都会通过onExpirationUpdated()方法来更新session的过期时间， 具体的操作看下面源码的注释。
+spring session在redis中保存了三个key，为什么？
+sessions key记录session本身的数据，expires key标记session的准确过期时间，expiration key保证session能够被及时删除，spring监听事件能够被及时处理。
+
+上面的代码展示了session expires key如何被删除，那session每次都是怎样更新过期时间的呢？
+每一次http请求，在经过所有的filter处理过后，spring session都会通过onExpirationUpdated()方法来更新session的过期时间， 具体的操作看下面源码的注释。
 
 ```
 public void onExpirationUpdated(Long originalExpirationTimeInMilli,
