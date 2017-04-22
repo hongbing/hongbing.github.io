@@ -63,9 +63,8 @@ public class ShardedRedisOperationsSessionRepository implements SessionRepositor
 
 另外，由于spring session中对redis的操作都封装在RedisTemplate里面，RedisTemplate对redis的读写key和value都进行了序列化，因此还需要实现一个对redis的key和value进行序列化的类。
 
-{% highlight %}
+{% highlight java %}
 public class RedisSerializerOperations {
-
     private boolean enableDefaultSerializer = true;
     private RedisSerializer<?> defaultSerializer;
     private RedisSerializer keySerializer = new StringRedisSerializer();
@@ -78,7 +77,6 @@ public class RedisSerializerOperations {
         if (defaultSerializer == null) {
             defaultSerializer = new JdkSerializationRedisSerializer(this.getClass().getClassLoader());
         }
-
         if (enableDefaultSerializer) {
             if (keySerializer == null) {
                 keySerializer = defaultSerializer;
@@ -98,6 +96,6 @@ public class RedisSerializerOperations {
 {% endhighlight %}
 RedisSerializerOperations与RedisTemplate中的序列化实现方式一致，采用JdkSerializationRedisSerializer作为默认的序列化方式，用户可以根据自己需要，对key和value配置不同的序列化方式。
 
-有上面所说的几个类实现的功能（注解类，配置类，实现SessionRepository的session管理类，分片redis client，redis序列化类）就可以扩展spring session，实现自定义的redis实现方式。
+有上面所说的几个类实现的功能（`注解类`，`配置类`，`实现SessionRepository的session管理类`，`分片redis client`，`redis序列化类`）就可以扩展spring session，实现自定义的redis实现方式。
 
 
