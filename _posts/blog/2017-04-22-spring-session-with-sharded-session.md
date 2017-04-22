@@ -8,7 +8,7 @@ categories: posts blog
 前一篇博客解析了spring session源码，分析了spring session的内部结构。本篇将扩展spring session使用分片redis。在使用spring-session一段时间后，发现spring-session后端redis实例的内存容量不断增长，从刚开始的8G（阿里云ECS），一直扩容到现在的64G。阿里云ECS单机最大容量就到64G，集群版可支持256G。经过对redis rdb的分析，使用spring-session，每个用户占用约2K的内存。由于session key里面保存数据的差异，以及使用不同的序列化方式，每个用户占用内存大小对于不同的业务来说是不一样的。
 
 <!-- more -->
-如果看过前一篇博客，应该知道spring-session保存到redis中的数据都会过期，过期时间取决于maxInactiveInSeconds的大小，我们业务上使用的时间是1个月。因此，我们redis的内存容量可以简单的计算：`月活 * 2K`
+如果看过前一篇博客，应该知道spring-session保存到redis中的数据都会过期，过期时间取决于maxInactiveInSeconds的大小，我们业务上使用的时间是1个月。因此，我们`redis的内存容量`可以简单的计算：`月活 * 2K`
 
 上面说过，阿里云ecs单实例最大64G，当我们月活到3000万的时候就撑不住了。3000万，很远吗？
 
@@ -31,13 +31,11 @@ spring-session支持redis cluster模式，但是不支持分片redis，需要自
 @Import(ShardedRedisHttpSessionConfiguration.class)
 @Configuration
 public @interface EnableShardedRedisHttpSession {
-
     /**
      * 最大不活跃时间间隔
      * @return
      */
     int maxInactiveIntervalInSeconds() default 1800;
-
     /**
      * spring session key的默认前缀
      * @return
@@ -52,12 +50,9 @@ ShardedRedisHttpSessionConfiguration类指定分片redis session的配置。在s
 
 {% highlight java %}
 public class ShardedRedisOperationsSessionRepository implements SessionRepository<ShardedRedisOperationsSessionRepository.ShardedRedisSession>, MessageListener {
-
     private static final Logger log = LoggerFactory.getLogger(ShardedRedisOperationsSessionRepository.class);
-
     @Autowired
     private ShardedRedisClient shardedRedisClient;
-
     private String keyPrefix = SessionConst.DEFAULT_SPRING_SESSION_REDIS_PREFIX;
     private Integer defaultMaxInactiveInterval;
 	... ...
@@ -68,7 +63,7 @@ public class ShardedRedisOperationsSessionRepository implements SessionRepositor
 
 另外，由于spring session中对redis的操作都封装在RedisTemplate里面，RedisTemplate对redis的读写key和value都进行了序列化，因此还需要实现一个对redis的key和value进行序列化的类。
 
-```
+{% highlight %}
 public class RedisSerializerOperations {
 
     private boolean enableDefaultSerializer = true;
@@ -100,7 +95,7 @@ public class RedisSerializerOperations {
         }
     }
 }
-```
+{% endhighlight %}
 RedisSerializerOperations与RedisTemplate中的序列化实现方式一致，采用JdkSerializationRedisSerializer作为默认的序列化方式，用户可以根据自己需要，对key和value配置不同的序列化方式。
 
 有上面所说的几个类实现的功能（注解类，配置类，实现SessionRepository的session管理类，分片redis client，redis序列化类）就可以扩展spring session，实现自定义的redis实现方式。
