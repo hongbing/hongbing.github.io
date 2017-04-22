@@ -61,15 +61,19 @@
   <li>java</li>
 </ul>
 
-<p>java version “1.6.0_24”
+<blockquote>
+  <p>java version “1.6.0_24”
 Java(TM) SE Runtime Environment (build 1.6.0_24-b07)<!-- more -->
 Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02, mixed mode)</p>
+</blockquote>
 
 <ul>
   <li>jetty</li>
 </ul>
 
-<p>jetty 6.1.26</p>
+<blockquote>
+  <p>jetty 6.1.26</p>
+</blockquote>
 
 <h2 id="2-分析">2 分析</h2>
 <p>看到大量的tcp连接都处于CLOSE_WAIT状态，初步分析了一下网络状况，如果服务端处于CLOSE_WAIT状态，说明是客户端首先发起了关闭请求。但是在这个项目中，客户端与服务端之间采用的是jetty长连接，服务端在服务10分钟之后主动断开连接，客户端重新发起请求。明显，现在出现的情况与设计是不符合的。为了尽快恢复服务状况，释放服务端的连接，于是重启了服务端程序。重启之后，服务暂时恢复正常。在重启之前，使用jstack dump了一份当前java进程的线程栈,发现在dump的文件最后，检测到了deadlock，内容如下：</p>
@@ -194,6 +198,8 @@ Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02, mixed mode)</p>
         <h2>Blog</h2>
         <ul class="artical-list">
         
+            <li><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html">spring-session支持分片redis</a></li>
+        
             <li><a href="/posts/blog/17/02/12/spring-session.html">spring session源码解析</a></li>
         
             <li><a href="/posts/blog/16/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
@@ -214,7 +220,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02, mixed mode)</p>
         
             <li><a href="/posts/blog/15/08/02/haproxy-install.html">haproxy部署</a></li>
         
-            <li><a href="/posts/blog/15/07/25/maven-introduce.html">maven实践</a></li>
+            <li><a href="/posts/blog/15/07/25/maven-introduce.html">maven介绍</a></li>
         
             <li><a href="/posts/blog/15/06/21/etcd-vs-consul.html">ETCD vs. Consul</a></li>
         

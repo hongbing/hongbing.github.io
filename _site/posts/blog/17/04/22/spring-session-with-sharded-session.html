@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>spring-session支持分片redis </title>
+    <meta name="author" content="hongbing" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="hongbing的部落格" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <link rel="shortcut icon" href="/jinchuan.png" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+      <div id="header_wrap" class="outer">
+        <header class="inner">
+                <div id="project_title" align="center"><a href="/">hongbingの部落格</a></div>
+                <div id="project_tagline" align="center">ONCE A GEEK, FOREVER A GEEK</div>
+    <!--    
+	        <div id="nav" class="navbar">
+                         <div id="home" class="navbar"><a href="/">Home</a></div>
+                         <div id="archive" class="navbar"><a href="/archive">Archive</a></div>
+                         <div id="about" class="navbar"><a href="/about">About</a></div>
+                </div>
+-->	</header>
+</div>
+ 
+         <link rel="stylesheet" href="/js/prettify/prettify.css" />
+<style type="text/css">
+    body { background:#e8e8e8; }
+    @media screen and (max-width: 750px){
+        body { background:#fff; }
+    }
+    @media screen and (max-width: 1020px){
+        body { background:#fff; }
+    }
+</style>
+
+<div id="content">
+    <div class="entry">
+        <h1 class="entry-title"><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html" title="spring-session支持分片redis">spring-session支持分片redis</a></h1>
+        <p class="entry-date">2017-04-22</p>
+<!--
+	
+-->
+	<p>前一篇博客解析了spring session源码，分析了spring session的内部结构。本篇将扩展spring session使用分片redis。在使用spring-session一段时间后，发现spring-session后端redis实例的内存容量不断增长，从刚开始的8G（阿里云ECS），一直扩容到现在的64G。阿里云ECS单机最大容量就到64G，集群版可支持256G。经过对redis rdb的分析，使用spring-session，每个用户占用约2K的内存。由于session key里面保存数据的差异，以及使用不同的序列化方式，每个用户占用内存大小对于不同的业务来说是不一样的。</p>
+
+<!-- more -->
+<p>如果看过前一篇博客，应该知道spring-session保存到redis中的数据都会过期，过期时间取决于maxInactiveInSeconds的大小，我们业务上使用的时间是1个月。因此，我们<code class="highlighter-rouge">redis的内存容量</code>可以简单的计算：<code class="highlighter-rouge">月活 * 2K</code></p>
+
+<p>上面说过，阿里云ecs单实例最大64G，当我们月活到3000万的时候就撑不住了。3000万，很远吗？</p>
+
+<p>由于业务发展很快，做运营活动时，会有大量的新增用户进来，新增用户会带来大量的redis的写操作，导致读性能下降，影响老用户登录。</p>
+
+<p><strong>当前的两大问题就是，redis的容量？，redis的读写性能提升？</strong></p>
+
+<p>阿里云的redis集群可以在一定时间内解决容量和性能问题，但是容量依旧不可线性扩展，且集群不支持读写分离，据说已经在roadmap里了。还有就是不知道阿里云的redis集群的实现逻辑，心理没谱，对于session如此重要的功能，需要有对其实现，包括存储都有一定的掌控度，不然影响面太广了。</p>
+
+<p>不采用阿里云集群，采用的是分片redis集群的方式，<strong>用户session按照key哈希到不同的redis实例中，redis既可以线性扩展，每个redis实例承担的读写qps也相应降低。</strong></p>
+
+<p>spring-session支持redis cluster模式，但是不支持分片redis，需要自己实现。</p>
+
+<p>要使用spring-session只需要一个注解@EnableRedisHttpSession，然后注入一个RedisConnectionFactory的bean即可。使用了@EnableRedisHttpSession注解，就绑定了redis单实例或者使用redis cluster模式。要想使用分片redis集群，需要自定义注解。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Retention</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">annotation</span><span class="o">.</span><span class="na">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Target</span><span class="o">({</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">annotation</span><span class="o">.</span><span class="na">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">})</span>
+<span class="nd">@Documented</span>
+<span class="nd">@Import</span><span class="o">(</span><span class="n">ShardedRedisHttpSessionConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">EnableShardedRedisHttpSession</span> <span class="o">{</span>
+    <span class="cm">/**
+     * 最大不活跃时间间隔
+     * @return
+     */</span>
+    <span class="kt">int</span> <span class="nf">maxInactiveIntervalInSeconds</span><span class="o">()</span> <span class="k">default</span> <span class="mi">1800</span><span class="o">;</span>
+    <span class="cm">/**
+     * spring session key的默认前缀
+     * @return
+     */</span>
+    <span class="n">String</span> <span class="nf">keyPrefix</span><span class="o">()</span> <span class="k">default</span> <span class="s">""</span><span class="o">;</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>注解EnableShardedRedisHttpSession，表明我们要使用分片Redis，而不是spring-session默认的redis使用方式。</p>
+
+<p>ShardedRedisHttpSessionConfiguration类指定分片redis session的配置。在spring session中，session创建和管理都是在SessionRepository的实现类中完成的，因此要使用分片 redis，也需要实现自定义的SessionRepository来完成session的创建和管理。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ShardedRedisOperationsSessionRepository</span> <span class="kd">implements</span> <span class="n">SessionRepository</span><span class="o">&lt;</span><span class="n">ShardedRedisOperationsSessionRepository</span><span class="o">.</span><span class="na">ShardedRedisSession</span><span class="o">&gt;,</span> <span class="n">MessageListener</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">log</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">ShardedRedisOperationsSessionRepository</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">ShardedRedisClient</span> <span class="n">shardedRedisClient</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">keyPrefix</span> <span class="o">=</span> <span class="n">SessionConst</span><span class="o">.</span><span class="na">DEFAULT_SPRING_SESSION_REDIS_PREFIX</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">defaultMaxInactiveInterval</span><span class="o">;</span>
+	<span class="o">...</span> <span class="o">...</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>自定义的ShardedRedisOperationsSessionRepository实现了SessionRepository和MessageListener接口，ShardedRedisOperationsSessionRepository类在ShardedRedisHttpSessionConfiguration里面完成初始化。在ShardedRedisOperationsSessionRepository里面注入了一个ShardedRedisClient类，该类即为我们的分片redis，对redis的读写都在这个类中完成。ShardedRedisClient可以使用不同的hash算法来分片，也可以实现redis的读写分离。</p>
+
+<p>另外，由于spring session中对redis的操作都封装在RedisTemplate里面，RedisTemplate对redis的读写key和value都进行了序列化，因此还需要实现一个对redis的key和value进行序列化的类。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RedisSerializerOperations</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">enableDefaultSerializer</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">RedisSerializer</span><span class="o">&lt;?&gt;</span> <span class="n">defaultSerializer</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">RedisSerializer</span> <span class="n">keySerializer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringRedisSerializer</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="n">RedisSerializer</span> <span class="n">valueSerializer</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">RedisSerializer</span> <span class="n">hashKeySerializer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringRedisSerializer</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="n">RedisSerializer</span> <span class="n">hashValueSerializer</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">RedisSerializer</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">stringSerializer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringRedisSerializer</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">afterSerializerPropertiesSet</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">defaultSerializer</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">defaultSerializer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JdkSerializationRedisSerializer</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getClassLoader</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">enableDefaultSerializer</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">keySerializer</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">keySerializer</span> <span class="o">=</span> <span class="n">defaultSerializer</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">valueSerializer</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">valueSerializer</span> <span class="o">=</span> <span class="n">defaultSerializer</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">hashKeySerializer</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">hashKeySerializer</span> <span class="o">=</span> <span class="n">defaultSerializer</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">hashValueSerializer</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">hashValueSerializer</span> <span class="o">=</span> <span class="n">defaultSerializer</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>RedisSerializerOperations与RedisTemplate中的序列化实现方式一致，采用JdkSerializationRedisSerializer作为默认的序列化方式，用户可以根据自己需要，对key和value配置不同的序列化方式。</p>
+
+<p>有上面所说的几个类实现的功能:</p>
+<ul>
+  <li><code class="highlighter-rouge">注解类-EnableShardedRedisHttpSession</code></li>
+  <li><code class="highlighter-rouge">配置类-ShardedRedisHttpSessionConfiguration</code></li>
+  <li><code class="highlighter-rouge">实现SessionRepository的session管理类</code></li>
+  <li><code class="highlighter-rouge">分片redis client</code></li>
+  <li><code class="highlighter-rouge">redis序列化类</code></li>
+</ul>
+
+<p>就可以扩展spring session，实现自定义的redis实现方式。</p>
+
+
+	<ul class="pager">
+            
+            <li class="previous"><a href="/posts/blog/17/02/12/spring-session.html" title="spring session源码解析">上一篇 spring session源码解析</a></li>
+	    
+
+            
+	</ul>
+	<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hongbing.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    </div>
+
+    <div class="sidenav">
+	<iframe width="100%" height="85" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=85&fansRow=2&ptype=1&speed=0&skin=1&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=2702608131&verifier=f3af5509&dpc=1"></iframe>
+    </div>
+
+    <div class="sidenav">
+        <h2>Blog</h2>
+        <ul class="artical-list">
+        
+            <li><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html">spring-session支持分片redis</a></li>
+        
+            <li><a href="/posts/blog/17/02/12/spring-session.html">spring session源码解析</a></li>
+        
+            <li><a href="/posts/blog/16/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
+        
+            <li><a href="/posts/blog/16/05/19/hardware-interrupt-balance.html">硬件中断均衡</a></li>
+        
+            <li><a href="/posts/blog/16/04/17/a-oom-problem.html">一次oom的排查过程</a></li>
+        
+            <li><a href="/posts/blog/15/11/14/monitor-principle.html">监控模式</a></li>
+        
+            <li><a href="/posts/blog/15/11/14/jetty-deadlock.html">jetty6 deadlock</a></li>
+        
+            <li><a href="/posts/blog/15/08/21/linux-of-blockdump.html">linux系统之block_dump</a></li>
+        
+            <li><a href="/posts/blog/15/08/20/linux-of-pdflush.html">linux系统之pdflush</a></li>
+        
+            <li><a href="/posts/blog/15/08/11/UnknowHostException.html">UnknowHostException</a></li>
+        
+            <li><a href="/posts/blog/15/08/02/haproxy-install.html">haproxy部署</a></li>
+        
+            <li><a href="/posts/blog/15/07/25/maven-introduce.html">maven介绍</a></li>
+        
+            <li><a href="/posts/blog/15/06/21/etcd-vs-consul.html">ETCD vs. Consul</a></li>
+        
+            <li><a href="/posts/blog/15/06/21/distributed-id-generator.html">分布式ID生成器</a></li>
+        
+            <li><a href="/posts/blog/15/06/17/what-is-good-code.html">什么样的代码才是好的代码</a></li>
+        
+            <li><a href="/posts/blog/15/06/17/raft-introduce.html">Raft</a></li>
+        
+        </ul>
+<!--
+        <h2>Opinion</h2>
+        <ul class="artical-list">
+        
+        </ul>
+
+        <h2>Project</h2>
+        <ul class="artical-list">
+        
+        </ul>-->
+     </div>
+</div>
+<script src="/js/jquery-1.7.1.min.js"" type="text/javascript"></script>
+<script src="/js/post.js" type="text/javascript"></script>
+
+      
+
+</body>
+</html>

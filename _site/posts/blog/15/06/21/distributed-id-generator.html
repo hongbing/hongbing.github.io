@@ -88,11 +88,11 @@ ID大致有序。</li>
 
 <p>SnowFlake中的ID长度都是64位，由时间戳、节点号和序列编号组成。</p>
 
-<p><strong>时间戳</strong>以毫秒为单位，占41位，记录的是从 1288834974657 (Thu, 04 Nov 2010 01:42:54 GMT) 这一时刻到当前时间所经过的毫秒数。有时间戳，必然会存在着一个时间原点，默认情况下的时间元年为1970年1月1日 00:00:01。而在系统设计时，可以以当前的年份来表示元年，这样可以增加ID的使用年限。</p>
+<p><strong>时间戳</strong> 以毫秒为单位，占41位，记录的是从 1288834974657 (Thu, 04 Nov 2010 01:42:54 GMT) 这一时刻到当前时间所经过的毫秒数。有时间戳，必然会存在着一个时间原点，默认情况下的时间元年为1970年1月1日 00:00:01。而在系统设计时，可以以当前的年份来表示元年，这样可以增加ID的使用年限。</p>
 
-<p><strong>节点号</strong>在源码中被分成两部分，数据中心的 ID 和节点 ID，各自占 5 位。</p>
+<p><strong>节点号</strong> 在源码中被分成两部分，数据中心的 ID 和节点 ID，各自占 5 位。</p>
 
-<p><strong>序列编号</strong>为本地编号，占12位，从0开始，到4095，然后循环又从0开始，也就是说每一毫秒每个节点能够产生4096的ID号。</p>
+<p><strong>序列编号</strong> 为本地编号，占12位，从0开始，到4095，然后循环又从0开始，也就是说每一毫秒每个节点能够产生4096的ID号。</p>
 
 <p>还有一位为<strong>保留位</strong>，始终为0。</p>
 
@@ -185,6 +185,8 @@ ID大致有序。</li>
         <h2>Blog</h2>
         <ul class="artical-list">
         
+            <li><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html">spring-session支持分片redis</a></li>
+        
             <li><a href="/posts/blog/17/02/12/spring-session.html">spring session源码解析</a></li>
         
             <li><a href="/posts/blog/16/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
@@ -205,7 +207,7 @@ ID大致有序。</li>
         
             <li><a href="/posts/blog/15/08/02/haproxy-install.html">haproxy部署</a></li>
         
-            <li><a href="/posts/blog/15/07/25/maven-introduce.html">maven实践</a></li>
+            <li><a href="/posts/blog/15/07/25/maven-introduce.html">maven介绍</a></li>
         
             <li><a href="/posts/blog/15/06/21/etcd-vs-consul.html">ETCD vs. Consul</a></li>
         

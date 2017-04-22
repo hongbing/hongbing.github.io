@@ -48,7 +48,14 @@
 	<p>本文记录了在工作中常用的linux命令<!-- more -->。</p>
 
 <ul>
-  <li>查找某个端口运行的程序</li>
+  <li>
+    <p>文件保护，禁止编辑
+<code class="highlighter-rouge">chattr +i filename</code>
+使用<code class="highlighter-rouge">lsattr</code>显示文件的隐藏属性</p>
+  </li>
+  <li>
+    <p>查找某个端口运行的程序</p>
+  </li>
 </ul>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>lsof -i:[port]
@@ -213,10 +220,10 @@ cat /proc/net/sockstat`
 
 <div class="language-bash highlighter-rouge"><pre class="highlight"><code>sort -k2 sort.log | awk <span class="s1">'{
     n=a[$2]++;
-    if (n==0) 
+    if (n==0)
 	v=$0;
     else {
-	if (n==1) 
+	if (n==1)
 	    print v;
 	print $0
     }
@@ -336,7 +343,6 @@ awk <span class="s1">'{
 
 <p><img src="/images/linuxcommand/linux-command.png" alt="linux-command" /></p>
 
-
 	<ul class="pager">
             
             <li class="previous"><a href="/posts/blog/16/05/19/hardware-interrupt-balance.html" title="硬件中断均衡">上一篇 硬件中断均衡</a></li>
@@ -379,6 +385,8 @@ awk <span class="s1">'{
         <h2>Blog</h2>
         <ul class="artical-list">
         
+            <li><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html">spring-session支持分片redis</a></li>
+        
             <li><a href="/posts/blog/17/02/12/spring-session.html">spring session源码解析</a></li>
         
             <li><a href="/posts/blog/16/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
@@ -399,7 +407,7 @@ awk <span class="s1">'{
         
             <li><a href="/posts/blog/15/08/02/haproxy-install.html">haproxy部署</a></li>
         
-            <li><a href="/posts/blog/15/07/25/maven-introduce.html">maven实践</a></li>
+            <li><a href="/posts/blog/15/07/25/maven-introduce.html">maven介绍</a></li>
         
             <li><a href="/posts/blog/15/06/21/etcd-vs-consul.html">ETCD vs. Consul</a></li>
         

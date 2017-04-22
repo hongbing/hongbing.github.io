@@ -58,7 +58,7 @@
 <!-- more -->
   跟踪源代码发现<code class="highlighter-rouge">InetAddress.getLocalHost()</code>会调用<strong>Inet6AddressImpl</strong>或者<strong>Inet4AddressImpl</strong>的native方法：</p>
 
-<figure class="highlight"><pre><code class="language-java" data-lang="java"> 	<span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span> <span class="nf">getLocalHostName</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">UnknownHostException</span><span class="o">;</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span> <span class="nf">getLocalHostName</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">UnknownHostException</span><span class="o">;</span></code></pre></figure>
 
 <p>该native方法直接执行linux的系统调用gethostname。系统调用gethostname与在终端执行<code class="highlighter-rouge">$ hostname</code>或者<code class="highlighter-rouge">$ cat /etc/hostname</code>的结果一致。获得hostname后，比较该hostname的值，如果为localhost，则执行<code class="highlighter-rouge">impl.loopbackAddress();</code>获得localhost对应的ip地址。</p>
 
@@ -154,6 +154,8 @@
         <h2>Blog</h2>
         <ul class="artical-list">
         
+            <li><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html">spring-session支持分片redis</a></li>
+        
             <li><a href="/posts/blog/17/02/12/spring-session.html">spring session源码解析</a></li>
         
             <li><a href="/posts/blog/16/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
@@ -174,7 +176,7 @@
         
             <li><a href="/posts/blog/15/08/02/haproxy-install.html">haproxy部署</a></li>
         
-            <li><a href="/posts/blog/15/07/25/maven-introduce.html">maven实践</a></li>
+            <li><a href="/posts/blog/15/07/25/maven-introduce.html">maven介绍</a></li>
         
             <li><a href="/posts/blog/15/06/21/etcd-vs-consul.html">ETCD vs. Consul</a></li>
         

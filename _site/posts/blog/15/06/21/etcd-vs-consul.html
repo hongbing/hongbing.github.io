@@ -45,9 +45,7 @@
 <!--
 	
 -->
-	<h2 id="异同">异同</h2>
-
-<h3 id="1-协议">1. 协议</h3>
+	<h2 id="1-协议">1. 协议</h2>
 <ul>
   <li>
     <p>Etcd和consul均采用raft协议来保证server之间的数据一致性，但是consul还采用了gossip协议管理成员和传播消息。</p>
@@ -60,7 +58,7 @@
   </li>
 </ul>
 
-<h3 id="2-架构">2. 架构</h3>
+<h2 id="2-架构">2. 架构</h2>
 <ul>
   <li>
     <p>Etcd不支持多数据中心，<!-- more -->consul支持多数据中心</p>
@@ -76,7 +74,7 @@
   </li>
 </ul>
 
-<h3 id="3-数据处理">3. 数据处理</h3>
+<h2 id="3-数据处理">3. 数据处理</h2>
 <ul>
   <li><code class="highlighter-rouge">Consul集群中的所有请求都会重定向到server，对于非leader的server会将写请求转发给leader处理</code>。对于读请求支持3种一致性模式：
     <ul>
@@ -94,7 +92,7 @@
 <p>对于写请求来说，两者都必须经过leader的强一致来处理。但是对于读请求，consul的default模式在etcd被认为是consistent，consul的stale模式在etcd是被当作默认的一致性模式。
 Etcd使用强一致性读需要添加参数<code class="highlighter-rouge">quorum=true</code></p>
 
-<h3 id="4-健康检测">4. 健康检测</h3>
+<h2 id="4-健康检测">4. 健康检测</h2>
 <ul>
   <li>
     <p>Consul支持健康检测，包括应用级和系统级两种健康检测。</p>
@@ -104,7 +102,7 @@ Etcd使用强一致性读需要添加参数<code class="highlighter-rouge">quoru
   </li>
 </ul>
 
-<h3 id="5--压测">5.  压测</h3>
+<h2 id="5--压测">5.  压测</h2>
 <ul>
   <li>
     <p>Etcd支持单实例1000次/s的写请求</p>
@@ -114,7 +112,7 @@ Etcd使用强一致性读需要添加参数<code class="highlighter-rouge">quoru
   </li>
 </ul>
 
-<h3 id="6-安全">6. 安全</h3>
+<h2 id="6-安全">6. 安全</h2>
 <ul>
   <li>
     <p>Consul支持ACL，Etcd不支持（TODO）</p>
@@ -124,7 +122,7 @@ Etcd使用强一致性读需要添加参数<code class="highlighter-rouge">quoru
   </li>
 </ul>
 
-<h3 id="7-kv存储">7. KV存储</h3>
+<h2 id="7-kv存储">7. KV存储</h2>
 <ul>
   <li>
     <p>Etcd和Consul均采用类似与U/Linux文件目录格式存储，Etcd支持隐藏的目录节点（以<code class="highlighter-rouge">/—</code>开始的key，不知道做什么用，在V3版可能去掉），etcd存储的value可以直接采用json文件，xml文件，txt文件等。</p>
@@ -134,7 +132,7 @@ Etcd使用强一致性读需要添加参数<code class="highlighter-rouge">quoru
   </li>
 </ul>
 
-<h3 id="8-变更通知">8. 变更通知</h3>
+<h2 id="8-变更通知">8. 变更通知</h2>
 <ul>
   <li>
     <p>Etcd使用long polling监听某一个key的变化，当变化发生时将变化key的相关信息推送给监听key的client。同时，还可以监听最近1000次以内的key的变化情况（X-Etcd-Index表示当前获取的key的index）。</p>
@@ -145,7 +143,7 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
   </li>
 </ul>
 
-<h3 id="9-节点变更或故障处理">9. 节点变更或故障处理</h3>
+<h2 id="9-节点变更或故障处理">9. 节点变更或故障处理</h2>
 <ul>
   <li>
     <p>Etcd中的server故障（硬件故障等难以恢复的故障），应该尽快用新的服务器替换掉故障的机器，否则quorum机制可能产生影响。需要手动执行命令移除和添加新的member。如果故障机器中的数据大于50MB，最好将数据copy到新的机器中，否则leader会将store中的所有数据传输给该member，将会长时间占用带宽。</p>
@@ -155,7 +153,7 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
   </li>
 </ul>
 
-<h3 id="10-请求超时">10. 请求超时</h3>
+<h2 id="10-请求超时">10. 请求超时</h2>
 <ul>
   <li>
     <p>Etcd不对get request做超时处理，因为get request为non-blocking way。watch request也不设置超时。只对Delete, Put, Post, QuorumGet requests设置超时时间，超时发生要么请求的server故障，要么集群中的大多数server故障。</p>
@@ -165,7 +163,7 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
   </li>
 </ul>
 
-<h3 id="11-集群节点发现">11. 集群节点发现</h3>
+<h2 id="11-集群节点发现">11. 集群节点发现</h2>
 
 <p>Etcd支持三种节点发现功能：</p>
 
@@ -200,7 +198,7 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
   </li>
 </ul>
 
-<h3 id="12-统计数据">12. 统计数据</h3>
+<h2 id="12-统计数据">12. 统计数据</h2>
 <ul>
   <li>
     <p>Etcd支持node的统计数据，包括latency, bandwidth和uptime， Store的统计数据。</p>
@@ -210,7 +208,7 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
   </li>
 </ul>
 
-<h3 id="13-输出信息格式">13. 输出信息格式</h3>
+<h2 id="13-输出信息格式">13. 输出信息格式</h2>
 <ul>
   <li>Etcd和Consul均采用json格式输出</li>
 </ul>
@@ -225,7 +223,7 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
 	    
 
             
-            <li class="next"><a href="/posts/blog/15/07/25/maven-introduce.html" title="maven实践">下一篇 maven实践</a></li>
+            <li class="next"><a href="/posts/blog/15/07/25/maven-introduce.html" title="maven介绍">下一篇 maven介绍</a></li>
             
 	</ul>
 	<div id="disqus_thread"></div>
@@ -261,6 +259,8 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
         <h2>Blog</h2>
         <ul class="artical-list">
         
+            <li><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html">spring-session支持分片redis</a></li>
+        
             <li><a href="/posts/blog/17/02/12/spring-session.html">spring session源码解析</a></li>
         
             <li><a href="/posts/blog/16/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
@@ -281,7 +281,7 @@ Consul某些节点的监听使用long polling等待直到监听的X-Consul-Index
         
             <li><a href="/posts/blog/15/08/02/haproxy-install.html">haproxy部署</a></li>
         
-            <li><a href="/posts/blog/15/07/25/maven-introduce.html">maven实践</a></li>
+            <li><a href="/posts/blog/15/07/25/maven-introduce.html">maven介绍</a></li>
         
             <li><a href="/posts/blog/15/06/21/etcd-vs-consul.html">ETCD vs. Consul</a></li>
         
