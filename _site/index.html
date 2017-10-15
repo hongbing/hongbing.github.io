@@ -32,6 +32,15 @@
     <ul class="artical-list">
       
       <li>
+        <h2><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html">动态变更log4j日志级别</a></h2>
+        <div class="title-desc">log4j的日志级别包括ALL，TRACE，DEBUG，INFO，WARN，ERROR, FATAL，OFF。日志级别从前往后越来越严格，ALL和OFF（日志级别的两个极端）在项目开发中都使用的比较少，可以说是基本不使用。每个级别在什么样的场景下使用这里就不多说了。下面说一下，为什么需要日志级别的动态变更？
+
+不管是第三方开发包，还是自己开发的项目工程，在调试的过程中都会有大量的TRACE，DEBUG日志，
+
+&hellip; <a href="/posts/blog/17/10/15/dynamic-change-logger-level.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
         <h2><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html">spring-session支持分片redis</a></h2>
         <div class="title-desc">前一篇博客解析了spring session源码，分析了spring session的内部结构。本篇将扩展spring session使用分片redis。在使用spring-session一段时间后，发现spring-session后端redis实例的内存容量不断增长，从刚开始的8G（阿里云ECS），一直扩容到现在的64G。阿里云ECS单机最大容量就到64G，集群版可支持256G。经过对redis rdb的分析，使用spring-session，每个用户占用约2K的内存。由于session key里面保存数据的差异，以及使用不同的序列化方式，每个用户占用内存大小对于不同的业务来说是不一样的。
 
@@ -61,13 +70,6 @@ Spring Session对HTTP的支持是通过标准的servlet filter来实现的，这
         <div class="title-desc">硬件与cpu沟通有两种方式，一种是中断，另一种是轮询。中断是硬件主动，产生中断信号，中断控制器将信号传递给cpu，cpu停下手中的工作，执行中断任务；轮询则为cpu主动，定时查询硬件设备的状态，是否处理硬件请求。
 
 &hellip; <a href="/posts/blog/16/05/19/hardware-interrupt-balance.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/16/04/17/a-oom-problem.html">一次oom的排查过程</a></h2>
-        <div class="title-desc">最近对平台内部的消息中间件添加了从kafka读取数据的功能（平台内部存在着多个消息中间件，主要是由不同的使用场景与历史沿革造成的）。原有逻辑是从mcq中读取消息，现在需要新增从kafka读取消息。
-
-&hellip; <a href="/posts/blog/16/04/17/a-oom-problem.html" style="font-weight:bold;">Read More</a></div>
       </li>
       
 

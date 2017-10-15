@@ -32,6 +32,13 @@
     <ul class="artical-list">
       
       <li>
+        <h2><a href="/posts/blog/16/04/17/a-oom-problem.html">一次oom的排查过程</a></h2>
+        <div class="title-desc">最近对平台内部的消息中间件添加了从kafka读取数据的功能（平台内部存在着多个消息中间件，主要是由不同的使用场景与历史沿革造成的）。原有逻辑是从mcq中读取消息，现在需要新增从kafka读取消息。
+
+&hellip; <a href="/posts/blog/16/04/17/a-oom-problem.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
         <h2><a href="/posts/blog/15/11/14/monitor-principle.html">监控模式</a></h2>
         <div class="title-desc">文章来源stop-monitoring-if-service-is-up
 由于最近组内在对各个项目的监控做梳理，并完善各个项目的监控报警，所以对监控方面关注的比较多些。
@@ -95,22 +102,6 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
         <div class="title-desc">当我们向磁盘文件写入数据时，由于内存与磁盘之间数据读取的差异，操作系统不会直接将数据写透（write through）到磁盘上，而是会写到页高速缓存（page cache）中，真正的写磁盘操作会延迟进行，称为写延迟（write delay）。当page cache中的数据比后端存储中的数据还要新时，称page cache中的数据为脏数据（或者脏页，dirty page）。page cache对被缓存的页面范围的定义非常宽泛，任何基于页的对象，包括各种类型
 
 &hellip; <a href="/posts/blog/15/08/20/linux-of-pdflush.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/15/08/11/UnknowHostException.html">UnknowHostException</a></h2>
-        <div class="title-desc">1 问题
-
-团队使用Docker中的测试环境，在新起的测试环境中启动消息队列项目，项目启动失败，抛出如下异常：
-
-UnknowHostException：
-	java.net.UnknownHostException: e7a05a2abfc5: e7a05a2abfc5: 未知的名称或服务
-
-2 分析
-
-异常信息栈显示抛出异常的地方在：InetAddress localHost = InetAddress.getLocalHost();
-
-&hellip; <a href="/posts/blog/15/08/11/UnknowHostException.html" style="font-weight:bold;">Read More</a></div>
       </li>
       
 

@@ -97,7 +97,7 @@
 
 <p>自定义的ShardedRedisOperationsSessionRepository实现了SessionRepository和MessageListener接口，ShardedRedisOperationsSessionRepository类在ShardedRedisHttpSessionConfiguration里面完成初始化。在ShardedRedisOperationsSessionRepository里面注入了一个ShardedRedisClient类，该类即为我们的分片redis，对redis的读写都在这个类中完成。ShardedRedisClient可以使用不同的hash算法来分片，也可以实现redis的读写分离。</p>
 
-<p>另外，由于spring session中对redis的操作都封装在RedisTemplate里面，RedisTemplate对redis的读写key和value都进行了序列化，因此还需要实现一个对redis的key和value进行序列化的类。</p>
+<p>另外，由于spring session中对redis的操作都封装在RedisTemplate里面，RedisTemplate对redis的读写key和value都进行了序列化，因此还需要实现一个对redis的key和value进行序列化的类。如果线上没有使用过spring-session，序列化类可以不需要，直接写入redis。因为我们线上使用过spring-session，为了兼容老数据的的读和写，因此需要跟RedisTemplate实现方式一致的序列化方式。</p>
 
 <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RedisSerializerOperations</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">enableDefaultSerializer</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
@@ -149,6 +149,8 @@
 	    
 
             
+            <li class="next"><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html" title="动态变更log4j日志级别">下一篇 动态变更log4j日志级别</a></li>
+            
 	</ul>
 	<div id="disqus_thread"></div>
 <script>
@@ -182,6 +184,8 @@
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html">动态变更log4j日志级别</a></li>
         
             <li><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html">spring-session支持分片redis</a></li>
         

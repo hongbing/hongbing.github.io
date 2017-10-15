@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>动态变更log4j日志级别 </title>
+    <meta name="author" content="hongbing" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="hongbing的部落格" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <link rel="shortcut icon" href="/jinchuan.png" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+      <div id="header_wrap" class="outer">
+        <header class="inner">
+                <div id="project_title" align="center"><a href="/">hongbingの部落格</a></div>
+                <div id="project_tagline" align="center">ONCE A GEEK, FOREVER A GEEK</div>
+    <!--    
+	        <div id="nav" class="navbar">
+                         <div id="home" class="navbar"><a href="/">Home</a></div>
+                         <div id="archive" class="navbar"><a href="/archive">Archive</a></div>
+                         <div id="about" class="navbar"><a href="/about">About</a></div>
+                </div>
+-->	</header>
+</div>
+ 
+         <link rel="stylesheet" href="/js/prettify/prettify.css" />
+<style type="text/css">
+    body { background:#e8e8e8; }
+    @media screen and (max-width: 750px){
+        body { background:#fff; }
+    }
+    @media screen and (max-width: 1020px){
+        body { background:#fff; }
+    }
+</style>
+
+<div id="content">
+    <div class="entry">
+        <h1 class="entry-title"><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html" title="动态变更log4j日志级别">动态变更log4j日志级别</a></h1>
+        <p class="entry-date">2017-10-15</p>
+<!--
+	
+-->
+	<p>log4j的日志级别包括ALL，TRACE，DEBUG，INFO，WARN，ERROR, FATAL，OFF。日志级别从前往后越来越严格，ALL和OFF（日志级别的两个极端）在项目开发中都使用的比较少，可以说是基本不使用。每个级别在什么样的场景下使用这里就不多说了。下面说一下，为什么需要日志级别的动态变更？</p>
+
+<p>不管是第三方开发包，还是自己开发的项目工程，在调试的过程中都会有大量的TRACE，DEBUG日志，<!-- more --> 然而上线之后这些TRACE，DEBUG日志绝大部分都不需要出现在业务日志中，一是日志量可能较大，占用存储空间，消耗性能，二是大量调试的日志会对线上业务相关的日志造成干扰。因此，线上日志的级别就被设定为INFO以及更严格的WARN。但是，当某一天线上某个功能不正常了，特别是第三方组件的问题，我们就抓瞎了。到底走到哪一步了，是什么样的结果，完全不知道，有TRACE，DEBUG日志也看不见，只得重新打包上线，更改日志输出等级。即便这样也只能粗略的把可能需要更改的包都改了，不能精确的定位到需要改哪个包，哪个类的日志输出等级。当解决问题后，还需要再上一次线把日志输出等级改回去。这里还需要考虑的是，有的问题一旦重启就复现不了了。要排查问题就不能轻易的重启。</p>
+
+<p>另一方面，不同的开发人员对于日志输出等级的控制理解不同，对于日志输出也有自己的认识。有的开发在输出日志时，会尽可能多的将日志都输出，不管什么方法，都在方法入口和出口都输出一句日志。我是不建议这种做法，一是在很多情况下都是对日志的一种浪费，二是不加思考的开发，对线上服务是一种很危险的行为。对于这样的情况，需要开发考虑在需要输出日志的地方才输出。如果线上出现问题，在疯狂的刷某一些相关的日志，但是某些日志特别长，信息特别多，对解决问题又没有帮助，这时我们就需要关闭一些日志的输出。</p>
+
+<p>基于上面的两种情况，都需要能够在线上动态的调整日志输出等级。</p>
+
+<p>再多说一点关于如何进行业务日志输出的问题。我的理解是，凡是写方法都应该有入口日志，入口日志应该详细描述入口参数以及可能影响写方法结果的变量，同时可以在方法出口增加返回值相关的日志；读方法可以选择性的加日志，对于按页读取数据的方法，返回值可能会很多，一般不要输出大面积的日志，或者把日志输出级别调低。</p>
+
+<p>Log4J2的文档里面有很详细的设置，更新logger输出等级的代码。我这里贴出项目里面使用的：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"> <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">ConcurrentHashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">loggerContainer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ConcurrentHashMap</span><span class="o">&lt;&gt;();</span>
+ <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">LoggerContext</span> <span class="n">loggerContext</span> <span class="o">=</span> <span class="o">(</span><span class="n">LoggerContext</span><span class="o">)</span> <span class="n">LogManager</span><span class="o">.</span><span class="na">getContext</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+
+ <span class="kd">public</span> <span class="kd">static</span> <span class="n">Pair</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="nf">setLoggerLevel</span><span class="o">(</span><span class="n">String</span> <span class="n">loggerName</span><span class="o">,</span> <span class="n">String</span> <span class="n">level</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">"set logger level, loggerName:{}, level:{}"</span><span class="o">,</span> <span class="n">loggerName</span><span class="o">,</span> <span class="n">level</span><span class="o">);</span>
+
+        <span class="n">LoggerConfig</span> <span class="n">loggerConfig</span> <span class="o">=</span> <span class="o">(</span><span class="n">LoggerConfig</span><span class="o">)</span> <span class="n">loggerContainer</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">loggerName</span><span class="o">);</span>
+        <span class="n">Level</span> <span class="n">targetLevel</span> <span class="o">=</span> <span class="n">StringUtils</span><span class="o">.</span><span class="na">isBlank</span><span class="o">(</span><span class="n">level</span><span class="o">)</span> <span class="o">?</span> <span class="n">Level</span><span class="o">.</span><span class="na">INFO</span> <span class="o">:</span> <span class="n">Level</span><span class="o">.</span><span class="na">toLevel</span><span class="o">(</span><span class="n">level</span><span class="o">);</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">loggerConfig</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">logger</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">"no loggerConfig for loggerName:{}"</span><span class="o">,</span> <span class="n">loggerName</span><span class="o">);</span>
+            <span class="k">return</span> <span class="n">Pair</span><span class="o">.</span><span class="na">makePair</span><span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="n">loggerName</span> <span class="o">+</span> <span class="s">" logger not exist."</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">loggerConfig</span><span class="o">.</span><span class="na">setLevel</span><span class="o">(</span><span class="n">targetLevel</span><span class="o">);</span>
+        <span class="n">loggerContext</span><span class="o">.</span><span class="na">updateLoggers</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">Pair</span><span class="o">.</span><span class="na">makePair</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="s">"set logger: "</span> <span class="o">+</span> <span class="n">loggerName</span> <span class="o">+</span> <span class="s">", level: "</span> <span class="o">+</span> <span class="n">targetLevel</span><span class="o">.</span><span class="na">name</span><span class="o">());</span>
+    <span class="o">}</span></code></pre></figure>
+
+<p>loggerName可以是某个包名，比如com.appache.zookeeper，设置之后会将该包下的所有日志等级都变更。当你只需要变更某个类中的输出日志等级时，指定loggerName为某个具体的类名即可。</p>
+
+<p>在线上使用log4j2的xml配置时，需要配置不同包的输出日志等级，以及输出到某个文件。配置log4j2的root Appender的level为INFO，然后设置输出文件的Appender的ThresholdFilter的level为DEBUG。也即 该文件可以输出TRACE及其以下的任何日志，但是默认的Root Appender的级别为INFO，所以只有info及其以下等级日志才会输出到文件。这样当更改线上某个类，或者某个包的级别时，都会输出到文件。</p>
+
+<p>注意：动态的变更了日志输出等级，当服务重启后动态变更的会失效，仍旧保持xml里配置的情况。所以特别适合临时调整线上日志级别。</p>
+
+<h5 id="参考">参考</h5>
+<p>[1] <a href="https://logging.apache.org/log4j/2.0/manual/architecture.html">https://logging.apache.org/log4j/2.0/manual/architecture.html</a></p>
+
+<p>[2] <a href="https://tech.meituan.com/change_log_level.html">https://tech.meituan.com/change_log_level.html</a></p>
+
+
+	<ul class="pager">
+            
+            <li class="previous"><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html" title="spring-session支持分片redis">上一篇 spring-session支持分片redis</a></li>
+	    
+
+            
+	</ul>
+	<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hongbing.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    </div>
+
+    <div class="sidenav">
+	<iframe width="100%" height="85" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=85&fansRow=2&ptype=1&speed=0&skin=1&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=2702608131&verifier=f3af5509&dpc=1"></iframe>
+    </div>
+
+    <div class="sidenav">
+        <h2>Blog</h2>
+        <ul class="artical-list">
+        
+            <li><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html">动态变更log4j日志级别</a></li>
+        
+            <li><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html">spring-session支持分片redis</a></li>
+        
+            <li><a href="/posts/blog/17/02/12/spring-session.html">spring session源码解析</a></li>
+        
+            <li><a href="/posts/blog/16/05/21/linux-common-command.html">工作中常用的linux命令</a></li>
+        
+            <li><a href="/posts/blog/16/05/19/hardware-interrupt-balance.html">硬件中断均衡</a></li>
+        
+            <li><a href="/posts/blog/16/04/17/a-oom-problem.html">一次oom的排查过程</a></li>
+        
+            <li><a href="/posts/blog/15/11/14/monitor-principle.html">监控模式</a></li>
+        
+            <li><a href="/posts/blog/15/11/14/jetty-deadlock.html">jetty6 deadlock</a></li>
+        
+            <li><a href="/posts/blog/15/08/21/linux-of-blockdump.html">linux系统之block_dump</a></li>
+        
+            <li><a href="/posts/blog/15/08/20/linux-of-pdflush.html">linux系统之pdflush</a></li>
+        
+            <li><a href="/posts/blog/15/08/11/UnknowHostException.html">UnknowHostException</a></li>
+        
+            <li><a href="/posts/blog/15/08/02/haproxy-install.html">haproxy部署</a></li>
+        
+            <li><a href="/posts/blog/15/07/25/maven-introduce.html">maven介绍</a></li>
+        
+            <li><a href="/posts/blog/15/06/21/etcd-vs-consul.html">ETCD vs. Consul</a></li>
+        
+            <li><a href="/posts/blog/15/06/21/distributed-id-generator.html">分布式ID生成器</a></li>
+        
+            <li><a href="/posts/blog/15/06/17/what-is-good-code.html">什么样的代码才是好的代码</a></li>
+        
+            <li><a href="/posts/blog/15/06/17/raft-introduce.html">Raft</a></li>
+        
+        </ul>
+<!--
+        <h2>Opinion</h2>
+        <ul class="artical-list">
+        
+        </ul>
+
+        <h2>Project</h2>
+        <ul class="artical-list">
+        
+        </ul>-->
+     </div>
+</div>
+<script src="/js/jquery-1.7.1.min.js"" type="text/javascript"></script>
+<script src="/js/post.js" type="text/javascript"></script>
+
+      
+
+</body>
+</html>
