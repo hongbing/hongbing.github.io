@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>haproxy部署 </title>
+    <title>20171015一周坑 </title>
     <meta name="author" content="hongbing" />
     <meta name="renderer" content="webkit">
     <meta name="description" content="hongbing的部落格" />
@@ -40,125 +40,99 @@
 
 <div id="content">
     <div class="entry">
-        <h1 class="entry-title"><a href="/posts/blog/15/08/02/haproxy-install.html" title="haproxy部署">haproxy部署</a></h1>
-        <p class="entry-date">2015-08-02</p>
+        <h1 class="entry-title"><a href="/posts/blog/17/10/15/daily-shit.html" title="20171015一周坑">20171015一周坑</a></h1>
+        <p class="entry-date">2017-10-15</p>
 <!--
 	
 -->
-	<h2 id="1-安装">1 安装</h2>
+	<h5 id="1-disconf加载类的坑">1. disconf加载类的坑</h5>
+<p>在做push工程的时候，使用disconf动态配置极光的masterSecret和key，但是一直不成功，配置无法更新，始终使用的是默认的配置值。disconf下载的本地文件里面，各项配置都是动态更新的，而且在其他工程里面同样的使用方式都没有问题，判断是因为配置类没有被disconf加载到导致的。
+为什么没有被加载到？ <!-- more --></p>
 
-<p>下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），<strong>Fuck GFW</strong>。
- 可以通过直接访问http://www.haproxy.org/download/1.5/src/地址，选择相应的版本下载。或者使用wget命令</p>
+<p>disconf相关配置如下：</p>
 
-<pre><code class="language-Bash"> wget http://www.haproxy.org/download/1.5/src/haproxy-1.5.12.tar.gz
-</code></pre>
-
-<p>下载，下载完成后，将其解压。</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd </span>haproxy-1.5.12
-uname -a
-make <span class="nv">TARGET</span><span class="o">=</span>linux26 <span class="nv">PREFIX</span><span class="o">=</span>/usr/local/haproxy install</code></pre></figure>
-
-<!-- more -->
-<p>linux26,26表示linux系统的主次版本号。
-执行上面的命令，输出done就正确安装完成。</p>
-
-<h2 id="2-配置">2 配置</h2>
-
-<ul>
-  <li>修改配置</li>
-</ul>
-
-<p>配置文件可以参考源码里面examples下面的haproxy.cfg文件，haproxy里的配置参数可到<a href="http://cbonte.github.io/haproxy-dconv/index.html">haproxy-dconv</a>查看。</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /usr/local/haproxy
-mkdir conf logs
-vim /conf/haproxy.cfg</code></pre></figure>
-
-<p>下面是参考配置</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>global  //全局配置参数，进程级
-    log 127.0.0.1 local0//日志输出配置，所有日志都记录在本机，通过local0输出
-    maxconn  5120  //每个进程的最大连接数
-    chroot   /usr/local/haproxy  //改变当前工作目录
-    uid      100  //所属用户的uid
-    gid      100  //所属用户的gid
-    daemon  //以后台形式运行haproxy   
-    nbproc   2  //创建2个进程进去deamon模式
-    pidfile  /usr/local/haproxy/logs/haproxy.pid  //pid文件
-defaults  
-    log     127.0.0.1  local3  err
-    mode    http  //http七层,tcp4层,health只返回OK
-    option  httplog  //采用httpd日志格式
-    option  dontlognull  
-    option  redispatch  
-    retries 3  //三次失败认为服务不可用
-    maxconn 3000  //默认的最大连接数
-    contimeout 5000  //连接超时时间
-    clitimeout 50000  //客户端超时时间
-    srvtimeout 50000  //服务器超时时间
-    stats enable  
-    stats uri /admin  //统计页面的url
-    stats auth admin:admin  //统计页面的用户名密码
-    stats realm Haproxy \ statistic  //统计页面提示信息
-    stats hide-version//隐藏统计页面版本信息
-
-    listen web_proxy *:80
-          server web1 192.168.1.128:80 check inter 5000 fall 1 rise 2  
-          server web1 192.168.1.128:8080 check inter 5000 fall 1 rise 2
-    //check inter 5000 是检测心跳频率，rise 2 是2次正确认为服务可用，fall 1 是1次失败认为服务不可用，weight代表权重
+<div class="highlighter-rouge"><pre class="highlight"><code> &lt;bean id="disconfMgrBean" class="com.baidu.disconf.client.DisconfMgrBean"
+          destroy-method="destroy"&gt;
+        &lt;property name="scanPackage" value="com.uxin.zb,  com.uxin.commons"/&gt;
+    &lt;/bean&gt;
+    &lt;bean id="disconfMgrBean2" class="com.baidu.disconf.client.DisconfMgrBeanSecond"
+          init-method="init" destroy-method="destroy"&gt;
+    &lt;/bean&gt;
 </code></pre>
 </div>
 
-<p>global是进程级别的参数；代理参数可以设置defaults，listen，frontend和backend。listen是frontend和backend的组合，可以设置frontend的端口，backend的server节点，以及一些其他参数。</p>
+<p>打开disconf的debug日志，可以看到在disconf静态扫描时候的日志</p>
+<blockquote>
+  <p>start to scan package: com.uxin.zb,  com.uxin.commons</p>
+</blockquote>
 
-<ul>
-  <li>配置日志环境</li>
-</ul>
+<p>说明disconf已经开始要去加载这两个包，但是为什么包里面的配置相关的类没有加载进来呢？看代码也没发现什么问题，只得下载disconf的源码，在源码里面加了些DEBUG日志，然后打包在测试环境使用，最终发现问题所在。</p>
 
-<p>在/etc/syslog.conf文件中添加，如下：</p>
+<p>在初始化DisconfMgrBean的时候，会根据scanPackage参数来解析需要扫描的包名，解析方法是下面的<code class="highlighter-rouge">StringUtil.parseStringToStringList()</code>， 参数token为逗号，source即为’com.uxin.zb,  com.uxin.commons’，因为在逗号之间多加了个空格，所以解析出来的包包括com.uxin.zb和空格com.uxin.commons, 因此在根据包名查找classpath下面相应的文件时就没有找到对应com.uxin.commons包的zb-commons.jar包，导致了配置类没有加载进来，无法使用disconf的动态配置。</p>
 
-<figure class="highlight"><pre><code class="language-conf" data-lang="conf"><span class="n">local0</span>.*        /<span class="n">usr</span>/<span class="n">local</span>/<span class="n">logs</span>/<span class="n">haproxy</span>.<span class="n">log</span>
-<span class="n">local3</span>.*        /<span class="n">usr</span>/<span class="n">local</span>/<span class="n">logs</span>/<span class="n">haproxy_err</span>.<span class="n">log</span></code></pre></figure>
+<p>一个空格导致的问题，也是disconf的一个bug。</p>
 
-<p>如果系统需要设置接收外来日志，修改/etc/sysconfig/syslog文件：</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>public static List&lt;String&gt; parseStringToStringList(String source,
+                                                       String token) {
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">SYSLOGD_OPTIONS</span><span class="o">=</span><span class="s2">"-r -m 0"</span></code></pre></figure>
+        if (StringUtils.isBlank(source) || StringUtils.isEmpty(token)) {
+            return null;
+        }
 
-<ul>
-  <li>启动命令</li>
-</ul>
+        List&lt;String&gt; result = new ArrayList&lt;String&gt;();
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">./sbin/haproxy -f ./conf/haproxy.cfg</code></pre></figure>
+        String[] units = source.split(token);
+        for (String unit : units) {
+            result.add(unit);
+        }
+        return result;
+    }
 
-<ul>
-  <li>重启命令</li>
-</ul>
+</code></pre>
+</div>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">./sbin/haproxy -f ./conf/haproxy.cfg -st <span class="o">[</span>haproxy.pid]</code></pre></figure>
+<h5 id="2-drds使用mysql别名的坑">2. DRDS使用mysql别名的坑</h5>
+<p>项目中使用mybatis操作数据库，自定义了查询主播粉丝uid的最大值和最小值的mapper，最大值和最小值都使用了别名，返回结果map。在返回结果里读取粉丝uid的最大值和最小值<code class="highlighter-rouge">map.get("maxUid"), map.get("minUid")</code>。在测试环境里面测试通过了，上线之后就发现了NPE异常。</p>
 
-<ul>
-  <li>停止命令</li>
-</ul>
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;select id="selectMaxMinByToUid" parameterType="java.lang.Long" resultType="java.util.Map"&gt;
+    select max(from_uid) as "maxUid",
+    min(from_uid) as "minUid"
+    from user_follow
+    where to_uid = #{toUid,jdbcType=BIGINT}
+  &lt;/select&gt;
+</code></pre>
+</div>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">killall haproxy</code></pre></figure>
+<p>分析测试环境与线上的差异，测试环境使用的是本机mysql数据库，线上用户关系库使用的是阿里云的drds。在线上执行mybatis解析后的sql语句</p>
+<div class="highlighter-rouge"><pre class="highlight"><code> mysql&gt; select max(from_uid) as "maxUid", min(from_uid) as "minUid" from user_follow where to_uid=18xxxxxx;
++---------------+---------------+
+| 'maxUid'      | 'minUid'      |
++---------------+---------------+
+| 20xxxxxxxxxx1 | 17xxxxxxxxxx3 |
++---------------+---------------+
+</code></pre>
+</div>
 
-<ul>
-  <li>reload配置</li>
-</ul>
+<p>发现返回的map结果中的key并不是maxUid和minUid，而是’maxUid’和’minUid’，所以后续再读取这两个key的时候会抛出NPE异常。再测试一下将别名的双引号去掉，返回的key就没有单引号。同样的语句，不管是别名有没有双引号在mysql中执行时，返回的key都是不带单引号的。因此，断定是阿里云的drds给带有双引号的别名的返回结果加上了单引号。</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">./sbin/haproxy -f ./conf/haproxy.cfg -sf <span class="o">[</span>haproxy.pid]</code></pre></figure>
+<div class="highlighter-rouge"><pre class="highlight"><code>mysql&gt; select max(from_uid) as maxUid, min(from_uid) as minUid from user_follow where to_uid=188xxxxx;
++---------------+---------------+
+| maxUid        | minUid        |
++---------------+---------------+
+| 191xxxx111111 | 17xxxxxxx9623 |
++---------------+---------------+
+</code></pre>
+</div>
+<p>解决方法就是将别名的双引号去掉就ok了。</p>
 
-<p>可以在修改haproxy.cfg后，快速重载变更配置。
-<img src="/images/haproxy/haproxy.jpg" alt="haproxy" /></p>
 
 	<ul class="pager">
             
-            <li class="previous"><a href="/posts/blog/15/07/25/maven-introduce.html" title="maven介绍">上一篇 maven介绍</a></li>
+            <li class="previous"><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html" title="spring-session支持分片redis">上一篇 spring-session支持分片redis</a></li>
 	    
 
             
-            <li class="next"><a href="/posts/blog/15/08/11/UnknowHostException.html" title="UnknowHostException">下一篇 UnknowHostException</a></li>
+            <li class="next"><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html" title="动态变更log4j日志级别">下一篇 动态变更log4j日志级别</a></li>
             
 	</ul>
 	<div id="disqus_thread"></div>
