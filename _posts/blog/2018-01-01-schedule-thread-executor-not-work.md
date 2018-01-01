@@ -1,11 +1,11 @@
 ---
 layout: post
-title: ScheduledThreadPoolExecutor任务怎么不定时执行了
+title: 定时任务怎么不定时执行了
 description: 定时器任务在执行一段时间之后停止了，为什么呢？
 categories: posts blog
 ---
 
-2017年的元旦假期，测试反馈说微博里红豆直播间的观看人数在一段时间内都没有变化。接到问题的第一反应是不是前一天上线导致的？一个好好的系统功能，突然在某一天不正常工作了，如果恰巧前面有一次有上线变更，那么90%的原因就是上线变更导致的。我赶紧看一下前一天的上线是否涉及到这一块儿的内容？<!-- more -- > 经过查看比对，发现上线的功能完全不涉及这里，于是否定了前面的假设。
+2017年的元旦假期，测试反馈说微博里红豆直播间的观看人数在一段时间内都没有变化。接到问题的第一反应是不是前一天上线导致的？一个好好的系统功能，突然在某一天不正常工作了，如果恰巧前面有一次有上线变更，那么90%的原因就是上线变更导致的。我赶紧看一下前一天的上线是否涉及到这一块儿的内容？<!-- more --> 经过查看比对，发现上线的功能完全不涉及这里，于是否定了前面的假设。
 
 微博里红豆直播间展示的计数是由我们定时推送过去的，现在就需要去看看我们的推送逻辑是否有问题了。计数的推送逻辑很简单，如果直播间的观看人数有变化，就发送一条kafka消息，消费端接收到kafka消息然后定时同步到微博。定时逻辑使用的是ScheduledThreadPoolExecutor线程池，每隔30秒同步一次数据。该ScheduledThreadPoolExecutor的初始化和定时启动在kafka消费线程的初始化逻辑里面。即只要kafka消费端线程启动了，ScheduledThreadPoolExecutor就会启动定时任务。
 
@@ -46,10 +46,11 @@ categories: posts blog
 那么，partition不够是不是问题的根本原因呢？是不是问题得到了根本的解决？通过查看日志还有一个异常的情况：211和212两台机器上，始终没有“start execute scheduled sync room. size”日志出现，即便在增加partition到16个之前也没有日志出现，这又是怎么回事儿？服务恢复正常的根本原因是什么？
 
 我们重新来梳理一下现场：
-1）一开始只有211和212在消费“sync_room_counters_change”的topic消息，没有堆积，消费正常，但是没有定时任务的入口日志。
-2）其余机器有定时任务的入口日志，但是size的大小都为0。
-3）当将partition增加到16个之后，其余机器定时器的入口日志size的大小都不为0了，推送数据正常
-4）当将partition增加到16个之后，211和212机器仍然没有定时任务的入口日志。
+
++ 一开始只有211和212在消费“sync_room_counters_change”的topic消息，没有堆积，消费正常，但是没有定时任务的入口日志。
++ 其余机器有定时任务的入口日志，但是size的大小都为0。
++ 当将partition增加到16个之后，其余机器定时器的入口日志size的大小都不为0了，推送数据正常
++ 当将partition增加到16个之后，211和212机器仍然没有定时任务的入口日志。
 
 从梳理的现场来看，增加partition能够让服务恢复正常（也许是临时），但是并不是服务不正常的真正原因，因为211和212并没有出现什么变化。接下来着重分析211和212机器。
 
@@ -72,9 +73,12 @@ StatLog.registerExecutor("room_counters_change", scheduledExecutor);
 根据scheduleAtFixedRate()和scheduleWithFixedDelay()方法的约定，任务的执行周期将在ExecutorService终止时或者任务执行时有异常抛出的时候结束。
 
 通过这篇文章的指引与同事的沟通，找到了scheduledExecutor.scheduleWithFixedDelay执行过程中roomService.getBatchRoomInfoWithStatistic(roomIds)方法因为超时抛出异常的日志，确定了是因为异常情况导致了定时器不再定时执行，同时用test case也模拟了定时器遇到异常不定时执行的场景。
-修复问题的方式反而显得简单了，在scheduledExecutor.scheduleWithFixedDelay的执行方法里面加上try...catch。同时得出一个结论：在scheduledExecutor的执行方法里面都应该用try...catch，避免因为异常导致定时器终止。
+修复问题的方式反而显得简单了，在scheduledExecutor.scheduleWithFixedDelay的执行方法里面加上try...catch。
+
+同时得出一个结论：`在scheduledExecutor的执行方法里面都应该用try...catch，避免因为异常导致定时器终止。`
 
 在这次排查问题的过程中，有一些思考：
+
 恢复故障仍然是第一位的，遇到问题需要依靠经验及时把不相关的因素排除，不要纠结于一个点上，可以不断提出假设，并用多个方面的证据（日志，现象等）佐证你的判断。
 线上执行了某个操作，是否有相应的结果出来？服务恢复了，问题的根本原因是不是找到了？本次排查过程中，增加partition的操作确实让服务恢复了，但是并不是问题出现的根本原因。
 要深入细节，追根溯源，到底哪个是原因，哪个是结果。
