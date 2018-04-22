@@ -35,10 +35,10 @@ categories: posts blog
 
 6. 执行第6步之前，所有小说数据的读和写还是走的老逻辑，即读写A，A中的数据没有经过任何人为的变更，因此前5步操作并不会对线上服务产生任何影响。
 切读，小说数据的读请求走B。当切读后，所有小说数据来自于B，这一步应当随时关注监控，报警，线上反馈，如果有问题，立即将读请求切回到A。然后排查B中的数据问题。直到B中的数据没问题之后，才能再次切读。 
-![cache-split-2](/images/cache-split/cache-split-4.png)
+![cache-split-2](/images/cache-split/cache-split-6.png)
 
 7. 现在小说的数据双写A和B，读的是B，当这种情况在线上稳定运行一段时间（一般是以周为记）之后，可以考虑将双写下掉。下掉双写，小说数据的读和写都走B，此时redis缓存的拆分和数据迁移绝大部分已经完成，只剩下数据的清理工作。
-![cache-split-2](/images/cache-split/cache-split-4.png)
+![cache-split-2](/images/cache-split/cache-split-7.png)
 
 8. 清理A和B中的数据，将A中所有小说相关的数据移除，将B中所有非小说的数据移除。
 
