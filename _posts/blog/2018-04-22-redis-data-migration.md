@@ -50,7 +50,7 @@ categories: posts blog
 
 双写逻辑会造成一定的性能损失，但是不可避免。如果没有外部工具能够实现A和B之间的数据同步，应该自己实现这样的工具。在切读之前，必须在一个实例中保存有完整的数据，一旦数据迁移有问题，可以随时切回去，必须要有回滚方案。另外，每一次开关操作都伴随着数据的校验，有可能还伴随着数据的清洗，细心是必不可少的。如果对于短时间内的数据不敏感，也可以选择不洗数据。
 
-![brunette](/image/cache-split/brunette-3.jpg)
+![brunette](/images/cache-split/brunette-3.jpg)
 
 ## 6 参考
 [1] [阿里云redis-tdb-tools](https://help.aliyun.com/knowledge_detail/50037.html)
