@@ -58,35 +58,32 @@
   </li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>lsof -i:[port]
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsof -i:[port]
 
 netstat -antp | grep [port]
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>注意使用上述两个命令都需要root权限。</p>
 
 <ul>
   <li>创建软链</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ln -s target_file_name symblic_file_name
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ln -s target_file_name symblic_file_name
+</code></pre></div></div>
 <p>target_file_name 为已经存在的文件名，symblic_file_name为需要创建的软链文件名。该命令会在当前目录创建一个名为symblic_file_name的软链文件，链接到target_file_name上。</p>
 
 <ul>
   <li>解除软链</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>unlink mySymblink
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>unlink mySymblink
+</code></pre></div></div>
 
 <ul>
   <li>sar命令查看系统状况</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>// 查看磁盘io
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 查看磁盘io
 sar -d 1 10
 
 // 查看tcp状况
@@ -94,38 +91,34 @@ sar -n TCP,ETCP 1 10
 
 // 查看设备读写速率
 sar -n DEV 1 10
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>查看cpu架构</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>lscpu
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lscpu
+</code></pre></div></div>
 
 <ul>
   <li>查看系统版本,linux版本号</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>uname -a
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uname -a
 
 uname -r
 
 cat /proc/version
 
 lsb_release -a
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>cpu绑定</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>taskset -pc [cid] [pid]
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>taskset -pc [cid] [pid]
+</code></pre></div></div>
 
 <p>cid表示需要绑定的cpu id号，pid为进程号。参数没有cid表示查看当前pid的cpu绑定情况。通过
 <code class="highlighter-rouge">cat /proc/cpuinfo | grep processor</code>查看当前的cpu核数.</p>
@@ -136,37 +129,33 @@ lsb_release -a
   <li>查看某一个进程占用的内存大小：</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>top -d 1 -p [pid]
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>top -d 1 -p [pid]
+</code></pre></div></div>
 
 <p>top查看到的RES或者RSS是进程的实际内存，VSZ或者VIRT是虚拟内存（表示当前没有用到，可能会用到的内存大小）,然而，RES的内存大小还包括了共享内存的大小，使用<code class="highlighter-rouge">pmap -d [pid]</code>可以在最后一行查看到实际内存与共享内存的大小。</p>
 
 <p>与top命令相关的：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>top，shift + p // 各进程按CPU从高到低排序
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>top，shift + p // 各进程按CPU从高到低排序
 top，shift + h // 查看各线程占用CPU情况
 top，shift + m // 各进程按内存使用（RES）大小排序显示
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>查看当前目录下所占存储最大的10个文件：</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>du -hsx * | sort -rh | head -10
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>du -hsx * | sort -rh | head -10
+</code></pre></div></div>
 
 <ul>
   <li>查看历史命令：</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ctrl + r
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ctrl + r
 
 history | grep "mysql"
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>使用CTRL+p和CTRL+n还可以向前和向后查找上一条或者下一条命令。</p>
 
@@ -174,51 +163,46 @@ history | grep "mysql"
   <li>查看某一个文件中的字符串出现的次数</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>grep -o 'helolo' info.txt | wc -l
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grep -o 'helolo' info.txt | wc -l
+</code></pre></div></div>
 
 <ul>
   <li>针对gz的文件，使用上面的命令无效，需要使用zcat</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>zcat info.gz | grep -o 'helolo' | wc -l
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zcat info.gz | grep -o 'helolo' | wc -l
+</code></pre></div></div>
 
 <ul>
   <li>查看系统连接状况</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ss -s
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ss -s
+</code></pre></div></div>
 
 <ul>
   <li>TCP 连接状态数量统计</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
 
 netstat -ant | grep ':8082' | awk '{print $6}' | sort | uniq -c
 
 cat /proc/net/sockstat`
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>排序(对out.txt的第二列排序，-n表示对数字排序，-f表示大小写不敏感)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sort -n -k2 out.txt
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sort -n -k2 out.txt
+</code></pre></div></div>
 
 <ul>
   <li>对第二列排序，并将第二列相同的整行输出</li>
 </ul>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>sort -k2 sort.log | awk <span class="s1">'{
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sort</span> <span class="nt">-k2</span> sort.log | <span class="nb">awk</span> <span class="s1">'{
     n=a[$2]++;
     if (n==0)
 	v=$0;
@@ -228,23 +212,21 @@ cat /proc/net/sockstat`
 	print $0
     }
 }'</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>将所有数据转换成一整行</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>awk '{printf("%s ",$i)}' filename
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>awk '{printf("%s ",$i)}' filename
+</code></pre></div></div>
 
 <ul>
   <li>矩阵转置</li>
 </ul>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="c"># 使用数组的方式</span>
-awk <span class="s1">'{
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 使用数组的方式</span>
+<span class="nb">awk</span> <span class="s1">'{
     for(i=1;i&lt;=NF;i++){
 	a[FNR,i]=$i
     }
@@ -259,7 +241,7 @@ END{
 }'</span> file.text
 
 <span class="c"># 将相同的NF串联起来的方式</span>
-awk <span class="s1">'{
+<span class="nb">awk</span> <span class="s1">'{
     for (i = 1; i &lt;= NF; ++i) {
         if (NR == 1)  s[i] = $i;
         else s[i] = s[i] " " $i;
@@ -269,32 +251,28 @@ awk <span class="s1">'{
         print s[i];
     }
 }'</span> file.text
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>按CPU利用率从大到小排列</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ps -e -o "%C : %p : %z : %a"|sort -nr
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps -e -o "%C : %p : %z : %a"|sort -nr
+</code></pre></div></div>
 
 <ul>
   <li>查看进程，按内存从大到小排列</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ps -e -o "%C : %p : %z : %a"|sort -k5 -nr
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps -e -o "%C : %p : %z : %a"|sort -k5 -nr
+</code></pre></div></div>
 
 <ul>
   <li>查看系统cpu物理个数，核数以及逻辑个数</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l;cat /proc/cpuinfo| grep "cpu cores"| uniq;cat /proc/cpuinfo| grep "processor"| wc -l
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l;cat /proc/cpuinfo| grep "cpu cores"| uniq;cat /proc/cpuinfo| grep "processor"| wc -l
+</code></pre></div></div>
 
 <ul>
   <li>文件拷贝</li>
@@ -302,16 +280,15 @@ awk <span class="s1">'{
 
 <p>1.将本地文件拷贝到远程机器上</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>scp 本地用户名@IP地址:文件名  远程用户名@IP地址 : 文件夹名
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp 本地用户名@IP地址:文件名  远程用户名@IP地址 : 文件夹名
+</code></pre></div></div>
 
 <p>例：scp  info.log  root@10.210.230.46:/data7/jetty8950/logs
 在本地机器上可以不用写“本地用户名@IP地址”，直接写文件名就可以。</p>
 
 <p>2.将远程机器上的文件拷贝到本地</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>scp  远程用户名@IP地址：文件  本地文件夹
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp  远程用户名@IP地址：文件  本地文件夹
 
 可能有用的几个参数 :
     -v 和大多数linux命令中的-v意思一样, 用来显示进度,可以用来查看连接, 认证, 或是配置错误
@@ -320,24 +297,21 @@ awk <span class="s1">'{
 　　-4 强行使用 IPV4 地址
 　　-6 强行使用 IPV6 地址
 　　-r Recursively copy entire directories
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>找到某进程打开的所有文件</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>lsof -c $processname | egrep 'w.+REG' | awk '{print $9}' | sort | uniq
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsof -c $processname | egrep 'w.+REG' | awk '{print $9}' | sort | uniq
+</code></pre></div></div>
 
 <ul>
   <li>找到系统中已经删除的文件</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>lsof -n | grep deleted
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsof -n | grep deleted
+</code></pre></div></div>
 
 <p>在执行<code class="highlighter-rouge">df -h</code>查看磁盘空间的时候，看见磁盘空间已满，但是通过<code class="highlighter-rouge">du -sh *</code>查看目录下的文件，却没有大的文件。这时可以通过lsof命令查看是否存在已经删除了（在磁盘上已经看不到文件的存在了），但是仍然被某进程打开着的文件，找到打开该文件的进程号，kill掉，就可以释放空间了。</p>
 
@@ -384,6 +358,10 @@ awk <span class="s1">'{
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/posts/blog/18/04/22/redis-data-migration.html">阿里云redis数据拆分</a></li>
+        
+            <li><a href="/posts/blog/18/01/01/schedule-thread-executor-not-work.html">定时任务怎么不定时执行了</a></li>
         
             <li><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html">动态变更log4j日志级别</a></li>
         

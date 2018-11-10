@@ -90,24 +90,22 @@
 
 <p>变量<code class="highlighter-rouge">$nowday</code>表示当前的时间：</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="nv">nowday</span><span class="o">=</span><span class="sb">`</span>date +%Y%m%d_%H%M%S<span class="sb">`</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="nv">nowday</span><span class="o">=</span><span class="sb">`</span><span class="nb">date</span> +%Y%m%d_%H%M%S<span class="sb">`</span></code></pre></figure>
 
 <p>上面的配置让进程的GC情况都一一记录到gc.log文件中，我们还可以通过这些日志来查看gc的情况。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>2016-04-14T17:29:33.351+0800: 257.802: [Full GC 257.802: [CMS: 14273K-&gt;14754K(3145728K), 0.2970110 secs] 716960K-&gt;14754K(4044544K), [CMS Perm : 40959K-&gt;40957K(40960K)], 0.2973540 secs] [Times: user=0.30 sys=0.00, real=0.30 secs]
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2016-04-14T17:29:33.351+0800: 257.802: [Full GC 257.802: [CMS: 14273K-&gt;14754K(3145728K), 0.2970110 secs] 716960K-&gt;14754K(4044544K), [CMS Perm : 40959K-&gt;40957K(40960K)], 0.2973540 secs] [Times: user=0.30 sys=0.00, real=0.30 secs]
 2016-04-14T17:29:33.650+0800: 258.101: [Full GC 258.101: [CMS: 14754K-&gt;14615K(3145728K), 0.1683430 secs] 15839K-&gt;14615K(4044544K), [CMS Perm : 40959K-&gt;40959K(40960K)], 0.1685680 secs] [Times: user=0.17 sys=0.00, real=0.17 secs]
 2016-04-14T17:29:33.819+0800: 258.270: [Full GC 258.270: [CMS: 14615K-&gt;13871K(3145728K), 0.1910210 secs] 14770K-&gt;13871K(4044544K), [CMS Perm : 40959K-&gt;40894K(40960K)], 0.1912510 secs] [Times: user=0.20 sys=0.00, real=0.19 secs]
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>通过上面的gc日志可以看到JVM正在执行FullGC，使用的是CMS收集器，堆内存容量为4044544K，Perm区容量为40960K，且经过GC过后仍然占用40894K，可见是Perm区溢出导致Full GC，而Perm区存储的是class相关的信息。当读取kafka的功能开关打开之后，会加载与kafka client相关的class信息，由于class信息的增多导致Perm区溢出了，Perm溢出一般的解决方法就是增加Perm区大小。</p>
 
 <p>查看进程启动的时候JVM相关配置参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>-Xms4g -Xmx4g  -Xmn1g -XX:PermSize=40m -XX:MaxPermSize=40m -XX:+UseConcMarkSweepGC 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-Xms4g -Xmx4g  -Xmn1g -XX:PermSize=40m -XX:MaxPermSize=40m -XX:+UseConcMarkSweepGC 
 -XX:CMSInitiatingOccupancyFraction=80 -XX:+PrintGCDetails -XX:+PrintGCDateStamps 
 -Xloggc:../gclogs/gc.log.$nowday -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=../logs/memory.hprof  -server
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>PermSize最大为40M，与上面GC日志以及jstat看到的内容一致，Perm区设置的比较小，将其改为如下：</p>
 
@@ -163,6 +161,10 @@
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/posts/blog/18/04/22/redis-data-migration.html">阿里云redis数据拆分</a></li>
+        
+            <li><a href="/posts/blog/18/01/01/schedule-thread-executor-not-work.html">定时任务怎么不定时执行了</a></li>
         
             <li><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html">动态变更log4j日志级别</a></li>
         

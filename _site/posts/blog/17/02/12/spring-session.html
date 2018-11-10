@@ -55,15 +55,14 @@
 
 <p>spring session通过注解<code class="highlighter-rouge">@EnableRedisHttpSession</code>或者xml配置</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/&gt;
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/&gt;
+</code></pre></div></div>
 
 <p>来设置spring session的一些参数，比如session的最大活跃时间（maxInactiveIntervalInSeconds），redis命名空间（redisNamespace），session写入到redis的时机（FlushMode）以及如何序列化写到redis中的session value等等。</p>
 
 <p>要想使用spring session，还需要创建名为springSessionRepositoryFilter的<code class="highlighter-rouge">SessionRepositoryFilter</code>类。该类实现了Sevlet Filter接口，当请求穿越sevlet filter链时应该首先经过springSessionRepositoryFilter，这样在后面获取session的时候，得到的将是spring session。为了springSessonRepositoryFilter作为filter链中的第一个，spring session提供了<code class="highlighter-rouge">AbstractHttpSessionApplicationInitializer</code>类， 它实现了<code class="highlighter-rouge">WebApplicationInitializer</code>类，在onStartup方法中将springSessionRepositoryFilter加入到其他fitler链前面。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>public abstract class AbstractHttpSessionApplicationInitializer
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public abstract class AbstractHttpSessionApplicationInitializer
 		implements WebApplicationInitializer {
 
 	/**
@@ -93,8 +92,7 @@
 		registerFilter(servletContext, true, filterName, springSessionRepositoryFilter);
 	}
 }
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>或者也可以在web.xml里面将springSessionRepositoryFilter加入到filter配置的第一个。</p>
 
@@ -102,7 +100,7 @@
 
 <p>RedisSession在创建时设置3个变量creationTime，maxInactiveInterval，lastAccessedTime。maxInactiveInterval默认值为1800，表示1800s之内该session没有被再次使用，则表明该session已过期。每次session被访问都会更新lastAccessedTime的值，session的过期计算公式：<code class="highlighter-rouge">当前时间-lastAccessedTime &gt; maxInactiveInterval</code>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/**
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
 * Creates a new instance ensuring to mark all of the new attributes to be
 * persisted in the next save operation.
 **/
@@ -118,8 +116,7 @@ RedisSession() {
 public MapSession() {
 	this(UUID.randomUUID().toString());
 }
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>flushImmediateIfNecessary判断session是否需要立即写入后端存储。</p>
 
@@ -149,7 +146,7 @@ public MapSession() {
 
 <p>另， 从request取sessionId依赖具体的HttpSessionStrategy的实现，spring session给了两个默认的实现CookieHttpSessionStrategy和HeaderHttpSessionStrategy，即从cookie和header中取出sessionId。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>@Override
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Override
 public HttpSessionWrapper getSession(boolean create) {
 	HttpSessionWrapper currentSession = getCurrentSession();
 	if (currentSession != null) {
@@ -183,8 +180,7 @@ public HttpSessionWrapper getSession(boolean create) {
 	setCurrentSession(currentSession);
 	return currentSession;
 }
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>spring session为什么会使用3个key，而不是一个key？接下来回答。</p>
 
@@ -206,7 +202,7 @@ public HttpSessionWrapper getSession(boolean create) {
 
 <p>还有一点是，查看三个数据结构的TTL时间，spring:session:sessions:[sessionId]和spring:session:expirations:[min]比真正的有效期大5分钟，目的是确保当expire key数据过期后，监听事件还能获取到session保存的原始数据。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>@Scheduled(cron = "${spring.session.cleanup.cron.expression:0 * * * * *}")
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Scheduled(cron = "${spring.session.cleanup.cron.expression:0 * * * * *}")
 public void cleanupExpiredSessions() {
 	this.expirationPolicy.cleanExpiredSessions();
 }
@@ -227,8 +223,7 @@ public void cleanExpiredSessions() {
 		touch(sessionKey);
 	}
 }
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>spring session在redis中保存了三个key，为什么？
 sessions key记录session本身的数据，expires key标记session的准确过期时间，expiration key保证session能够被及时删除，spring监听事件能够被及时处理。</p>
@@ -236,7 +231,7 @@ sessions key记录session本身的数据，expires key标记session的准确过�
 <p>上面的代码展示了session expires key如何被删除，那session每次都是怎样更新过期时间的呢？
 每一次http请求，在经过所有的filter处理过后，spring session都会通过onExpirationUpdated()方法来更新session的过期时间， 具体的操作看下面源码的注释。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>public void onExpirationUpdated(Long originalExpirationTimeInMilli,
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public void onExpirationUpdated(Long originalExpirationTimeInMilli,
 			ExpiringSession session) {
 	String keyToExpire = "expires:" + session.getId();
 	long toExpire = roundUpToNextMinute(expiresInMillis(session));
@@ -283,8 +278,7 @@ sessions key记录session本身的数据，expires key标记session的准确过�
 	this.redis.boundHashOps(getSessionKey(session.getId()))
 			.expire(fiveMinutesAfterExpires, TimeUnit.SECONDS);
 }
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="5-参考">5 参考</h2>
 
@@ -337,6 +331,10 @@ sessions key记录session本身的数据，expires key标记session的准确过�
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/posts/blog/18/04/22/redis-data-migration.html">阿里云redis数据拆分</a></li>
+        
+            <li><a href="/posts/blog/18/01/01/schedule-thread-executor-not-work.html">定时任务怎么不定时执行了</a></li>
         
             <li><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html">动态变更log4j日志级别</a></li>
         

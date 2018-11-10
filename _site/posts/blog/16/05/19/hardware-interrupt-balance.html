@@ -82,7 +82,7 @@
 
 <p>通过<code class="highlighter-rouge">cat /proc/interrupts</code>查看网卡队列对应的中断号。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>//查看各cpu中断类型
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//查看各cpu中断类型
 [root@XX-0-79-core ~]# cat /proc/interrupts
             CPU0       CPU1       CPU2       CPU3
    0:         57          0          0          0   IO-APIC-edge      timer
@@ -94,8 +94,7 @@
   61:         2346          0          0          0   PCI-MSI-edge      eth0-0
   62:          0         208711        0         0   PCI-MSI-edge      eth0-1
   63:         0          0                 0     147535          PCI-MSI-edge      eth0-2
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>第1栏表示中断号，第2-5栏表示在CPU0-3上处理的中断数量，第6栏表示中断控制器，APIC表示高级可编程中断控制器。不支持APIC的控制器，不能完成中断绑定，默认发往cpu0：</p>
 
@@ -113,15 +112,14 @@
 
 <p>中断号的大小即决定了CPU处理中断请求的优先级，中断号越小，优先级越高。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>IRQ 0 — **system timer (cannot be changed)**
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>IRQ 0 — **system timer (cannot be changed)**
 IRQ 1 — **keyboard controller (cannot be changed)**
 IRQ 3 — serial port controller for serial port 2 (shared with serial port 4, if present);
 IRQ 4 — serial port controller for serial port 1 (shared with serial port 3, if present);
 IRQ 5 — parallel port 2 and 3 or sound card;
 IRQ 6 — floppy disk controller;
 IRQ 7 — parallel port 1. It is used for printers or for any parallel port if a printer is not present.
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>如果手动设置了CPU亲和度绑定，需要将irqbalance后台进程关掉（<code class="highlighter-rouge">service irqbalance status；service irqbalance stop</code>），因为它会自动将不同的中断交给各个cpu处理，会覆盖掉手动设置值。</p>
 
@@ -147,10 +145,9 @@ IRQ 7 — parallel port 1. It is used for printers or for any parallel port if a
 
 <p>要开启RFS，需要修改两个参数，</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/proc/sys/net/core/rps_sock_flow_entries
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/proc/sys/net/core/rps_sock_flow_entries
 /sys/class/net/[device]/queues/rx-[num]/rps_flow_cnt
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>设置rps_sock_flow_entries的值为期望获得的最大并发连接的数量（该值必须为2的幂，如果不是，系统设置为向上最接近的2的幂），rps_flow_cnt的值为rps_sock_flow_entries/N，N表示设备接收队列的数量，对于单队列两者设置为同一值。</p>
 
 <h4 id="4-xpstransmit-packet-steering">4. XPS（Transmit Packet Steering）</h4>
@@ -217,6 +214,10 @@ IRQ 7 — parallel port 1. It is used for printers or for any parallel port if a
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/posts/blog/18/04/22/redis-data-migration.html">阿里云redis数据拆分</a></li>
+        
+            <li><a href="/posts/blog/18/01/01/schedule-thread-executor-not-work.html">定时任务怎么不定时执行了</a></li>
         
             <li><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html">动态变更log4j日志级别</a></li>
         

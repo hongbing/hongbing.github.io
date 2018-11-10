@@ -282,25 +282,25 @@
 <span class="c">### find cycle in maven depnedency tree
 </span>
 
-<span class="k">if</span> <span class="o">[</span> <span class="nv">$# </span>-gt 0 <span class="o">]</span>;<span class="k">then
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$# </span><span class="nt">-gt</span> 0 <span class="o">]</span><span class="p">;</span><span class="k">then
     </span><span class="nv">sourcepath</span><span class="o">=</span><span class="nv">$1</span>
 <span class="k">else
     </span><span class="nv">sourcepath</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
 <span class="k">fi
-if</span> <span class="o">[</span> ! -f <span class="s2">"</span><span class="nv">$sourcepath</span><span class="s2">/pom.xml"</span> <span class="o">]</span>; <span class="k">then
+if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="s2">"</span><span class="nv">$sourcepath</span><span class="s2">/pom.xml"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
     </span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$sourcepath</span><span class="s2"> is not a vaild maven project!"</span>
     <span class="nb">echo</span> <span class="s1">'Usage : ./findcycle [path]'</span>
-    <span class="nb">exit </span>1;
+    <span class="nb">exit </span>1<span class="p">;</span>
 <span class="k">fi
 </span><span class="nv">mvn</span><span class="o">=</span><span class="sb">`</span>which mvn<span class="sb">`</span>
-<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$mvn</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">""</span> <span class="o">]</span>;<span class="k">then
+<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$mvn</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">""</span> <span class="o">]</span><span class="p">;</span><span class="k">then
     </span><span class="nb">echo</span> <span class="s2">"counld not found mvn in PATH,exit!"</span>
-    <span class="nb">exit </span>1;
+    <span class="nb">exit </span>1<span class="p">;</span>
 <span class="k">fi
 
 </span><span class="nb">cd</span> <span class="nv">$sourcepath</span>
 <span class="nb">echo</span> <span class="s2">"scan cycle dependency in </span><span class="nv">$sourcepath</span><span class="s2"> ..."</span>
-mvn dependency:tree -Dverbose | awk -F<span class="s1">'- '</span> <span class="s1">'{if(index($2,"maven-dependency-plugin")&gt;0){indent=0;}else{indent=length($1);}stack[indent]=$2;if(index($0,"for cycle")&gt;0){print "****found cycle****";for(i=0;i&lt;=indent;i++){if(stack[i]!=null){print "-&gt;"stack[i]}}}}'</span>
+mvn dependency:tree <span class="nt">-Dverbose</span> | <span class="nb">awk</span> <span class="nt">-F</span><span class="s1">'- '</span> <span class="s1">'{if(index($2,"maven-dependency-plugin")&gt;0){indent=0;}else{indent=length($1);}stack[indent]=$2;if(index($0,"for cycle")&gt;0){print "****found cycle****";for(i=0;i&lt;=indent;i++){if(stack[i]!=null){print "-&gt;"stack[i]}}}}'</span>
 <span class="nb">echo</span> <span class="s2">"scan finished!"</span></code></pre></figure>
 
 <p>使用上面的脚本（将其放置于工程目录下，或者指定工程路径）检测是否存在循环依赖，如果存在，会输出循环依赖的链。（此脚本取自于@秦迪 <a href="http://blog.2baxb.me">Axb的自我修养</a>）</p>
@@ -350,6 +350,10 @@ mvn dependency:tree -Dverbose | awk -F<span class="s1">'- '</span> <span class="
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/posts/blog/18/04/22/redis-data-migration.html">阿里云redis数据拆分</a></li>
+        
+            <li><a href="/posts/blog/18/01/01/schedule-thread-executor-not-work.html">定时任务怎么不定时执行了</a></li>
         
             <li><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html">动态变更log4j日志级别</a></li>
         

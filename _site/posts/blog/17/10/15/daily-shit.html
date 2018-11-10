@@ -51,15 +51,14 @@
 
 <p>disconf相关配置如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;bean id="disconfMgrBean" class="com.baidu.disconf.client.DisconfMgrBean"
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;bean id="disconfMgrBean" class="com.baidu.disconf.client.DisconfMgrBean"
           destroy-method="destroy"&gt;
         &lt;property name="scanPackage" value="com.uxin.zb,  com.uxin.commons"/&gt;
     &lt;/bean&gt;
     &lt;bean id="disconfMgrBean2" class="com.baidu.disconf.client.DisconfMgrBeanSecond"
           init-method="init" destroy-method="destroy"&gt;
     &lt;/bean&gt;
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>打开disconf的debug日志，可以看到在disconf静态扫描时候的日志</p>
 <blockquote>
@@ -72,7 +71,7 @@
 
 <p>一个空格导致的问题，也是disconf的一个bug。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>public static List&lt;String&gt; parseStringToStringList(String source,
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static List&lt;String&gt; parseStringToStringList(String source,
                                                        String token) {
 
         if (StringUtils.isBlank(source) || StringUtils.isEmpty(token)) {
@@ -88,41 +87,37 @@
         return result;
     }
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h5 id="2-drds使用mysql别名的坑">2. DRDS使用mysql别名的坑</h5>
 <p>项目中使用mybatis操作数据库，自定义了查询主播粉丝uid的最大值和最小值的mapper，最大值和最小值都使用了别名，返回结果map。在返回结果里读取粉丝uid的最大值和最小值<code class="highlighter-rouge">map.get("maxUid"), map.get("minUid")</code>。在测试环境里面测试通过了，上线之后就发现了NPE异常。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;select id="selectMaxMinByToUid" parameterType="java.lang.Long" resultType="java.util.Map"&gt;
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;select id="selectMaxMinByToUid" parameterType="java.lang.Long" resultType="java.util.Map"&gt;
     select max(from_uid) as "maxUid",
     min(from_uid) as "minUid"
     from user_follow
     where to_uid = #{toUid,jdbcType=BIGINT}
   &lt;/select&gt;
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>分析测试环境与线上的差异，测试环境使用的是本机mysql数据库，线上用户关系库使用的是阿里云的drds。在线上执行mybatis解析后的sql语句</p>
-<div class="highlighter-rouge"><pre class="highlight"><code> mysql&gt; select max(from_uid) as "maxUid", min(from_uid) as "minUid" from user_follow where to_uid=18xxxxxx;
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> mysql&gt; select max(from_uid) as "maxUid", min(from_uid) as "minUid" from user_follow where to_uid=18xxxxxx;
 +---------------+---------------+
 | 'maxUid'      | 'minUid'      |
 +---------------+---------------+
 | 20xxxxxxxxxx1 | 17xxxxxxxxxx3 |
 +---------------+---------------+
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>发现返回的map结果中的key并不是maxUid和minUid，而是’maxUid’和’minUid’，所以后续再读取这两个key的时候会抛出NPE异常。再测试一下将别名的双引号去掉，返回的key就没有单引号。同样的语句，不管是别名有没有双引号在mysql中执行时，返回的key都是不带单引号的。因此，断定是阿里云的drds给带有双引号的别名的返回结果加上了单引号。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mysql&gt; select max(from_uid) as maxUid, min(from_uid) as minUid from user_follow where to_uid=188xxxxx;
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt; select max(from_uid) as maxUid, min(from_uid) as minUid from user_follow where to_uid=188xxxxx;
 +---------------+---------------+
 | maxUid        | minUid        |
 +---------------+---------------+
 | 191xxxx111111 | 17xxxxxxx9623 |
 +---------------+---------------+
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>解决方法就是将别名的双引号去掉就ok了。</p>
 
 
@@ -167,6 +162,10 @@
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/posts/blog/18/04/22/redis-data-migration.html">阿里云redis数据拆分</a></li>
+        
+            <li><a href="/posts/blog/18/01/01/schedule-thread-executor-not-work.html">定时任务怎么不定时执行了</a></li>
         
             <li><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html">动态变更log4j日志级别</a></li>
         

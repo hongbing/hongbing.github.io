@@ -27,7 +27,7 @@ unpublished: false
 # Plugins
 whitelist: []
 # gems
-gems: [jekyll-paginate]
+plugins: [jekyll-paginate]
 
 
 # Conversion Kramdown

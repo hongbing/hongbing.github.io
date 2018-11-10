@@ -32,6 +32,24 @@
     <ul class="artical-list">
       
       <li>
+        <h2><a href="/posts/blog/17/02/12/spring-session.html">spring session源码解析</a></h2>
+        <div class="title-desc">最近要在项目中做用户踢线的功能，由于项目使用spring session来管理用户session，因此特地翻了翻spring session的源码，看看spring session是如何管理的。我们使用redis来存储session，因此本文只对session在redis中的存储结构以及管理做解析。
+
+1 spring session使用
+
+Spring Session对HTTP的支持是通过标准的servlet filter来实现的，这个filter必须要配置为拦截所有的web应用请求，并且它最好是filter链中的第一个filter。Spring Session filter会确保随后调用javax.servlet.http.HttpServletRequest的getSession()方法时，都会返回Spring Session的HttpSession实例，而不是应用服务器默认的HttpSession。
+
+&hellip; <a href="/posts/blog/17/02/12/spring-session.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
+        <h2><a href="/posts/blog/16/05/21/linux-common-command.html">工作中常用的linux命令</a></h2>
+        <div class="title-desc">本文记录了在工作中常用的linux命令
+
+&hellip; <a href="/posts/blog/16/05/21/linux-common-command.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
         <h2><a href="/posts/blog/16/05/19/hardware-interrupt-balance.html">硬件中断均衡</a></h2>
         <div class="title-desc">硬件与cpu沟通有两种方式，一种是中断，另一种是轮询。中断是硬件主动，产生中断信号，中断控制器将信号传递给cpu，cpu停下手中的工作，执行中断任务；轮询则为cpu主动，定时查询硬件设备的状态，是否处理硬件请求。
 
@@ -62,46 +80,6 @@
 哦（满头大汗！！！），幸好没整个故障出来。如果对于监控的认识与上面是一致的，那么系统经常会与故障相伴。
 
 &hellip; <a href="/posts/blog/15/11/14/monitor-principle.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/15/11/14/jetty-deadlock.html">jetty6 deadlock</a></h2>
-        <div class="title-desc">1 背景
-业务方反应消息队列最近几天输出的消息量变少了（良好的监控系统应该在业务方感知到故障之前将问题暴露出来），进入到前端机发现，多达20多万的TCP连接状态都处于CLOSE_WAIT状态，且TCP socket的RECV-Q中还有100多个包没有被处理。
-我们使用的环境是：
-
-
-  java
-
-
-
-  java version “1.6.0_24”
-Java(TM) SE Runtime Environment (build 1.6.0_24-b07)
-
-
-&hellip; <a href="/posts/blog/15/11/14/jetty-deadlock.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/15/08/21/linux-of-blockdump.html">linux系统之block_dump</a></h2>
-        <div class="title-desc">当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过iostat，vmstat命令从宏观上来查看系统的一些io参数，比如某设备的读写速度，cpu的使用情况。
-
-#iostat
-avg-cpu:  %user   %nice %system %iowait  %steal   %idle
-          17.62    0.02    3.20    1.37    0.00   77.80
-
-Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn
-sda               1.86        22.79        17.90    4910899    3857428
-
-#vmstat
-procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
- r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
- 0  0 619448 167984   5728 366044   12   13    52    40  125  393 18  3 78  1  0
-
-
-
-
-&hellip; <a href="/posts/blog/15/08/21/linux-of-blockdump.html" style="font-weight:bold;">Read More</a></div>
       </li>
       
 

@@ -49,7 +49,7 @@
 
 <p>可以在<code class="highlighter-rouge">/proc/meminfo</code>中查看系统page cache的信息。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>MemTotal:        1943676 kB
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MemTotal:        1943676 kB
 MemFree:          165132 kB
 Buffers:           23784 kB
 Cached:           511048 kB
@@ -64,8 +64,7 @@ Mapped:           229812 kB
 Shmem:            195912 kB
 Slab:             163756 kB
 ......
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Cached即表示当前page cache的大小，Dirty表示脏页的大小。</p>
 
@@ -85,7 +84,7 @@ Slab:             163756 kB
 
 <p>查看Kernel version 2.6.29的doc，看看该doc是怎么描述这两个参数的：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>==============================================================
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>==============================================================
 dirty_background_ratio
 
 Contains, as a percentage of total available memory that
@@ -106,22 +105,20 @@ start writing out dirty data.
 The total avaiable memory is not equal to total system memory.
 
 ==============================================================
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>从doc中可以看出，含义都是表示<code class="highlighter-rouge">占可用内存空间的百分比</code>。但是区别在达到<strong>dirty_background_ratio</strong>这个阈值后，pdflush线程会<code class="highlighter-rouge">异步</code>执行脏页回写，而当达到<strong>dirty_ratio</strong>阈值时，当时执行写操作的进程会被强制<code class="highlighter-rouge">同步</code>执行脏页回写操作，此时所有进程的写操作都会被阻塞,直到脏页占比降低到dirty_ratio之下，如果此时的脏页率仍然在dirty_backgroud_radio之上，将调用pdflush执行异步刷新。</p>
 
 <p>默认的<strong>dirty_ratio</strong>的值应该设置得比<strong>dirty_background_ratio</strong>大。看看工作机中与dirty有关的参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ sysctl -a | grep dirty
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sysctl -a | grep dirty
 vm.dirty_background_bytes = 0
 vm.dirty_background_ratio = 5
 vm.dirty_bytes = 0
 vm.dirty_expire_centisecs = 3000
 vm.dirty_ratio = 10
 vm.dirty_writeback_centisecs = 500
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>这里有一个需要注意的点，占比依据的是<code class="highlighter-rouge">可用内存</code>，并不是全部内存。可用内存如何计算？</p>
 
@@ -133,16 +130,15 @@ vm.dirty_writeback_centisecs = 500
 
 <p>pdflush唤醒后会调用<code class="highlighter-rouge">background_writeout(int)</code>函数，该函数需要传入一个整形值，表示写回的页数。当下面两个条件满足时，pdflush停止回写操作：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> 指定的最小数目的脏页数被写回到磁盘；
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 指定的最小数目的脏页数被写回到磁盘；
  空闲内存数已经回升，超过了阈值dirty_background_ratio
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>只有达到上面两个条件才会停止回写，除非将所有脏页都写回到磁盘，没有剩余的脏页可以回写了。</p>
 
 <p>再来看看被动式的时间阈值<code class="highlighter-rouge">dirty_expire_centisecs</code>（脏页的过期时间），该值在linux doc中是这样描述的：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>==============================================================
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>==============================================================
 dirty_expire_centisecs
 
 This tunable is used to define when dirty data is old enough
@@ -152,12 +148,11 @@ It is expressed in 100 ths of a second.
 Data which has been dirty in-memory for longer than this interval
  will be written out next time a flusher thread wakes up.
 ==============================================================
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><strong>dirty_expire_centisecs</strong> 表示脏页在内存中驻留的时间阈值，该值的单位为1/100 秒。另外还有一个参数<code class="highlighter-rouge">dirty_writeback_centisecs</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>==============================================================
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>==============================================================
 dirty_writeback_centisecs
 
 The kernel flusher threads will periodically wake up
@@ -167,8 +162,7 @@ in 100 ths of a second.
 
 Setting this to zero disables periodic writeback altogether.
 ==============================================================
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>表示系统多久唤醒pdflush来执行回写操作。系统启动时会设置一个定时器，时间为百分之dirty_writeback_centisecs秒，当时间到时，唤醒pdflush线程将驻留时间超过百分之dirty_expire_centisecs秒的脏页回写到磁盘，完成后睡眠，然后重置定时器时间为百分之dirty_writeback_centisecs秒等待下一次唤醒，也即周期性的执行脏页回写操作。</p>
 
@@ -228,6 +222,10 @@ Setting this to zero disables periodic writeback altogether.
     <div class="sidenav">
         <h2>Blog</h2>
         <ul class="artical-list">
+        
+            <li><a href="/posts/blog/18/04/22/redis-data-migration.html">阿里云redis数据拆分</a></li>
+        
+            <li><a href="/posts/blog/18/01/01/schedule-thread-executor-not-work.html">定时任务怎么不定时执行了</a></li>
         
             <li><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html">动态变更log4j日志级别</a></li>
         

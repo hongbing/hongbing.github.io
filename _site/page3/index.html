@@ -32,6 +32,45 @@
     <ul class="artical-list">
       
       <li>
+        <h2><a href="/posts/blog/15/11/14/jetty-deadlock.html">jetty6 deadlock</a></h2>
+        <div class="title-desc">1 背景
+业务方反应消息队列最近几天输出的消息量变少了（良好的监控系统应该在业务方感知到故障之前将问题暴露出来），进入到前端机发现，多达20多万的TCP连接状态都处于CLOSE_WAIT状态，且TCP socket的RECV-Q中还有100多个包没有被处理。
+我们使用的环境是：
+
+
+  java
+
+
+
+  java version “1.6.0_24”
+Java(TM) SE Runtime Environment (build 1.6.0_24-b07)
+
+
+&hellip; <a href="/posts/blog/15/11/14/jetty-deadlock.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
+        <h2><a href="/posts/blog/15/08/21/linux-of-blockdump.html">linux系统之block_dump</a></h2>
+        <div class="title-desc">当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过iostat，vmstat命令从宏观上来查看系统的一些io参数，比如某设备的读写速度，cpu的使用情况。
+
+#iostat
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+          17.62    0.02    3.20    1.37    0.00   77.80
+
+Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn
+sda               1.86        22.79        17.90    4910899    3857428
+
+#vmstat
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 0  0 619448 167984   5728 366044   12   13    52    40  125  393 18  3 78  1  0
+
+
+
+&hellip; <a href="/posts/blog/15/08/21/linux-of-blockdump.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
         <h2><a href="/posts/blog/15/08/20/linux-of-pdflush.html">linux系统之pdflush</a></h2>
         <div class="title-desc">当我们向磁盘文件写入数据时，由于内存与磁盘之间数据读取的差异，操作系统不会直接将数据写透（write through）到磁盘上，而是会写到页高速缓存（page cache）中，真正的写磁盘操作会延迟进行，称为写延迟（write delay）。当page cache中的数据比后端存储中的数据还要新时，称page cache中的数据为脏数据（或者脏页，dirty page）。page cache对被缓存的页面范围的定义非常宽泛，任何基于页的对象，包括各种类型
 
@@ -71,47 +110,6 @@ uname -a
 make TARGET=linux26 PREFIX=/usr/local/haproxy install
 
 &hellip; <a href="/posts/blog/15/08/02/haproxy-install.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/15/07/25/maven-introduce.html">maven介绍</a></h2>
-        <div class="title-desc">1 相关概念
-
-1.1 版本号
-
-版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。
-版本号格式一般分为：
-
-主版本号.分支版本号.小版本号-里程碑版本号
-
-主版本号：一般指框架具有重大变化的版本号，比如struts1，struts2框架的变化
-
-分支版本号： 一般指功能的变化
-
-&hellip; <a href="/posts/blog/15/07/25/maven-introduce.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/15/06/21/etcd-vs-consul.html">ETCD vs. Consul</a></h2>
-        <div class="title-desc">1. 协议
-
-  
-    Etcd和consul均采用raft协议来保证server之间的数据一致性，但是consul还采用了gossip协议管理成员和传播消息。
-  
-  
-    Etcd中的RPC消息格式都是protobuf格式，Consul的RPC消息格式采用MsgPack格式。
-  
-  
-    Etcd支持HTTP操作接口，Consul支持HTTP和DNS两种操作接口
-  
-
-
-2. 架构
-
-  Etcd不支持多数据中心，
-
-
-&hellip; <a href="/posts/blog/15/06/21/etcd-vs-consul.html" style="font-weight:bold;">Read More</a></div>
       </li>
       
 

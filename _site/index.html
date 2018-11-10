@@ -32,6 +32,21 @@
     <ul class="artical-list">
       
       <li>
+        <h2><a href="/posts/blog/18/04/22/redis-data-migration.html">阿里云redis数据拆分</a></h2>
+        <div class="title-desc">1 背景
+在业务发展的早期，对业务数据量没有进行严格的评估，由于业务发展的未知性，也没法做出严格的评估，因此出现多个小业务使用同一个redis缓存的情况。但是随着时间的推移，原来评估的某一个小功能在公司层面变成一个大的方向，造成了redis缓存中某一功能相关的key数量不断上涨，同时qps也相应的上升。
+
+&hellip; <a href="/posts/blog/18/04/22/redis-data-migration.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
+        <h2><a href="/posts/blog/18/01/01/schedule-thread-executor-not-work.html">定时任务怎么不定时执行了</a></h2>
+        <div class="title-desc">2017年的元旦假期，测试反馈说微博里红豆直播间的观看人数在一段时间内都没有变化。接到问题的第一反应是不是前一天上线导致的？一个好好的系统功能，突然在某一天不正常工作了，如果恰巧前面有一次有上线变更，那么90%的原因就是上线变更导致的。我赶紧看一下前一天的上线是否涉及到这一块儿的内容？
+
+&hellip; <a href="/posts/blog/18/01/01/schedule-thread-executor-not-work.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
         <h2><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html">动态变更log4j日志级别</a></h2>
         <div class="title-desc">log4j的日志级别包括ALL，TRACE，DEBUG，INFO，WARN，ERROR, FATAL，OFF。日志级别从前往后越来越严格，ALL和OFF（日志级别的两个极端）在项目开发中都使用的比较少，可以说是基本不使用。每个级别在什么样的场景下使用这里就不多说了。下面说一下，为什么需要日志级别的动态变更？
 
@@ -54,24 +69,6 @@
         <div class="title-desc">前一篇博客解析了spring session源码，分析了spring session的内部结构。本篇将扩展spring session使用分片redis。在使用spring-session一段时间后，发现spring-session后端redis实例的内存容量不断增长，从刚开始的8G（阿里云ECS），一直扩容到现在的64G。阿里云ECS单机最大容量就到64G，集群版可支持256G。经过对redis rdb的分析，使用spring-session，每个用户占用约2K的内存。由于session key里面保存数据的差异，以及使用不同的序列化方式，每个用户占用内存大小对于不同的业务来说是不一样的。
 
 &hellip; <a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/17/02/12/spring-session.html">spring session源码解析</a></h2>
-        <div class="title-desc">最近要在项目中做用户踢线的功能，由于项目使用spring session来管理用户session，因此特地翻了翻spring session的源码，看看spring session是如何管理的。我们使用redis来存储session，因此本文只对session在redis中的存储结构以及管理做解析。
-
-1 spring session使用
-
-Spring Session对HTTP的支持是通过标准的servlet filter来实现的，这个filter必须要配置为拦截所有的web应用请求，并且它最好是filter链中的第一个filter。Spring Session filter会确保随后调用javax.servlet.http.HttpServletRequest的getSession()方法时，都会返回Spring Session的HttpSession实例，而不是应用服务器默认的HttpSession。
-
-&hellip; <a href="/posts/blog/17/02/12/spring-session.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/16/05/21/linux-common-command.html">工作中常用的linux命令</a></h2>
-        <div class="title-desc">本文记录了在工作中常用的linux命令
-
-&hellip; <a href="/posts/blog/16/05/21/linux-common-command.html" style="font-weight:bold;">Read More</a></div>
       </li>
       
 
