@@ -32,61 +32,28 @@
     <ul class="artical-list">
       
       <li>
-        <h2><a href="/posts/blog/19/08/29/why-502.html">为什么web服务器返回502</a></h2>
-        <div class="title-desc">前段时间收到业务方反馈说他们请求任务调度系统经常会收到“502 Bad Gateway”的错误信息，导致不少任务创建失败。
+        <h2><a href="/posts/blog/15/06/17/raft-introduce.html">Raft</a></h2>
+        <div class="title-desc">1 Raft概念
 
+分布式系统中，为了实现一致性，一般采用对称式和非对称式两种server组织方式。
 
-在弄清楚为什么任务调度系统会返回“502 Bad Gateway”之前，我们首先应该搞清楚什么是502。
+对称式：所有的server都具有相同的功能，客户端可以和任意一个server通信。
 
-RFC是这样说的：
+非对称式：有一个leader作为与外界通信的角色，其余server不与外界通信，leader会将数据的变更同步到所有的其他server中。
 
-&hellip; <a href="/posts/blog/19/08/29/why-502.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/18/04/22/redis-data-migration.html">阿里云redis数据拆分</a></h2>
-        <div class="title-desc">1 背景
-在业务发展的早期，对业务数据量没有进行严格的评估，由于业务发展的未知性，也没法做出严格的评估，因此出现多个小业务使用同一个redis缓存的情况。但是随着时间的推移，原来评估的某一个小功能在公司层面变成一个大的方向，造成了redis缓存中某一功能相关的key数量不断上涨，同时qps也相应的上升。
-
-&hellip; <a href="/posts/blog/18/04/22/redis-data-migration.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/18/01/01/schedule-thread-executor-not-work.html">定时任务怎么不定时执行了</a></h2>
-        <div class="title-desc">2017年的元旦假期，测试反馈说微博里红豆直播间的观看人数在一段时间内都没有变化。接到问题的第一反应是不是前一天上线导致的？一个好好的系统功能，突然在某一天不正常工作了，如果恰巧前面有一次有上线变更，那么90%的原因就是上线变更导致的。我赶紧看一下前一天的上线是否涉及到这一块儿的内容？
-
-&hellip; <a href="/posts/blog/18/01/01/schedule-thread-executor-not-work.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/17/10/15/dynamic-change-logger-level.html">动态变更log4j日志级别</a></h2>
-        <div class="title-desc">log4j的日志级别包括ALL，TRACE，DEBUG，INFO，WARN，ERROR, FATAL，OFF。日志级别从前往后越来越严格，ALL和OFF（日志级别的两个极端）在项目开发中都使用的比较少，可以说是基本不使用。每个级别在什么样的场景下使用这里就不多说了。下面说一下，为什么需要日志级别的动态变更？
-
-不管是第三方开发包，还是自己开发的项目工程，在调试的过程中都会有大量的TRACE，DEBUG日志，
-
-&hellip; <a href="/posts/blog/17/10/15/dynamic-change-logger-level.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
-      <li>
-        <h2><a href="/posts/blog/17/10/15/daily-shit.html">20171015一周坑</a></h2>
-        <div class="title-desc">1. disconf加载类的坑
-在做push工程的时候，使用disconf动态配置极光的masterSecret和key，但是一直不成功，配置无法更新，始终使用的是默认的配置值。disconf下载的本地文件里面，各项配置都是动态更新的，而且在其他工程里面同样的使用方式都没有问题，判断是因为配置类没有被disconf加载到导致的。
-为什么没有被加载到？
-
-&hellip; <a href="/posts/blog/17/10/15/daily-shit.html" style="font-weight:bold;">Read More</a></div>
+&hellip; <a href="/posts/blog/15/06/17/raft-introduce.html" style="font-weight:bold;">Read More</a></div>
       </li>
       
 
       <ul class="pager">
         
             
-              <li class="dislastpage"> 上一页</li>
+              <li class="lastpage"> <a href="/page4">上一页</a></li>
             
               &nbsp;
             
               
-                <span class="active">1</span>
-                &nbsp;
+                <a href="/index.html">1</a>      &nbsp;
               
             
               
@@ -108,14 +75,13 @@ RFC是这样说的：
               
             
               
-                &nbsp;
-                <a href="/page5">5</a>
+                <span class="active">5</span>
                 &nbsp;
               
             
             &nbsp;
             
-              <li class="nextpage"> <a href="/page2">下一页</a></li>
+              <li class="disnextpage"> 下一页</li>
             
         
       </ul>

@@ -32,6 +32,13 @@
     <ul class="artical-list">
       
       <li>
+        <h2><a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html">spring-session支持分片redis</a></h2>
+        <div class="title-desc">前一篇博客解析了spring session源码，分析了spring session的内部结构。本篇将扩展spring session使用分片redis。在使用spring-session一段时间后，发现spring-session后端redis实例的内存容量不断增长，从刚开始的8G（阿里云ECS），一直扩容到现在的64G。阿里云ECS单机最大容量就到64G，集群版可支持256G。经过对redis rdb的分析，使用spring-session，每个用户占用约2K的内存。由于session key里面保存数据的差异，以及使用不同的序列化方式，每个用户占用内存大小对于不同的业务来说是不一样的。
+
+&hellip; <a href="/posts/blog/17/04/22/spring-session-with-sharded-session.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
         <h2><a href="/posts/blog/17/02/12/spring-session.html">spring session源码解析</a></h2>
         <div class="title-desc">最近要在项目中做用户踢线的功能，由于项目使用spring session来管理用户session，因此特地翻了翻spring session的源码，看看spring session是如何管理的。我们使用redis来存储session，因此本文只对session在redis中的存储结构以及管理做解析。
 
@@ -63,25 +70,6 @@ Spring Session对HTTP的支持是通过标准的servlet filter来实现的，这
 &hellip; <a href="/posts/blog/16/04/17/a-oom-problem.html" style="font-weight:bold;">Read More</a></div>
       </li>
       
-      <li>
-        <h2><a href="/posts/blog/15/11/14/monitor-principle.html">监控模式</a></h2>
-        <div class="title-desc">文章来源stop-monitoring-if-service-is-up
-由于最近组内在对各个项目的监控做梳理，并完善各个项目的监控报警，所以对监控方面关注的比较多些。
-
-在作者看来，99%的监控都没搞对。大多数人认为的监控是这样的：
-
-
-  1.系统有什么东西出问题了。
-  2.报警给我。
-  3.以最快的速度解决。
-  4.快到小于RTO（recovery time objective）。
-
-
-哦（满头大汗！！！），幸好没整个故障出来。如果对于监控的认识与上面是一致的，那么系统经常会与故障相伴。
-
-&hellip; <a href="/posts/blog/15/11/14/monitor-principle.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
 
       <ul class="pager">
         
@@ -108,6 +96,12 @@ Spring Session对HTTP的支持是通过标准的servlet filter来实现的，这
               
                 &nbsp;
                 <a href="/page4">4</a>
+                &nbsp;
+              
+            
+              
+                &nbsp;
+                <a href="/page5">5</a>
                 &nbsp;
               
             

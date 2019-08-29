@@ -32,6 +32,25 @@
     <ul class="artical-list">
       
       <li>
+        <h2><a href="/posts/blog/15/08/02/haproxy-install.html">haproxy部署</a></h2>
+        <div class="title-desc">1 安装
+
+下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），Fuck GFW。
+ 可以通过直接访问http://www.haproxy.org/download/1.5/src/地址，选择相应的版本下载。或者使用wget命令
+
+ wget http://www.haproxy.org/download/1.5/src/haproxy-1.5.12.tar.gz
+
+
+下载，下载完成后，将其解压。
+
+cd haproxy-1.5.12
+uname -a
+make TARGET=linux26 PREFIX=/usr/local/haproxy install
+
+&hellip; <a href="/posts/blog/15/08/02/haproxy-install.html" style="font-weight:bold;">Read More</a></div>
+      </li>
+      
+      <li>
         <h2><a href="/posts/blog/15/07/25/maven-introduce.html">maven介绍</a></h2>
         <div class="title-desc">1 相关概念
 
@@ -111,19 +130,6 @@ ID最大的特点就是唯一，一个ID存在的目的就是唯一性的标识�
 &hellip; <a href="/posts/blog/15/06/17/what-is-good-code.html" style="font-weight:bold;">Read More</a></div>
       </li>
       
-      <li>
-        <h2><a href="/posts/blog/15/06/17/raft-introduce.html">Raft</a></h2>
-        <div class="title-desc">1 Raft概念
-
-分布式系统中，为了实现一致性，一般采用对称式和非对称式两种server组织方式。
-
-对称式：所有的server都具有相同的功能，客户端可以和任意一个server通信。
-
-非对称式：有一个leader作为与外界通信的角色，其余server不与外界通信，leader会将数据的变更同步到所有的其他server中。
-
-&hellip; <a href="/posts/blog/15/06/17/raft-introduce.html" style="font-weight:bold;">Read More</a></div>
-      </li>
-      
 
       <ul class="pager">
         
@@ -153,9 +159,15 @@ ID最大的特点就是唯一，一个ID存在的目的就是唯一性的标识�
                 &nbsp;
               
             
+              
+                &nbsp;
+                <a href="/page5">5</a>
+                &nbsp;
+              
+            
             &nbsp;
             
-              <li class="disnextpage"> 下一页</li>
+              <li class="nextpage"> <a href="/page5">下一页</a></li>
             
         
       </ul>

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>什么样的代码才是好的代码 </title>
+    <title>为什么web服务器返回502 </title>
     <meta name="author" content="hongbing" />
     <meta name="renderer" content="webkit">
     <meta name="description" content="hongbing的部落格" />
@@ -40,70 +40,81 @@
 
 <div id="content">
     <div class="entry">
-        <h1 class="entry-title"><a href="/posts/blog/15/06/17/what-is-good-code.html" title="什么样的代码才是好的代码">什么样的代码才是好的代码</a></h1>
-        <p class="entry-date">2015-06-17</p>
+        <h1 class="entry-title"><a href="/posts/blog/19/08/29/why-502.html" title="为什么web服务器返回502">为什么web服务器返回502</a></h1>
+        <p class="entry-date">2019-08-29</p>
 <!--
 	
 -->
-	<p><strong>文章来源</strong>：http://engineering.intenthq.com/2015/03/what-is-good-code-a-scientific-definition/</p>
+	<p>前段时间收到业务方反馈说他们请求任务调度系统经常会收到“502 Bad Gateway”的错误信息，导致不少任务创建失败。
+<img src="/images/why502/0829_1.png" alt="why502" /></p>
 
-<p>文章的统计结果来自于面试过程中对65个开发者的调查，这些开发者大多数使用java或者scala语言，同时多数具有5年以上的开发经验。</p>
+<p>在弄清楚为什么任务调度系统会返回“502 Bad Gateway”之前，我们首先应该搞清楚什么是502。</p>
 
-<h2 id="1-好代码的top5特征">1 好代码的Top5特征</h2>
-
-<ul>
-  <li><strong>Readable</strong>（可读性）</li>
-  <li><strong>Tested/Testable</strong>（可测试性）</li>
-  <li><strong>Simple</strong>（简单）</li>
-  <li><strong>Works</strong>（功能良好）</li>
-  <li><strong>Maintainable</strong>（可维护性）</li>
-</ul>
-
+<p>RFC是这样说的：<!-- more --></p>
 <blockquote>
-  <p>“Good code is written <!-- more --> so that is readable, understandable, covered by automated tests, not over complicated and does well what is intended to do.”</p>
+  <p>The 502 (Bad Gateway) status code indicates that the server, while acting as a gateway or proxy, received an invalid response from an inbound server it accessed while attempting to fulfill the request.
+翻译一下：
+  502状态码表示作为网关或者代理的server在请求时收到了上游server的无效响应。
+白话就是说，A（比如nginx）请求B（tomcat，或者php-fpm），B没有应A的请求返回正确的数据，A收到了无效的返回。</p>
 </blockquote>
 
-<p><strong>Readable</strong> 应该体现在包，类，方法以及变量的命名上，同时方法调用逻辑，从上到下应该是可读的。写代码就像写故事一样，随着调用链的进行，应该是故事一步一步向前推进的过程。</p>
-
-<h2 id="2-其它特点">2 其它特点</h2>
-<p>避免过早优化，<a href="http://en.wikipedia.org/wiki/Donald_Knuth">Knuth, Donald</a>在40年前就这样说到：</p>
-
+<p>从定义上来看，我们知道是B返回了无效的数据。
+另外需要说明的是，上面图中显示502错误信息的并不是nginx服务器，而是调用方的业务服务器。整个链路是下面这样：</p>
 <blockquote>
-  <p>“We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil”</p>
+  <p>调用方server –&gt; lvs –&gt; nginx –&gt; 任务调度server</p>
 </blockquote>
 
-<p>然而提到要<strong>高效代码</strong>的比提到<strong>避免过早优化</strong>的人要多出一倍。</p>
+<p>从整个调用链路上来看，lvs，nginx，或者任务调度server任何一个都有可能是导致调用方server收到了502请求的罪魁祸首。</p>
 
-<p>同时文中还提到了，self-document和comment，一部分人认为应该代码应该具有自文档性，不应该添加注释（<strong>事实上，没有及时更新或者错误的注释比没有注释还让人烦恼</strong>）; 而另一部分人觉得应该有添加comment，需要让别人知道你在干什么，就是java doc API一样。</p>
+<p>那么应该怎么来排查是谁返回了502呢？</p>
 
-<p>代码的自文档性能够提高代码的可读性，同时一定的注释也是必要的。对于那些有特殊默认值的方法，是需要使用注释来解释的，以避免使用者误用。并非所有的功能实现都能简单化，复杂的功能实现应该要有注释说明，甚至表明所使用到的相关理论以及文档，以供后来人参考。</p>
+<p><code class="highlighter-rouge">看日志。</code></p>
 
-<h2 id="3-有关好代码的统计数据">3 有关好代码的统计数据</h2>
+<p>查看lvs和nginx的日志，看是否有收到502的返回。实际上，在nginx的access日志上看到了任务调度server返回的502.</p>
 
-<p>下面是具体的统计信息：
-  <img src="/images/goodcode/goodcode_statistics.png" alt="好代码的特征" /></p>
+<p>现在要确定任务调度server为什么返回502？</p>
 
-<h2 id="4-代码好坏的测试标准">4 代码好坏的测试标准</h2>
+<p>看日志，任务调度server上没有任何有关502的记录，接下来该怎么办？</p>
 
-<p>可以通过下面的公式来判断一段代码的好坏：</p>
+<p><code class="highlighter-rouge">抓包。</code></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WTFs / minute
-</code></pre></div></div>
+<p>在nginx和调度server一起抓包，实际情况是在server上看到了下面的现象：
+<img src="/images/why502/0829_2.png" alt="why502" /></p>
 
-<p><img src="/images/goodcode/standofgoodcode.png" alt="代码好坏的测试标准" /></p>
+<p>82是nginx，106是调度server。可以看到319756-319758nginx主动建立连接，319759-319769nginx一次post请求，server返回HTTP/1.1 200，并且server收到了nginx的ack确认。
+219769与320738之间间隔了7s多，也即是此刻连接空闲了7s多，之后由server主动发起fin包，同一时刻，nginx也向server发了一个post请求（320751包）。因为server已经要主动关闭连接了，所以不会处理nginx发出的post请求，server发了一个rst包，希望重置连接。nginx收到后，也同意断开连接，也回复了FIN,ACK包。此时，在nginx一端的acess日志我们看到了502请求。</p>
 
-<h2 id="6-写出好代码的方法">6 写出好代码的方法</h2>
-<p>按照下面的流程即可写出好的代码，程序员必备，哈哈哈.</p>
+<p>那这里我们搞清楚了502无效响应是怎么出现的。</p>
 
-<p><img src="/images/goodcode/good_code.png" alt="GoodCode" /></p>
+<p>即：调度server主动关闭连接，但同时nginx仍有请求发到server，server无法处理，发RST包给nginx，nginx无奈也同意关闭连接，这一次请求就失败了，表现出来就是nginx收到502，最终经过lvs返回给调用方。</p>
+
+<p>那么为什么server要主动关闭连接？</p>
+
+<p>因为空闲，空闲了7s。nginx有设置keepalive_timeout,时间是60s。</p>
+
+<p>从这个信息，猜测是因为server tomcat的keepalive时间是7s，所以server等待连接空闲7s后，主动关闭了连接。</p>
+
+<p>tomcat8的keepalive时间是通过里下面两个参数确定的。
+<img src="/images/why502/0829_3.png" alt="why502" /></p>
+
+<p>而我们代码里确实设置了connectionTimeout，值是7000.
+<img src="/images/why502/0829_4.png" alt="why502" /></p>
+
+<p>到这里，问题的原因找到了。为了避免server主动关闭连接导致502的这个问题，需要把tomcat的keepalive时间设置得比nginx的长一些，这样即便是空闲连接到达关闭的时间，也是由nginx主动关闭，而不是由上游服务器来关闭。由于nginx设置的60s，tomcat这里设置90s就可以了。改完配置后502立马消失了。
+<img src="/images/why502/0829_5.png" alt="why502" /></p>
+
+<h4 id="参考资料">参考资料</h4>
+<p>[1] <a href="https://tools.ietf.org/html/rfc7231#section-6.6.3">rfc</a></p>
+
+<p>[2] <a href="https://docs.bmc.com/docs/ars81/fine-tuning-the-network-for-http-protocol-258511131.html">Optimizing the network for HTTP by setting the HTTP keep-alive option</a></p>
+
+<p>[3] <a href="https://www.wireshark.org/">Wireshark</a></p>
 
 	<ul class="pager">
             
-            <li class="previous"><a href="/posts/blog/15/06/17/raft-introduce.html" title="Raft">上一篇 Raft</a></li>
+            <li class="previous"><a href="/posts/blog/18/04/22/redis-data-migration.html" title="阿里云redis数据拆分">上一篇 阿里云redis数据拆分</a></li>
 	    
 
-            
-            <li class="next"><a href="/posts/blog/15/06/21/distributed-id-generator.html" title="分布式ID生成器">下一篇 分布式ID生成器</a></li>
             
 	</ul>
 	<div id="disqus_thread"></div>
