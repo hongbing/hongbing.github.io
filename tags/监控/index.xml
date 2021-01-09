@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>监控 on Hongbing Blog</title>
+    <link>http://hongbing.github.io/tags/%E7%9B%91%E6%8E%A7/</link>
+    <description>Recent content in 监控 on Hongbing Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 14 Nov 2015 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/%E7%9B%91%E6%8E%A7/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>监控的原则</title>
+      <link>http://hongbing.github.io/post/2015-11-14-monitor-principle/</link>
+      <pubDate>Sat, 14 Nov 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/post/2015-11-14-monitor-principle/</guid>
+      <description>文章来源stop-monitoring-if-service-is-up 由于最近组内在对各个项目的监控做梳理，并完善各个项目的监控报警，所以</description>
+    </item>
+    
+  </channel>
+</rss>

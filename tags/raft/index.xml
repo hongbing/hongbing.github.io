@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>raft on Hongbing Blog</title>
+    <link>http://hongbing.github.io/tags/raft/</link>
+    <description>Recent content in raft on Hongbing Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 17 Jun 2015 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/raft/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Raft简介</title>
+      <link>http://hongbing.github.io/post/2015-06-17-raft-introduce/</link>
+      <pubDate>Wed, 17 Jun 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/post/2015-06-17-raft-introduce/</guid>
+      <description>1 Raft概念 分布式系统中，为了实现一致性，一般采用对称式和非对称式两种server组织方式。 对称式：所有的server都具有相同的功能，客</description>
+    </item>
+    
+  </channel>
+</rss>

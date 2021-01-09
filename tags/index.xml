@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Hongbing Blog</title>
+    <link>http://hongbing.github.io/tags/</link>
+    <description>Recent content in Tags on Hongbing Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 02 Apr 2018 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>redis</title>
+      <link>http://hongbing.github.io/tags/redis/</link>
+      <pubDate>Mon, 02 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/redis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>log4j</title>
+      <link>http://hongbing.github.io/tags/log4j/</link>
+      <pubDate>Sun, 15 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/log4j/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>java</title>
+      <link>http://hongbing.github.io/tags/java/</link>
+      <pubDate>Sat, 22 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>spring</title>
+      <link>http://hongbing.github.io/tags/spring/</link>
+      <pubDate>Sat, 22 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/spring/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linux</title>
+      <link>http://hongbing.github.io/tags/linux/</link>
+      <pubDate>Sat, 21 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>中断</title>
+      <link>http://hongbing.github.io/tags/%E4%B8%AD%E6%96%AD/</link>
+      <pubDate>Thu, 19 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/%E4%B8%AD%E6%96%AD/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>oom</title>
+      <link>http://hongbing.github.io/tags/oom/</link>
+      <pubDate>Sun, 17 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/oom/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>监控</title>
+      <link>http://hongbing.github.io/tags/%E7%9B%91%E6%8E%A7/</link>
+      <pubDate>Sat, 14 Nov 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/%E7%9B%91%E6%8E%A7/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>block_dump</title>
+      <link>http://hongbing.github.io/tags/block_dump/</link>
+      <pubDate>Fri, 21 Aug 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/block_dump/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jetty</title>
+      <link>http://hongbing.github.io/tags/jetty/</link>
+      <pubDate>Fri, 21 Aug 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/jetty/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pdflush</title>
+      <link>http://hongbing.github.io/tags/pdflush/</link>
+      <pubDate>Thu, 20 Aug 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/pdflush/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>HAproxy</title>
+      <link>http://hongbing.github.io/tags/haproxy/</link>
+      <pubDate>Sun, 02 Aug 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/haproxy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>maven</title>
+      <link>http://hongbing.github.io/tags/maven/</link>
+      <pubDate>Sat, 25 Jul 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/maven/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>consul</title>
+      <link>http://hongbing.github.io/tags/consul/</link>
+      <pubDate>Sun, 21 Jun 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/consul/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>etcd</title>
+      <link>http://hongbing.github.io/tags/etcd/</link>
+      <pubDate>Sun, 21 Jun 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/etcd/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>uuid</title>
+      <link>http://hongbing.github.io/tags/uuid/</link>
+      <pubDate>Sun, 21 Jun 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/uuid/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>raft</title>
+      <link>http://hongbing.github.io/tags/raft/</link>
+      <pubDate>Wed, 17 Jun 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/raft/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>代码</title>
+      <link>http://hongbing.github.io/tags/%E4%BB%A3%E7%A0%81/</link>
+      <pubDate>Wed, 17 Jun 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/tags/%E4%BB%A3%E7%A0%81/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

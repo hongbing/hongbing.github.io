@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>maven on Hongbing Blog</title>
+    <link>http://hongbing.github.io/tags/maven/</link>
+    <description>Recent content in maven on Hongbing Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 25 Jul 2015 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/maven/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>maven介绍</title>
+      <link>http://hongbing.github.io/post/2015-07-25-maven-introduce/</link>
+      <pubDate>Sat, 25 Jul 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/post/2015-07-25-maven-introduce/</guid>
+      <description>1 相关概念 1.1 版本号 版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。 版本号格式一般分为： 主版本号.分支版本号.小</description>
+    </item>
+    
+  </channel>
+</rss>

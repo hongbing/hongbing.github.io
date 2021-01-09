@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="Hongbing Blog">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="http://hongbing.github.io//img/home-bg.jpg">
+    <meta property="twitter:image" content="http://hongbing.github.io//img/home-bg.jpg" />
+    
+
+    
+    <meta name="title" content="HAproxy部署" />
+    <meta property="og:title" content="HAproxy部署" />
+    <meta property="twitter:title" content="HAproxy部署" />
+    
+
+    
+    <meta name="description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人">
+    <meta property="og:description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人" />
+    <meta property="twitter:description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="靳洪兵, Jinhongbing, hongbing, Hongbing Blog, 博客, 个人网站, 互联网, Web">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>HAproxy部署-洪兵的博客</title>
+
+    <link rel="canonical" href="/post/2015-08-02-haproxy-install/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+</head>
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Hongbing Blog</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                        <li>
+                            <a href="/categories/tech">tech</a>
+                        </li>
+                        
+                    
+                    
+		    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search">SEARCH <img src="/img/search.png" height="15" style="cursor: pointer;" alt="Search"></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/haproxy" title="HAproxy">
+                            HAproxy
+                        </a>
+                        
+                    </div>
+                    <h1>HAproxy部署</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by 
+                        
+                            hongbing
+                         
+                        on 
+                        2015-08-02
+                        
+                        
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <header>
+                    <h2>目录</h2>
+                </header>
+                <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-安装">1 安装</a></li>
+        <li><a href="#2-配置">2 配置</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                
+                <h2 id="1-安装">1 安装</h2>
+<p>下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），<strong>Fuck GFW</strong>。
+可以通过直接访问http://www.haproxy.org/download/1.5/src/地址，选择相应的版本下载。或者使用wget命令</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-http" data-lang="http"> wget http://www.haproxy.org/download/1.5/src/haproxy-1.5.12.tar.gz
+</code></pre></div><p>下载，下载完成后，将其解压。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#8be9fd;font-style:italic">cd</span> haproxy-1.5.12
+uname -a
+make <span style="color:#8be9fd;font-style:italic">TARGET</span><span style="color:#ff79c6">=</span>linux26 <span style="color:#8be9fd;font-style:italic">PREFIX</span><span style="color:#ff79c6">=</span>/usr/local/haproxy install
+</code></pre></div><!-- raw HTML omitted -->
+<p>linux26,26表示linux系统的主次版本号。
+执行上面的命令，输出done就正确安装完成。</p>
+<h2 id="2-配置">2 配置</h2>
+<ul>
+<li>修改配置</li>
+</ul>
+<p>配置文件可以参考源码里面examples下面的haproxy.cfg文件，haproxy里的配置参数可到<a href="http://cbonte.github.io/haproxy-dconv/index.html">haproxy-dconv</a>查看。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#8be9fd;font-style:italic">cd</span> /usr/local/haproxy
+mkdir conf logs
+vim /conf/haproxy.cfg
+</code></pre></div><p>下面是参考配置</p>
+<pre><code>global  //全局配置参数，进程级
+    log 127.0.0.1 local0//日志输出配置，所有日志都记录在本机，通过local0输出
+    maxconn  5120  //每个进程的最大连接数
+    chroot   /usr/local/haproxy  //改变当前工作目录
+    uid      100  //所属用户的uid
+    gid      100  //所属用户的gid
+    daemon  //以后台形式运行haproxy   
+    nbproc   2  //创建2个进程进去deamon模式
+    pidfile  /usr/local/haproxy/logs/haproxy.pid  //pid文件
+defaults  
+    log     127.0.0.1  local3  err
+    mode    http  //http七层,tcp4层,health只返回OK
+    option  httplog  //采用httpd日志格式
+    option  dontlognull  
+    option  redispatch  
+    retries 3  //三次失败认为服务不可用
+    maxconn 3000  //默认的最大连接数
+    contimeout 5000  //连接超时时间
+    clitimeout 50000  //客户端超时时间
+    srvtimeout 50000  //服务器超时时间
+    stats enable  
+    stats uri /admin  //统计页面的url
+    stats auth admin:admin  //统计页面的用户名密码
+    stats realm Haproxy \ statistic  //统计页面提示信息
+    stats hide-version//隐藏统计页面版本信息
+
+    listen web_proxy *:80
+          server web1 192.168.1.128:80 check inter 5000 fall 1 rise 2  
+          server web1 192.168.1.128:8080 check inter 5000 fall 1 rise 2
+    //check inter 5000 是检测心跳频率，rise 2 是2次正确认为服务可用，fall 1 是1次失败认为服务不可用，weight代表权重
+</code></pre><p>global是进程级别的参数；代理参数可以设置defaults，listen，frontend和backend。listen是frontend和backend的组合，可以设置frontend的端口，backend的server节点，以及一些其他参数。</p>
+<ul>
+<li>配置日志环境</li>
+</ul>
+<p>在/etc/syslog.conf文件中添加，如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">local0.*        /usr/local/logs/haproxy.log
+local3.*        /usr/local/logs/haproxy_err.log
+</code></pre></div><p>如果系统需要设置接收外来日志，修改/etc/sysconfig/syslog文件：</p>
+<pre><code>SYSLOGD_OPTIONS=&quot;-r -m 0&quot;
+</code></pre><ul>
+<li>启动命令</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./sbin/haproxy -f ./conf/haproxy.cfg
+</code></pre></div><ul>
+<li>重启命令</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./sbin/haproxy -f ./conf/haproxy.cfg -st <span style="color:#ff79c6">[</span>haproxy.pid<span style="color:#ff79c6">]</span>
+</code></pre></div><ul>
+<li>停止命令</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">killall haproxy
+</code></pre></div><ul>
+<li>reload配置</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./sbin/haproxy -f ./conf/haproxy.cfg -sf <span style="color:#ff79c6">[</span>haproxy.pid<span style="color:#ff79c6">]</span>
+</code></pre></div><p>可以在修改haproxy.cfg后，快速重载变更配置。
+
+  <img src="/img/haproxy/haproxy.jpg" alt="haproxy">
+
+</p>
+
+
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/2015-07-25-maven-introduce/" data-toggle="tooltip" data-placement="top" title="maven介绍">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/post/2015-08-11-unknowhostexception/" data-toggle="tooltip" data-placement="top" title="UnknowHostException问题">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/java" title="java">
+                            java
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/linux" title="linux">
+                            linux
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/redis" title="redis">
+                            redis
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/spring" title="spring">
+                            spring
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                
+                    
+                    
+                    
+                        
+                        
+                        
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                   
+                   <li>
+                       <a href='' rel="alternate" type="application/rss+xml" title="Hongbing Blog" >
+                           <span class="fa-stack fa-lg">
+                               <i class="fas fa-circle fa-stack-2x"></i>
+                               <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                           </span>
+                       </a>
+                   </li>
+                   
+                    
+                    <li>
+                        <a href="mailto:jasonjin2009@163.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+
+                    
+                    
+                    
+
+                    
+
+		    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+            
+            
+            
+                </ul>
+		<p class="copyright text-muted">
+                    Copyright &copy; Hongbing Blog 2021
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> by <a href="https://zhaohuabing.com">Huabing</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=zhaohuabing&repo=hugo-theme-cleanwhite&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    async("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+
+
+
+</body>
+</html>

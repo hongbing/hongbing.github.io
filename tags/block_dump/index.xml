@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>block_dump on Hongbing Blog</title>
+    <link>http://hongbing.github.io/tags/block_dump/</link>
+    <description>Recent content in block_dump on Hongbing Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 21 Aug 2015 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/block_dump/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>linux系统之block_dump</title>
+      <link>http://hongbing.github.io/post/2015-08-21-linux-of-blockdump/</link>
+      <pubDate>Fri, 21 Aug 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/post/2015-08-21-linux-of-blockdump/</guid>
+      <description>当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过iostat，vmstat命令从宏观上来查看系统的一些io参数，比</description>
+    </item>
+    
+  </channel>
+</rss>

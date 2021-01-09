@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="Hongbing Blog">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="http://hongbing.github.io//img/home-bg.jpg">
+    <meta property="twitter:image" content="http://hongbing.github.io//img/home-bg.jpg" />
+    
+
+    
+    <meta name="title" content="监控的原则" />
+    <meta property="og:title" content="监控的原则" />
+    <meta property="twitter:title" content="监控的原则" />
+    
+
+    
+    <meta name="description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人">
+    <meta property="og:description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人" />
+    <meta property="twitter:description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="靳洪兵, Jinhongbing, hongbing, Hongbing Blog, 博客, 个人网站, 互联网, Web">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>监控的原则-洪兵的博客</title>
+
+    <link rel="canonical" href="/post/2015-11-14-monitor-principle/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+</head>
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Hongbing Blog</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                        <li>
+                            <a href="/categories/tech">tech</a>
+                        </li>
+                        
+                    
+                    
+		    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search">SEARCH <img src="/img/search.png" height="15" style="cursor: pointer;" alt="Search"></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/%E7%9B%91%E6%8E%A7" title="监控">
+                            监控
+                        </a>
+                        
+                    </div>
+                    <h1>监控的原则</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by 
+                        
+                            hongbing
+                         
+                        on 
+                        2015-11-14
+                        
+                        
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <p><em>文章来源<a href="http://everythingsysadmin.com/2013/11/stop-monitoring-if-service-is-up.html">stop-monitoring-if-service-is-up</a></em>
+由于最近组内在对各个项目的监控做梳理，并完善各个项目的监控报警，所以对监控方面关注的比较多些。</p>
+<p>在作者看来，99%的监控都没搞对。大多数人认为的监控是这样的：</p>
+<ul>
+<li><strong>1.系统有什么东西出问题了。</strong></li>
+<li><strong>2.报警给我。</strong></li>
+<li>3.以最快的速度解决。</li>
+<li>4.快到小于RTO（recovery time objective）。</li>
+</ul>
+<p>哦（满头大汗！！！），幸好没整个故障出来。如果对于监控的认识与上面是一致的，那么系统经常会与故障相伴。</p>
+<!-- raw HTML omitted -->
+<p>作者理解的监控是这样的：</p>
+<ul>
+<li><strong>1.收到报警有的东西不在状态，需要修复，否则会出故障。</strong></li>
+<li><strong>2.在出故障之前修复掉。</strong></li>
+<li>3.轻松搞定。</li>
+<li>4.用户无感知。</li>
+</ul>
+<p>也许你已经看明白了，作者理解的监控与大多数人认为的监控的差别，第1步与第2步的顺序，然而不止如此，它们是对于监控两种不同的认知。一个是出问题了，监控告知，快速修复的对问题的反应式方式，另一个是监控显示可能某处会出问题，快速处理的主动出击的方式。一个略显被动的处理问题，一个却是<code>主动</code>的，在问题出现之前就化解了。
+那么怎样做到作者提出的监控的模式？</p>
+<ul>
+<li><strong>1.删除监控系统中的所有报警(略显暴力哈)</strong></li>
+<li><strong>2.每次遇到故障，思考什么样的监控数据可以预测到这种故障的发生</strong></li>
+<li><strong>3.更新监控，收集监控数据，添加必要的报警</strong></li>
+<li><strong>4.重复上面的操作。最终利用报警阻止故障的发生，而不是应对故障。</strong></li>
+</ul>
+<p>所以，在设计监控报警的时候，应该将报警设置在最底层，离最终用户越远，越能尽快发现并解决问题。当然，监控项除了报警还有一个作用就是问题的排查，这个就需要在各个关键路径都有相应数据的监控指标。</p>
+<p>当然，没有完美的监控，并不能将所有的情况都早早的监控到，因此在我们设计系统的时候，都应该将监控思考进去，一些可能的点包括但不限于：</p>
+<blockquote>
+<p>多条网络线路，其中一条无效，报警；存储使用raid，其中一块硬盘出故障，报警；
+监控磁盘空间，ram使用，设置冗余，超过就报警；使用负载均衡器来转发web sever的请求；
+&hellip;&hellip;</p>
+</blockquote>
+<p>监控，一定要是显示在界面上，能够让外行轻易看懂的才叫监控，在日志里面的只能称之为数据，不叫监控。</p>
+<p>
+  <img src="/img/monitor/monitor.jpg" alt="monitor">
+
+</p>
+
+
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/2015-11-14-jetty-deadlock/" data-toggle="tooltip" data-placement="top" title="Jetty死锁问题">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/post/2016-04-17-a-oom-problem/" data-toggle="tooltip" data-placement="top" title="一次oom的排查过程">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/java" title="java">
+                            java
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/linux" title="linux">
+                            linux
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/redis" title="redis">
+                            redis
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/spring" title="spring">
+                            spring
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                
+                    
+                    
+                    
+                        
+                        
+                        
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                   
+                   <li>
+                       <a href='' rel="alternate" type="application/rss+xml" title="Hongbing Blog" >
+                           <span class="fa-stack fa-lg">
+                               <i class="fas fa-circle fa-stack-2x"></i>
+                               <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                           </span>
+                       </a>
+                   </li>
+                   
+                    
+                    <li>
+                        <a href="mailto:jasonjin2009@163.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+
+                    
+                    
+                    
+
+                    
+
+		    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+            
+            
+            
+                </ul>
+		<p class="copyright text-muted">
+                    Copyright &copy; Hongbing Blog 2021
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> by <a href="https://zhaohuabing.com">Huabing</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=zhaohuabing&repo=hugo-theme-cleanwhite&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    async("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="Hongbing Blog">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="http://hongbing.github.io//img/home-bg.jpg">
+    <meta property="twitter:image" content="http://hongbing.github.io//img/home-bg.jpg" />
+    
+
+    
+    <meta name="title" content="linux系统之pdflush" />
+    <meta property="og:title" content="linux系统之pdflush" />
+    <meta property="twitter:title" content="linux系统之pdflush" />
+    
+
+    
+    <meta name="description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人">
+    <meta property="og:description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人" />
+    <meta property="twitter:description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="靳洪兵, Jinhongbing, hongbing, Hongbing Blog, 博客, 个人网站, 互联网, Web">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>linux系统之pdflush-洪兵的博客</title>
+
+    <link rel="canonical" href="/post/2015-08-20-linux-of-pdflush/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+</head>
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Hongbing Blog</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                        <li>
+                            <a href="/categories/tech">tech</a>
+                        </li>
+                        
+                    
+                    
+		    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search">SEARCH <img src="/img/search.png" height="15" style="cursor: pointer;" alt="Search"></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/linux" title="linux">
+                            linux
+                        </a>
+                        
+                        <a class="tag" href="/tags/pdflush" title="pdflush">
+                            pdflush
+                        </a>
+                        
+                    </div>
+                    <h1>linux系统之pdflush</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by 
+                        
+                            hongbing
+                         
+                        on 
+                        2015-08-20
+                        
+                        
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <p>当我们向磁盘文件写入数据时，由于内存与磁盘之间数据读取的差异，操作系统不会直接将数据写透（write through）到磁盘上，而是会写到页高速缓存（page cache）中，真正的写磁盘操作会延迟进行，称为写延迟（write delay）。当page cache中的数据比后端存储中的数据还要新时，称page cache中的数据为脏数据（或者脏页，dirty page）。page cache对被缓存的页面范围的定义非常宽泛，任何基于页的对象，包括各种类型<!-- raw HTML omitted -->的文件和各种类型的内存映射都可以。如果计算机在运行过程中突然掉电，脏页会来不及写回磁盘，会造成数据丢失。为了尽可能的减少突然掉电带来的数据丢失，同时为了保证系统有足够多的空闲内存空间，操作系统会主动执行将脏页写回磁盘的操作，这也就是pdflush线程的工作。</p>
+<p>可以在<code>/proc/meminfo</code>中查看系统page cache的信息。</p>
+<pre><code>MemTotal:        1943676 kB
+MemFree:          165132 kB
+Buffers:           23784 kB
+Cached:           511048 kB
+SwapCached:            0 kB
+......
+SwapTotal:       1989628 kB
+SwapFree:        1989360 kB
+Dirty:                60 kB
+Writeback:             0 kB
+AnonPages:       1009132 kB
+Mapped:           229812 kB
+Shmem:            195912 kB
+Slab:             163756 kB
+......
+</code></pre><p>Cached即表示当前page cache的大小，Dirty表示脏页的大小。</p>
+<p>在linux内核2.6，操作系统维护一组内核线程pdflush执行脏页回写，<code>/proc/sys/vm/nr_pdflush_threads</code>参数可以设置系统中pdflush的线程数。在2.6.32内核版本，pdflush已经被Flusher线程组所取代，Flusher与pdflush的主要区别在于，<strong>pdflush线程与任何任务无关，它们是面向系统所有磁盘的全局任务</strong>，而Flusher线程组可以针对<strong>每个磁盘独立执行回写操作</strong>。下面我们仍然以pdflush来分析。</p>
+<p>在下面3种情况下，pdflush线程会被唤醒执行：</p>
+<ul>
+<li><strong>当空闲内存低于一个特定的阈值时;</strong></li>
+<li><strong>当脏页在内存中驻留时间超过一个特定的阈值时;</strong></li>
+<li><strong>当用户调用sync()和fsync()系统调用时.</strong></li>
+</ul>
+<p>第一种情况保证当空闲内存过低时，脏页回写释放内存；第二种情况保证脏页不会无限期的驻留在内存中，最后一种是应用层主动要求执行脏页刷新，可以认为前两种情况是被动式的，是在满足空间（内存空闲空间）和时间（脏页驻留时间）任一条件下进行的。最后一种是主动式的。</p>
+<p>首先看看被动式的空间阈值，空间阈值包括两个，一个是<code>/proc/sys/vm/dirty_background_ratio</code>，另一个是<code>/proc/sys/vm/dirty_ratio</code>。</p>
+<p>查看Kernel version 2.6.29的doc，看看该doc是怎么描述这两个参数的：</p>
+<pre><code>==============================================================
+dirty_background_ratio
+
+Contains, as a percentage of total available memory that
+contains free pages and reclaimable pages, the number of pages at
+which the background kernel flusher threads will start writing out
+dirty data.
+
+The total avaiable memory is not equal to total system memory.
+
+==============================================================
+dirty_ratio
+
+Contains, as a percentage of total available memory that
+contains free pages and reclaimable pages, the number of pages at
+which a process which is generating disk writes will itself
+start writing out dirty data.
+
+The total avaiable memory is not equal to total system memory.
+
+==============================================================
+</code></pre><p>从doc中可以看出，含义都是表示<code>占可用内存空间的百分比</code>。但是区别在达到<strong>dirty_background_ratio</strong>这个阈值后，pdflush线程会<code>异步</code>执行脏页回写，而当达到<strong>dirty_ratio</strong>阈值时，当时执行写操作的进程会被强制<code>同步</code>执行脏页回写操作，此时所有进程的写操作都会被阻塞,直到脏页占比降低到dirty_ratio之下，如果此时的脏页率仍然在dirty_backgroud_radio之上，将调用pdflush执行异步刷新。</p>
+<p>默认的<strong>dirty_ratio</strong>的值应该设置得比<strong>dirty_background_ratio</strong>大。看看工作机中与dirty有关的参数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sysctl -a | grep dirty
+vm.dirty_background_bytes <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+vm.dirty_background_ratio <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">5</span>
+vm.dirty_bytes <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+vm.dirty_expire_centisecs <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">3000</span>
+vm.dirty_ratio <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">10</span>
+vm.dirty_writeback_centisecs <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">500</span>
+</code></pre></div><p>这里有一个需要注意的点，占比依据的是<code>可用内存</code>，并不是全部内存。可用内存如何计算？</p>
+<blockquote>
+<p>MemFree + Cached - Mapped</p>
+</blockquote>
+<p>因此，按照前面给出的数字，可用内存为435M，那么当脏页达到21.75M时，就会触发空间阈值。</p>
+<p>pdflush唤醒后会调用<code>background_writeout(int)</code>函数，该函数需要传入一个整形值，表示写回的页数。当下面两个条件满足时，pdflush停止回写操作：</p>
+<pre><code> 指定的最小数目的脏页数被写回到磁盘；
+ 空闲内存数已经回升，超过了阈值dirty_background_ratio
+</code></pre>
+<p>只有达到上面两个条件才会停止回写，除非将所有脏页都写回到磁盘，没有剩余的脏页可以回写了。</p>
+<p>再来看看被动式的时间阈值<code>dirty_expire_centisecs</code>（脏页的过期时间），该值在linux doc中是这样描述的：</p>
+<pre><code>==============================================================
+dirty_expire_centisecs
+
+This tunable is used to define when dirty data is old enough
+to be eligible for writeout by the kernel flusher threads.
+
+It is expressed in 100 ths of a second.  
+Data which has been dirty in-memory for longer than this interval
+will be written out next time a flusher thread wakes up.
+==============================================================
+</code></pre><p><strong>dirty_expire_centisecs</strong> 表示脏页在内存中驻留的时间阈值，该值的单位为1/100 秒。另外还有一个参数<code>dirty_writeback_centisecs</code></p>
+<pre><code>==============================================================
+dirty_writeback_centisecs
+
+The kernel flusher threads will periodically wake up
+and write old data out to disk.  
+This tunable expresses the interval between those wakeups,
+in 100 ths of a second.
+
+Setting this to zero disables periodic writeback altogether.
+==============================================================
+</code></pre><p>表示系统多久唤醒pdflush来执行回写操作。系统启动时会设置一个定时器，时间为百分之dirty_writeback_centisecs秒，当时间到时，唤醒pdflush线程将驻留时间超过百分之dirty_expire_centisecs秒的脏页回写到磁盘，完成后睡眠，然后重置定时器时间为百分之dirty_writeback_centisecs秒等待下一次唤醒，也即周期性的执行脏页回写操作。</p>
+<p>最后来看看主动式的回写操作。当调用fsync()时，会传入一个文件描述符fd，fsync会保证该文件的所有脏页都被刷新到磁盘才返回。</p>
+<p>另外还有一种情况，是用户态在调用write函数时，当页面被标记为脏后会检查当前的脏页比率，根据条件刷新脏页。此时的刷新策略与脏页占可用内存比率大于dirty_ratio时一致，同步刷新，阻塞其它的write操作，当比率降到dirty_backgroud_ratio后，wakeup pdflush执行异步刷新。因此用户态调用write()函数也可能引发脏页刷新操作。</p>
+<p>参数调优应该根据具体的应用场景来确定，可以将参数值添加到<code>/etc/sysctl.conf</code>文件中，然后执行<code>sysctl -p</code>使其生效。</p>
+<p>
+  <img src="/img/linuxofpdflush/OMGLookather.jpg" alt="OMGLookather">
+
+</p>
+<h3 id="参考">参考</h3>
+<ul>
+<li><a href="http://www.westnet.com/~gsmith/content/linux-pdflush.htm">http://www.westnet.com/~gsmith/content/linux-pdflush.htm</a></li>
+<li><a href="https://www.kernel.org/doc/">https://www.kernel.org/doc/</a></li>
+<li><a href="http://www.oenhan.com/linux-cache-writeback">http://www.oenhan.com/linux-cache-writeback</a></li>
+</ul>
+
+
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/2015-08-11-unknowhostexception/" data-toggle="tooltip" data-placement="top" title="UnknowHostException问题">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/post/2015-08-21-linux-of-blockdump/" data-toggle="tooltip" data-placement="top" title="linux系统之block_dump">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/java" title="java">
+                            java
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/linux" title="linux">
+                            linux
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/redis" title="redis">
+                            redis
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/spring" title="spring">
+                            spring
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                
+                    
+                    
+                    
+                        
+                        
+                        
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                   
+                   <li>
+                       <a href='' rel="alternate" type="application/rss+xml" title="Hongbing Blog" >
+                           <span class="fa-stack fa-lg">
+                               <i class="fas fa-circle fa-stack-2x"></i>
+                               <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                           </span>
+                       </a>
+                   </li>
+                   
+                    
+                    <li>
+                        <a href="mailto:jasonjin2009@163.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+
+                    
+                    
+                    
+
+                    
+
+		    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+            
+            
+            
+                </ul>
+		<p class="copyright text-muted">
+                    Copyright &copy; Hongbing Blog 2021
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> by <a href="https://zhaohuabing.com">Huabing</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=zhaohuabing&repo=hugo-theme-cleanwhite&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    async("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+
+
+
+</body>
+</html>

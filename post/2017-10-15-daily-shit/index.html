@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="Hongbing Blog">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="http://hongbing.github.io//img/home-bg.jpg">
+    <meta property="twitter:image" content="http://hongbing.github.io//img/home-bg.jpg" />
+    
+
+    
+    <meta name="title" content="20171015一周坑" />
+    <meta property="og:title" content="20171015一周坑" />
+    <meta property="twitter:title" content="20171015一周坑" />
+    
+
+    
+    <meta name="description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人">
+    <meta property="og:description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人" />
+    <meta property="twitter:description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="靳洪兵, Jinhongbing, hongbing, Hongbing Blog, 博客, 个人网站, 互联网, Web">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>20171015一周坑-洪兵的博客</title>
+
+    <link rel="canonical" href="/post/2017-10-15-daily-shit/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+</head>
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Hongbing Blog</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                        <li>
+                            <a href="/categories/tech">tech</a>
+                        </li>
+                        
+                    
+                    
+		    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search">SEARCH <img src="/img/search.png" height="15" style="cursor: pointer;" alt="Search"></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                    </div>
+                    <h1>20171015一周坑</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by 
+                        
+                            hongbing
+                         
+                        on 
+                        2017-10-15
+                        
+                        
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <header>
+                    <h2>目录</h2>
+                </header>
+                <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-disconf加载类的坑">1. disconf加载类的坑</a></li>
+        <li><a href="#2-drds使用mysql别名的坑">2. DRDS使用mysql别名的坑</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                
+                <h2 id="1-disconf加载类的坑">1. disconf加载类的坑</h2>
+<p>在做push工程的时候，使用disconf动态配置极光的masterSecret和key，但是一直不成功，配置无法更新，始终使用的是默认的配置值。disconf下载的本地文件里面，各项配置都是动态更新的，而且在其他工程里面同样的使用方式都没有问题，判断是因为配置类没有被disconf加载到导致的。
+为什么没有被加载到？ <!-- raw HTML omitted --></p>
+<p>disconf相关配置如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> <span style="color:#ff79c6">&lt;</span>bean id<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;disconfMgrBean&#34;</span> class<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;com.baidu.disconf.client.DisconfMgrBean&#34;</span>
+          destroy<span style="color:#ff79c6">-</span>method<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;destroy&#34;</span><span style="color:#ff79c6">&gt;</span>
+        <span style="color:#ff79c6">&lt;</span>property name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;scanPackage&#34;</span> value<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;com.uxin.zb,  com.uxin.commons&#34;</span><span style="color:#ff79c6">/&gt;</span>
+    <span style="color:#ff79c6">&lt;/</span>bean<span style="color:#ff79c6">&gt;</span>
+    <span style="color:#ff79c6">&lt;</span>bean id<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;disconfMgrBean2&#34;</span> class<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;com.baidu.disconf.client.DisconfMgrBeanSecond&#34;</span>
+          init<span style="color:#ff79c6">-</span>method<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;init&#34;</span> destroy<span style="color:#ff79c6">-</span>method<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;destroy&#34;</span><span style="color:#ff79c6">&gt;</span>
+    <span style="color:#ff79c6">&lt;/</span>bean<span style="color:#ff79c6">&gt;</span>
+</code></pre></div><p>打开disconf的debug日志，可以看到在disconf静态扫描时候的日志</p>
+<blockquote>
+<p>start to scan package: com.uxin.zb,  com.uxin.commons</p>
+</blockquote>
+<p>说明disconf已经开始要去加载这两个包，但是为什么包里面的配置相关的类没有加载进来呢？看代码也没发现什么问题，只得下载disconf的源码，在源码里面加了些DEBUG日志，然后打包在测试环境使用，最终发现问题所在。</p>
+<p>在初始化DisconfMgrBean的时候，会根据scanPackage参数来解析需要扫描的包名，解析方法是下面的<code>StringUtil.parseStringToStringList()</code>， 参数token为逗号，source即为&rsquo;com.uxin.zb,  com.uxin.commons'，因为在逗号之间多加了个空格，所以解析出来的包包括com.uxin.zb和空格com.uxin.commons, 因此在根据包名查找classpath下面相应的文件时就没有找到对应com.uxin.commons包的zb-commons.jar包，导致了配置类没有加载进来，无法使用disconf的动态配置。</p>
+<p>一个空格导致的问题，也是disconf的一个bug。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">parseStringToStringList</span><span style="color:#ff79c6">(</span>String source<span style="color:#ff79c6">,</span>
+                                                       String token<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+
+        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>StringUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isBlank</span><span style="color:#ff79c6">(</span>source<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">||</span> StringUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isEmpty</span><span style="color:#ff79c6">(</span>token<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
+            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
+        <span style="color:#ff79c6">}</span>
+
+        List<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> result <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;();</span>
+
+        String<span style="color:#ff79c6">[]</span> units <span style="color:#ff79c6">=</span> source<span style="color:#ff79c6">.</span><span style="color:#50fa7b">split</span><span style="color:#ff79c6">(</span>token<span style="color:#ff79c6">);</span>
+        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>String unit <span style="color:#ff79c6">:</span> units<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+            result<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>unit<span style="color:#ff79c6">);</span>
+        <span style="color:#ff79c6">}</span>
+        <span style="color:#ff79c6">return</span> result<span style="color:#ff79c6">;</span>
+    <span style="color:#ff79c6">}</span>
+
+</code></pre></div><h2 id="2-drds使用mysql别名的坑">2. DRDS使用mysql别名的坑</h2>
+<p>项目中使用mybatis操作数据库，自定义了查询主播粉丝uid的最大值和最小值的mapper，最大值和最小值都使用了别名，返回结果map。在返回结果里读取粉丝uid的最大值和最小值<code>map.get(&quot;maxUid&quot;), map.get(&quot;minUid&quot;)</code>。在测试环境里面测试通过了，上线之后就发现了NPE异常。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#ff79c6">&lt;</span>select id<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;selectMaxMinByToUid&#34;</span> parameterType<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;java.lang.Long&#34;</span> resultType<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;java.util.Map&#34;</span><span style="color:#ff79c6">&gt;</span>
+    select <span style="color:#50fa7b">max</span><span style="color:#ff79c6">(</span>from_uid<span style="color:#ff79c6">)</span> as <span style="color:#f1fa8c">&#34;maxUid&#34;</span><span style="color:#ff79c6">,</span>
+    min<span style="color:#ff79c6">(</span>from_uid<span style="color:#ff79c6">)</span> as <span style="color:#f1fa8c">&#34;minUid&#34;</span>
+    from user_follow
+    where to_uid <span style="color:#ff79c6">=</span> #<span style="color:#ff79c6">{</span>toUid<span style="color:#ff79c6">,</span>jdbcType<span style="color:#ff79c6">=</span>BIGINT<span style="color:#ff79c6">}</span>
+  <span style="color:#ff79c6">&lt;/</span>select<span style="color:#ff79c6">&gt;</span>
+</code></pre></div><p>分析测试环境与线上的差异，测试环境使用的是本机mysql数据库，线上用户关系库使用的是阿里云的drds。在线上执行mybatis解析后的sql语句</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"> mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#50fa7b">max</span>(from_uid) <span style="color:#ff79c6">as</span> <span style="color:#f1fa8c">&#34;maxUid&#34;</span>, <span style="color:#50fa7b">min</span>(from_uid) <span style="color:#ff79c6">as</span> <span style="color:#f1fa8c">&#34;minUid&#34;</span> <span style="color:#ff79c6">from</span> user_follow <span style="color:#ff79c6">where</span> to_uid<span style="color:#ff79c6">=</span><span style="color:#bd93f9">18</span>xxxxxx;
+<span style="color:#ff79c6">+---------------+---------------+</span>
+<span style="color:#ff79c6">|</span> <span style="color:#f1fa8c">&#39;maxUid&#39;</span>      <span style="color:#ff79c6">|</span> <span style="color:#f1fa8c">&#39;minUid&#39;</span>      <span style="color:#ff79c6">|</span>
+<span style="color:#ff79c6">+---------------+---------------+</span>
+<span style="color:#ff79c6">|</span> <span style="color:#bd93f9">20</span>xxxxxxxxxx1 <span style="color:#ff79c6">|</span> <span style="color:#bd93f9">17</span>xxxxxxxxxx3 <span style="color:#ff79c6">|</span>
+<span style="color:#ff79c6">+---------------+---------------+</span>
+</code></pre></div><p>发现返回的map结果中的key并不是maxUid和minUid，而是&rsquo;maxUid&rsquo;和&rsquo;minUid'，所以后续再读取这两个key的时候会抛出NPE异常。再测试一下将别名的双引号去掉，返回的key就没有单引号。同样的语句，不管是别名有没有双引号在mysql中执行时，返回的key都是不带单引号的。因此，断定是阿里云的drds给带有双引号的别名的返回结果加上了单引号。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#50fa7b">max</span>(from_uid) <span style="color:#ff79c6">as</span> maxUid, <span style="color:#50fa7b">min</span>(from_uid) <span style="color:#ff79c6">as</span> minUid <span style="color:#ff79c6">from</span> user_follow <span style="color:#ff79c6">where</span> to_uid<span style="color:#ff79c6">=</span><span style="color:#bd93f9">188</span>xxxxx;
+<span style="color:#ff79c6">+---------------+---------------+</span>
+<span style="color:#ff79c6">|</span> maxUid        <span style="color:#ff79c6">|</span> minUid        <span style="color:#ff79c6">|</span>
+<span style="color:#ff79c6">+---------------+---------------+</span>
+<span style="color:#ff79c6">|</span> <span style="color:#bd93f9">191</span>xxxx111111 <span style="color:#ff79c6">|</span> <span style="color:#bd93f9">17</span>xxxxxxx9623 <span style="color:#ff79c6">|</span>
+<span style="color:#ff79c6">+---------------+---------------+</span>
+</code></pre></div><p>解决方法就是将别名的双引号去掉就ok了。</p>
+
+
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/2017-10-15-dynamic-change-logger-level/" data-toggle="tooltip" data-placement="top" title="动态变更log4j日志级别">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/post/2018-01-01-schedule-thread-executor-not-work/" data-toggle="tooltip" data-placement="top" title="定时任务怎么不定时执行了">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/java" title="java">
+                            java
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/linux" title="linux">
+                            linux
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/redis" title="redis">
+                            redis
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/spring" title="spring">
+                            spring
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                
+                    
+                    
+                    
+                        
+                        
+                        
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                   
+                   <li>
+                       <a href='' rel="alternate" type="application/rss+xml" title="Hongbing Blog" >
+                           <span class="fa-stack fa-lg">
+                               <i class="fas fa-circle fa-stack-2x"></i>
+                               <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                           </span>
+                       </a>
+                   </li>
+                   
+                    
+                    <li>
+                        <a href="mailto:jasonjin2009@163.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+
+                    
+                    
+                    
+
+                    
+
+		    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+            
+            
+            
+                </ul>
+		<p class="copyright text-muted">
+                    Copyright &copy; Hongbing Blog 2021
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> by <a href="https://zhaohuabing.com">Huabing</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=zhaohuabing&repo=hugo-theme-cleanwhite&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    async("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>spring on Hongbing Blog</title>
+    <link>http://hongbing.github.io/tags/spring/</link>
+    <description>Recent content in spring on Hongbing Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 22 Apr 2017 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/spring/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>spring-session支持分片redis</title>
+      <link>http://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</link>
+      <pubDate>Sat, 22 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</guid>
+      <description>前一篇博客解析了spring session源码，分析了spring session的内部结构。本篇将扩展spring session使用分片re</description>
+    </item>
+    
+    <item>
+      <title>spring session源码解析</title>
+      <link>http://hongbing.github.io/post/2017-02-12-spring-session/</link>
+      <pubDate>Sun, 12 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://hongbing.github.io/post/2017-02-12-spring-session/</guid>
+      <description>最近要在项目中做用户踢线的功能，由于项目使用spring session来管理用户session，因此特地翻了翻spring session的源</description>
+    </item>
+    
+  </channel>
+</rss>

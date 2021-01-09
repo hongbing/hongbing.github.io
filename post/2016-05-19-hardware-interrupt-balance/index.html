@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="Hongbing Blog">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="http://hongbing.github.io//img/home-bg.jpg">
+    <meta property="twitter:image" content="http://hongbing.github.io//img/home-bg.jpg" />
+    
+
+    
+    <meta name="title" content="硬件中断均衡" />
+    <meta property="og:title" content="硬件中断均衡" />
+    <meta property="twitter:title" content="硬件中断均衡" />
+    
+
+    
+    <meta name="description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人">
+    <meta property="og:description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人" />
+    <meta property="twitter:description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="靳洪兵, Jinhongbing, hongbing, Hongbing Blog, 博客, 个人网站, 互联网, Web">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>硬件中断均衡-洪兵的博客</title>
+
+    <link rel="canonical" href="/post/2016-05-19-hardware-interrupt-balance/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+</head>
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Hongbing Blog</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                        <li>
+                            <a href="/categories/tech">tech</a>
+                        </li>
+                        
+                    
+                    
+		    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search">SEARCH <img src="/img/search.png" height="15" style="cursor: pointer;" alt="Search"></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/%E4%B8%AD%E6%96%AD" title="中断">
+                            中断
+                        </a>
+                        
+                    </div>
+                    <h1>硬件中断均衡</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by 
+                        
+                            hongbing
+                         
+                        on 
+                        2016-05-19
+                        
+                        
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <header>
+                    <h2>目录</h2>
+                </header>
+                <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-rssreceive-side-scaling">1. RSS（Receive Side Scaling）</a></li>
+        <li><a href="#2-rpsreceive-packet-steering">2. RPS（Receive Packet Steering）</a></li>
+        <li><a href="#3-rfsreceive-flow-steering">3. RFS（Receive Flow Steering）</a></li>
+        <li><a href="#4-xpstransmit-packet-steering">4. XPS（Transmit Packet Steering）</a></li>
+        <li><a href="#5-参考">5. 参考</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                
+                <p>硬件与cpu沟通有两种方式，一种是中断，另一种是轮询。中断是硬件主动，产生中断信号，中断控制器将信号传递给cpu，cpu停下手中的工作，执行中断任务；轮询则为cpu主动，定时查询硬件设备的状态，是否处理硬件请求。</p>
+<!-- raw HTML omitted -->
+<p>硬件中断又分为两类：</p>
+<ul>
+<li><strong>Non-maskable interrupts [NMI]（不可屏蔽中断）</strong></li>
+</ul>
+<p>不可屏蔽中断针对的是严重的硬件错误，比如内存错误，传感器错误等等。出现这种中断一般需要硬件工程师介入，检测错误类型。</p>
+<ul>
+<li><strong>Maskable interrupts（可屏蔽中断）</strong></li>
+</ul>
+<p>对于IO密集型的服务来说，网卡中断会非常的频繁，每一次硬件中断都需要CPU作出响应，大量的中断其实是一件比较消耗CPU的操作。
+如果中断又都集中在某一个cpu上，那么对服务的影响就比较大，这时就需要将中断分散到各个cpu上均衡处理，由此就有了下面要介绍的网卡多队列,以及相关的优化技术。</p>
+<h2 id="1-rssreceive-side-scaling">1. RSS（Receive Side Scaling）</h2>
+<p>RSS需要硬件支持，通过<code>lspci -vvv | grep -i msi-x</code>命令来查看Ethernet controller中是否有MSI-X，Enable+，TabSize &gt; 1来判断是否硬件支持。</p>
+<p>RSS的原理，简单描述就是<strong>通过过滤规则将网络包分发到不同的队列，每个队列通过关联的中断由指定的不同CPU处理。</strong>
+使用RSS，既能缩短单个队列长度（降低延迟），又能均衡cpu的处理能力（不至于某个cpu达到瓶颈）。
+下面一一解释上面的关键字：过滤规则，队列，中断，CPU</p>
+<ul>
+<li><strong>过滤规则</strong></li>
+</ul>
+<p>过滤规则就是hash函数，对IP packet或TCP segment的header进行hash，分发到不同的队列。</p>
+<ul>
+<li><strong>队列关联中断号</strong></li>
+</ul>
+<p>通过<code>cat /proc/interrupts</code>查看网卡队列对应的中断号。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">//查看各cpu中断类型
+<span style="color:#ff79c6">[</span>root@XX-0-79-core ~<span style="color:#ff79c6">]</span><span style="color:#6272a4"># cat /proc/interrupts</span>
+            CPU0       CPU1       CPU2       CPU3
+   0:         <span style="color:#bd93f9">57</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>   IO-APIC-edge      timer
+   1:         <span style="color:#bd93f9">10</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>   IO-APIC-edge      i8042
+   6:          <span style="color:#bd93f9">3</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>   IO-APIC-edge      floppy
+   8:          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>   IO-APIC-edge      rtc0
+   9:          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>   IO-APIC-fasteoi   acpi
+  12:        <span style="color:#bd93f9">144</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>   IO-APIC-edge      i8042
+  61:         <span style="color:#bd93f9">2346</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>   PCI-MSI-edge      eth0-0
+  62:          <span style="color:#bd93f9">0</span>         <span style="color:#bd93f9">208711</span>        <span style="color:#bd93f9">0</span>         <span style="color:#bd93f9">0</span>   PCI-MSI-edge      eth0-1
+  63:         <span style="color:#bd93f9">0</span>          <span style="color:#bd93f9">0</span>                 <span style="color:#bd93f9">0</span>     <span style="color:#bd93f9">147535</span>          PCI-MSI-edge      eth0-2
+</code></pre></div><p>第1栏表示中断号，第2-5栏表示在CPU0-3上处理的中断数量，第6栏表示中断控制器，APIC表示高级可编程中断控制器。不支持APIC的控制器，不能完成中断绑定，默认发往cpu0：</p>
+<blockquote>
+<p>Without an IO-APIC, interrupts from hardware will be delivered only to the CPU which boots the operating system (usually CPU#0)</p>
+</blockquote>
+<p>最后一栏表示中断类型，timer时钟中断，eth0-0，eth0-1即是0号网卡的0号队列和1号队列，从表中可以看出，eth0-0，eth0-1，eth0-2分别对应中断号61，62，63。</p>
+<ul>
+<li><strong>中断号与CPU亲和</strong></li>
+</ul>
+<p>将网卡中断号通过CPU亲和度绑定到某个CPU上即可，具体绑定方式可以查看linux文档Documentation/IRQ-affinity.txt。每个队列都关联一个中断号，当一个包到达队列之后，网卡就触发该队列关联的中断请求，通过刚刚绑定的CPU处理中断。</p>
+<p>中断号的大小即决定了CPU处理中断请求的优先级，中断号越小，优先级越高。</p>
+<pre><code>IRQ 0 — **system timer (cannot be changed)**
+IRQ 1 — **keyboard controller (cannot be changed)**
+IRQ 3 — serial port controller for serial port 2 (shared with serial port 4, if present);
+IRQ 4 — serial port controller for serial port 1 (shared with serial port 3, if present);
+IRQ 5 — parallel port 2 and 3 or sound card;
+IRQ 6 — floppy disk controller;
+IRQ 7 — parallel port 1. It is used for printers or for any parallel port if a printer is not present.
+</code></pre><p>如果手动设置了CPU亲和度绑定，需要将irqbalance后台进程关掉（<code>service irqbalance status；service irqbalance stop</code>），因为它会自动将不同的中断交给各个cpu处理，会覆盖掉手动设置值。</p>
+<p>对于延迟特别敏感，或者接收中断处理已经成为瓶颈的系统应该开启RSS。但是应该控制队列在cpu物理核上的数量。</p>
+<blockquote>
+<p>Per-cpu load can be observed using the mpstat utility, but note that on processors with hyperthreading (HT), each hyperthread is represented as a separate CPU. For interrupt handling, HT has shown no benefit in initial tests, so limit the number of queues to the number of CPU cores in the system.</p>
+</blockquote>
+<h2 id="2-rpsreceive-packet-steering">2. RPS（Receive Packet Steering）</h2>
+<p>RPS可以看做是RSS的软件实现。原理简单描述为对<code>数据流hash分类</code>，并将软中断负载均衡到各CPU。不会增加网卡的硬中断速率，但是引入了处理器间的中断。</p>
+<p><strong>优化方式：</strong></p>
+<p>调整<code>/sys/class/net/[device]/queues/rx-[num]/rps_cpus</code>的值,rps_cpus默认为0000，每一位表示16进制位。000f表示使用cpu0，cpu1，cpu2，cpu3。</p>
+<h2 id="3-rfsreceive-flow-steering">3. RFS（Receive Flow Steering）</h2>
+<p>解决处理网卡数据流的cpu与接受该数据流的应用程序所运行的cpu不一致，造成cpu切换的问题。保证程序运行的CPU和软中断处理CPU是同一个，<code>提升CPU缓存命中率，降低网络延迟</code>。</p>
+<p><strong>优化方式：</strong></p>
+<p>要开启RFS，需要修改两个参数，</p>
+<pre><code>/proc/sys/net/core/rps_sock_flow_entries
+/sys/class/net/[device]/queues/rx-[num]/rps_flow_cnt
+</code></pre><p>设置rps_sock_flow_entries的值为期望获得的最大并发连接的数量（该值必须为2的幂，如果不是，系统设置为向上最接近的2的幂），rps_flow_cnt的值为rps_sock_flow_entries/N，N表示设备接收队列的数量，对于单队列两者设置为同一值。</p>
+<h2 id="4-xpstransmit-packet-steering">4. XPS（Transmit Packet Steering）</h2>
+<p>针对网卡发送时的优化，RFS是根据包接收的队列来选择cpu，而XPS是根据cpu来选择要发送的网卡队列。</p>
+<p><strong>优化方式：</strong></p>
+<p>修改<code>/sys/class/net/[device]/queues/tx-[num]/xps_cpus</code></p>
+<p>注意RPS和RFS在linux 内核版本2.6.35才被引入，2.6.38及其以上才包含XPS。</p>
+<p>
+  <img src="/img/hardwareinterrupt/hardware-interrupt.png" alt="hardware-interrupt">
+
+</p>
+<h2 id="5-参考">5. 参考</h2>
+<ul>
+<li><a href="http://blog.netzhou.net/?p=181">http://blog.netzhou.net/?p=181</a></li>
+<li><a href="http://hellojava.info/?p=238">http://hellojava.info/?p=238</a></li>
+<li><a href="http://blog.csdn.net/wyaibyn/article/details/14109325">http://blog.csdn.net/wyaibyn/article/details/14109325</a></li>
+<li><a href="https://lwn.net/Articles/412062/">https://lwn.net/Articles/412062/</a></li>
+</ul>
+
+
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/2016-04-17-a-oom-problem/" data-toggle="tooltip" data-placement="top" title="一次oom的排查过程">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/post/2016-05-21-linux-common-command/" data-toggle="tooltip" data-placement="top" title="linux常用命令">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/java" title="java">
+                            java
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/linux" title="linux">
+                            linux
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/redis" title="redis">
+                            redis
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/spring" title="spring">
+                            spring
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                
+                    
+                    
+                    
+                        
+                        
+                        
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                   
+                   <li>
+                       <a href='' rel="alternate" type="application/rss+xml" title="Hongbing Blog" >
+                           <span class="fa-stack fa-lg">
+                               <i class="fas fa-circle fa-stack-2x"></i>
+                               <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                           </span>
+                       </a>
+                   </li>
+                   
+                    
+                    <li>
+                        <a href="mailto:jasonjin2009@163.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+
+                    
+                    
+                    
+
+                    
+
+		    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+            
+            
+            
+                </ul>
+		<p class="copyright text-muted">
+                    Copyright &copy; Hongbing Blog 2021
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> by <a href="https://zhaohuabing.com">Huabing</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=zhaohuabing&repo=hugo-theme-cleanwhite&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    async("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+
+
+
+</body>
+</html>

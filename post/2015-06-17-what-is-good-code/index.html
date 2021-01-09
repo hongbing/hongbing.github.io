@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="Hongbing Blog">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="http://hongbing.github.io//img/home-bg.jpg">
+    <meta property="twitter:image" content="http://hongbing.github.io//img/home-bg.jpg" />
+    
+
+    
+    <meta name="title" content="什么样的代码才是好的代码" />
+    <meta property="og:title" content="什么样的代码才是好的代码" />
+    <meta property="twitter:title" content="什么样的代码才是好的代码" />
+    
+
+    
+    <meta name="description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人">
+    <meta property="og:description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人" />
+    <meta property="twitter:description" content="靳洪兵，来自重庆，软件工程师，北漂，一个无聊的人" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="靳洪兵, Jinhongbing, hongbing, Hongbing Blog, 博客, 个人网站, 互联网, Web">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>什么样的代码才是好的代码-洪兵的博客</title>
+
+    <link rel="canonical" href="/post/2015-06-17-what-is-good-code/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+</head>
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Hongbing Blog</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                        <li>
+                            <a href="/categories/tech">tech</a>
+                        </li>
+                        
+                    
+                    
+		    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search">SEARCH <img src="/img/search.png" height="15" style="cursor: pointer;" alt="Search"></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/%E4%BB%A3%E7%A0%81" title="代码">
+                            代码
+                        </a>
+                        
+                    </div>
+                    <h1>什么样的代码才是好的代码</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by 
+                        
+                            hongbing
+                         
+                        on 
+                        2015-06-17
+                        
+                        
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <header>
+                    <h2>目录</h2>
+                </header>
+                <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-好代码的top5特征">1 好代码的Top5特征</a></li>
+        <li><a href="#2-其它特点">2 其它特点</a></li>
+        <li><a href="#3-有关好代码的统计数据">3 有关好代码的统计数据</a></li>
+        <li><a href="#4-代码好坏的测试标准">4 代码好坏的测试标准</a></li>
+        <li><a href="#6-写出好代码的方法">6 写出好代码的方法</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                
+                <p><strong>文章来源</strong>：http://engineering.intenthq.com/2015/03/what-is-good-code-a-scientific-definition/</p>
+<p>文章的统计结果来自于面试过程中对65个开发者的调查，这些开发者大多数使用java或者scala语言，同时多数具有5年以上的开发经验。</p>
+<h2 id="1-好代码的top5特征">1 好代码的Top5特征</h2>
+<ul>
+<li><strong>Readable</strong>（可读性）ed</li>
+<li><strong>Tested/Testable</strong>（可测试性）</li>
+<li><strong>Simple</strong>（简单）</li>
+<li><strong>Works</strong>（功能良好）</li>
+<li><strong>Maintainable</strong>（可维护性）</li>
+</ul>
+<blockquote>
+<p>“Good code is written <!-- raw HTML omitted --> so that is readable, understandable, covered by automated tests, not over complicated and does well what is intended to do.”</p>
+</blockquote>
+<p><strong>Readable</strong> 应该体现在包，类，方法以及变量的命名上，同时方法调用逻辑，从上到下应该是可读的。写代码就像写故事一样，随着调用链的进行，应该是故事一步一步向前推进的过程。</p>
+<h2 id="2-其它特点">2 其它特点</h2>
+<p>避免过早优化，<a href="http://en.wikipedia.org/wiki/Donald_Knuth">Knuth, Donald</a>在40年前就这样说到：</p>
+<blockquote>
+<p>“We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil”</p>
+</blockquote>
+<p>然而提到要<strong>高效代码</strong>的比提到<strong>避免过早优化</strong>的人要多出一倍。</p>
+<p>同时文中还提到了，self-document和comment，一部分人认为应该代码应该具有自文档性，不应该添加注释（<strong>事实上，没有及时更新或者错误的注释比没有注释还让人烦恼</strong>）; 而另一部分人觉得应该有添加comment，需要让别人知道你在干什么，就是java doc API一样。</p>
+<p>代码的自文档性能够提高代码的可读性，同时一定的注释也是必要的。对于那些有特殊默认值的方法，是需要使用注释来解释的，以避免使用者误用。并非所有的功能实现都能简单化，复杂的功能实现应该要有注释说明，甚至表明所使用到的相关理论以及文档，以供后来人参考。</p>
+<h2 id="3-有关好代码的统计数据">3 有关好代码的统计数据</h2>
+<p>下面是具体的统计信息：
+
+  <img src="/img/goodcode/goodcode_statistics.png" alt="好代码的特征">
+
+</p>
+<h2 id="4-代码好坏的测试标准">4 代码好坏的测试标准</h2>
+<p>可以通过下面的公式来判断一段代码的好坏：</p>
+<pre><code>WTFs / minute
+</code></pre><p>
+  <img src="/img/goodcode/standofgoodcode.png" alt="代码好坏的测试标准">
+
+</p>
+<h2 id="6-写出好代码的方法">6 写出好代码的方法</h2>
+<p>按照下面的流程即可写出好的代码，程序员必备，哈哈哈.</p>
+<p>
+  <img src="/img/goodcode/good_code.png" alt="GoodCode">
+
+</p>
+
+
+                <hr>
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/post/2015-06-17-raft-introduce/" data-toggle="tooltip" data-placement="top" title="Raft简介">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/java" title="java">
+                            java
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/linux" title="linux">
+                            linux
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/redis" title="redis">
+                            redis
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/spring" title="spring">
+                            spring
+                        </a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                
+                    
+                    
+                    
+                        
+                        
+                        
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                   
+                   <li>
+                       <a href='' rel="alternate" type="application/rss+xml" title="Hongbing Blog" >
+                           <span class="fa-stack fa-lg">
+                               <i class="fas fa-circle fa-stack-2x"></i>
+                               <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                           </span>
+                       </a>
+                   </li>
+                   
+                    
+                    <li>
+                        <a href="mailto:jasonjin2009@163.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+
+                    
+                    
+                    
+
+                    
+
+		    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+            
+            
+            
+                </ul>
+		<p class="copyright text-muted">
+                    Copyright &copy; Hongbing Blog 2021
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> by <a href="https://zhaohuabing.com">Huabing</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=zhaohuabing&repo=hugo-theme-cleanwhite&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    async("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+
+
+
+</body>
+</html>
