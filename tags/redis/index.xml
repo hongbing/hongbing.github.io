@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>redis on Hongbing Blog</title>
-    <link>http://hongbing.github.io/tags/redis/</link>
+    <link>https://hongbing.github.io/tags/redis/</link>
     <description>Recent content in redis on Hongbing Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 02 Apr 2018 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 02 Apr 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://hongbing.github.io/tags/redis/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>阿里云redis数据拆分</title>
-      <link>http://hongbing.github.io/post/2018-04-22-redis-data-migration/</link>
+      <link>https://hongbing.github.io/post/2018-04-22-redis-data-migration/</link>
       <pubDate>Mon, 02 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2018-04-22-redis-data-migration/</guid>
+      <guid>https://hongbing.github.io/post/2018-04-22-redis-data-migration/</guid>
       <description>1 背景 在业务发展的早期，对业务数据量没有进行严格的评估，由于业务发展的未知性，也没法做出严格的评估，因此出现多个小业务使用同一个redis缓</description>
     </item>
     
     <item>
       <title>spring-session支持分片redis</title>
-      <link>http://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</link>
+      <link>https://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</link>
       <pubDate>Sat, 22 Apr 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</guid>
+      <guid>https://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</guid>
       <description>前一篇博客解析了spring session源码，分析了spring session的内部结构。本篇将扩展spring session使用分片re</description>
     </item>
     

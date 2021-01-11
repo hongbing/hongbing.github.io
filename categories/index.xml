@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Hongbing Blog</title>
-    <link>http://hongbing.github.io/categories/</link>
+    <link>https://hongbing.github.io/categories/</link>
     <description>Recent content in Categories on Hongbing Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 02 Apr 2018 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 02 Apr 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://hongbing.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Tech</title>
-      <link>http://hongbing.github.io/categories/tech/</link>
+      <link>https://hongbing.github.io/categories/tech/</link>
       <pubDate>Mon, 02 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/categories/tech/</guid>
+      <guid>https://hongbing.github.io/categories/tech/</guid>
       <description></description>
     </item>
     

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>consul on Hongbing Blog</title>
-    <link>http://hongbing.github.io/tags/consul/</link>
+    <link>https://hongbing.github.io/tags/consul/</link>
     <description>Recent content in consul on Hongbing Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 21 Jun 2015 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/consul/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 21 Jun 2015 00:00:00 +0000</lastBuildDate><atom:link href="https://hongbing.github.io/tags/consul/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ETCD vs. Consul</title>
-      <link>http://hongbing.github.io/post/2015-06-21-etcd-vs-consul/</link>
+      <link>https://hongbing.github.io/post/2015-06-21-etcd-vs-consul/</link>
       <pubDate>Sun, 21 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-06-21-etcd-vs-consul/</guid>
+      <guid>https://hongbing.github.io/post/2015-06-21-etcd-vs-consul/</guid>
       <description>1. 协议 Etcd和consul均采用raft协议来保证server之间的数据一致性，但是consul还采用了gossip协议管理成员和传播消息</description>
     </item>
     

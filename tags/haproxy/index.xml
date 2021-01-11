@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>HAproxy on Hongbing Blog</title>
-    <link>http://hongbing.github.io/tags/haproxy/</link>
+    <link>https://hongbing.github.io/tags/haproxy/</link>
     <description>Recent content in HAproxy on Hongbing Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 02 Aug 2015 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/haproxy/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 02 Aug 2015 00:00:00 +0000</lastBuildDate><atom:link href="https://hongbing.github.io/tags/haproxy/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>HAproxy部署</title>
-      <link>http://hongbing.github.io/post/2015-08-02-haproxy-install/</link>
+      <link>https://hongbing.github.io/post/2015-08-02-haproxy-install/</link>
       <pubDate>Sun, 02 Aug 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-08-02-haproxy-install/</guid>
+      <guid>https://hongbing.github.io/post/2015-08-02-haproxy-install/</guid>
       <description>1 安装 下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），Fuck GFW。 可以通过直接访问http</description>
     </item>
     

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>中断 on Hongbing Blog</title>
-    <link>http://hongbing.github.io/tags/%E4%B8%AD%E6%96%AD/</link>
+    <link>https://hongbing.github.io/tags/%E4%B8%AD%E6%96%AD/</link>
     <description>Recent content in 中断 on Hongbing Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 19 May 2016 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/%E4%B8%AD%E6%96%AD/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 19 May 2016 00:00:00 +0000</lastBuildDate><atom:link href="https://hongbing.github.io/tags/%E4%B8%AD%E6%96%AD/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>硬件中断均衡</title>
-      <link>http://hongbing.github.io/post/2016-05-19-hardware-interrupt-balance/</link>
+      <link>https://hongbing.github.io/post/2016-05-19-hardware-interrupt-balance/</link>
       <pubDate>Thu, 19 May 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2016-05-19-hardware-interrupt-balance/</guid>
+      <guid>https://hongbing.github.io/post/2016-05-19-hardware-interrupt-balance/</guid>
       <description>硬件与cpu沟通有两种方式，一种是中断，另一种是轮询。中断是硬件主动，产生中断信号，中断控制器将信号传递给cpu，cpu停下手中的工作，执行</description>
     </item>
     

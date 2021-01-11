@@ -2,188 +2,188 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Hongbing Blog</title>
-    <link>http://hongbing.github.io/post/</link>
+    <link>https://hongbing.github.io/post/</link>
     <description>Recent content in Posts on Hongbing Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 02 Apr 2018 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 02 Apr 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://hongbing.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>阿里云redis数据拆分</title>
-      <link>http://hongbing.github.io/post/2018-04-22-redis-data-migration/</link>
+      <link>https://hongbing.github.io/post/2018-04-22-redis-data-migration/</link>
       <pubDate>Mon, 02 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2018-04-22-redis-data-migration/</guid>
+      <guid>https://hongbing.github.io/post/2018-04-22-redis-data-migration/</guid>
       <description>1 背景 在业务发展的早期，对业务数据量没有进行严格的评估，由于业务发展的未知性，也没法做出严格的评估，因此出现多个小业务使用同一个redis缓</description>
     </item>
     
     <item>
       <title>定时任务怎么不定时执行了</title>
-      <link>http://hongbing.github.io/post/2018-01-01-schedule-thread-executor-not-work/</link>
+      <link>https://hongbing.github.io/post/2018-01-01-schedule-thread-executor-not-work/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2018-01-01-schedule-thread-executor-not-work/</guid>
+      <guid>https://hongbing.github.io/post/2018-01-01-schedule-thread-executor-not-work/</guid>
       <description>2017年的元旦假期，测试反馈说微博里红豆直播间的观看人数在一段时间内都没有变化。接到问题的第一反应是不是前一天上线导致的？一个好好的系统功</description>
     </item>
     
     <item>
       <title>20171015一周坑</title>
-      <link>http://hongbing.github.io/post/2017-10-15-daily-shit/</link>
+      <link>https://hongbing.github.io/post/2017-10-15-daily-shit/</link>
       <pubDate>Sun, 15 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2017-10-15-daily-shit/</guid>
+      <guid>https://hongbing.github.io/post/2017-10-15-daily-shit/</guid>
       <description>1. disconf加载类的坑 在做push工程的时候，使用disconf动态配置极光的masterSecret和key，但是一直不成功，配置无法</description>
     </item>
     
     <item>
       <title>动态变更log4j日志级别</title>
-      <link>http://hongbing.github.io/post/2017-10-15-dynamic-change-logger-level/</link>
+      <link>https://hongbing.github.io/post/2017-10-15-dynamic-change-logger-level/</link>
       <pubDate>Sun, 15 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2017-10-15-dynamic-change-logger-level/</guid>
+      <guid>https://hongbing.github.io/post/2017-10-15-dynamic-change-logger-level/</guid>
       <description>log4j的日志级别包括ALL，TRACE，DEBUG，INFO，WARN，ERROR, FATAL，OFF。日志级别从前往后越来越严格，AL</description>
     </item>
     
     <item>
       <title>spring-session支持分片redis</title>
-      <link>http://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</link>
+      <link>https://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</link>
       <pubDate>Sat, 22 Apr 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</guid>
+      <guid>https://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</guid>
       <description>前一篇博客解析了spring session源码，分析了spring session的内部结构。本篇将扩展spring session使用分片re</description>
     </item>
     
     <item>
       <title>spring session源码解析</title>
-      <link>http://hongbing.github.io/post/2017-02-12-spring-session/</link>
+      <link>https://hongbing.github.io/post/2017-02-12-spring-session/</link>
       <pubDate>Sun, 12 Feb 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2017-02-12-spring-session/</guid>
+      <guid>https://hongbing.github.io/post/2017-02-12-spring-session/</guid>
       <description>最近要在项目中做用户踢线的功能，由于项目使用spring session来管理用户session，因此特地翻了翻spring session的源</description>
     </item>
     
     <item>
       <title>linux常用命令</title>
-      <link>http://hongbing.github.io/post/2016-05-21-linux-common-command/</link>
+      <link>https://hongbing.github.io/post/2016-05-21-linux-common-command/</link>
       <pubDate>Sat, 21 May 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2016-05-21-linux-common-command/</guid>
+      <guid>https://hongbing.github.io/post/2016-05-21-linux-common-command/</guid>
       <description>本文记录了在工作中常用的linux命令。 文件保护，禁止编辑 chattr +i filename 使用lsattr显示文件的隐藏属性 查找某个端口运行的程序 lsof -i:[port] netstat -antp | grep [port] 注意使</description>
     </item>
     
     <item>
       <title>硬件中断均衡</title>
-      <link>http://hongbing.github.io/post/2016-05-19-hardware-interrupt-balance/</link>
+      <link>https://hongbing.github.io/post/2016-05-19-hardware-interrupt-balance/</link>
       <pubDate>Thu, 19 May 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2016-05-19-hardware-interrupt-balance/</guid>
+      <guid>https://hongbing.github.io/post/2016-05-19-hardware-interrupt-balance/</guid>
       <description>硬件与cpu沟通有两种方式，一种是中断，另一种是轮询。中断是硬件主动，产生中断信号，中断控制器将信号传递给cpu，cpu停下手中的工作，执行</description>
     </item>
     
     <item>
       <title>一次oom的排查过程</title>
-      <link>http://hongbing.github.io/post/2016-04-17-a-oom-problem/</link>
+      <link>https://hongbing.github.io/post/2016-04-17-a-oom-problem/</link>
       <pubDate>Sun, 17 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2016-04-17-a-oom-problem/</guid>
+      <guid>https://hongbing.github.io/post/2016-04-17-a-oom-problem/</guid>
       <description>最近对平台内部的消息中间件添加了从kafka读取数据的功能（平台内部存在着多个消息中间件，主要是由不同的使用场景与历史沿革造成的）。原有逻辑</description>
     </item>
     
     <item>
       <title>监控的原则</title>
-      <link>http://hongbing.github.io/post/2015-11-14-monitor-principle/</link>
+      <link>https://hongbing.github.io/post/2015-11-14-monitor-principle/</link>
       <pubDate>Sat, 14 Nov 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-11-14-monitor-principle/</guid>
+      <guid>https://hongbing.github.io/post/2015-11-14-monitor-principle/</guid>
       <description>文章来源stop-monitoring-if-service-is-up 由于最近组内在对各个项目的监控做梳理，并完善各个项目的监控报警，所以</description>
     </item>
     
     <item>
       <title>Jetty死锁问题</title>
-      <link>http://hongbing.github.io/post/2015-11-14-jetty-deadlock/</link>
+      <link>https://hongbing.github.io/post/2015-11-14-jetty-deadlock/</link>
       <pubDate>Fri, 21 Aug 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-11-14-jetty-deadlock/</guid>
+      <guid>https://hongbing.github.io/post/2015-11-14-jetty-deadlock/</guid>
       <description>1 背景 业务方反应消息队列最近几天输出的消息量变少了（良好的监控系统应该在业务方感知到故障之前将问题暴露出来），进入到前端机发现，多达20多万</description>
     </item>
     
     <item>
       <title>linux系统之block_dump</title>
-      <link>http://hongbing.github.io/post/2015-08-21-linux-of-blockdump/</link>
+      <link>https://hongbing.github.io/post/2015-08-21-linux-of-blockdump/</link>
       <pubDate>Fri, 21 Aug 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-08-21-linux-of-blockdump/</guid>
+      <guid>https://hongbing.github.io/post/2015-08-21-linux-of-blockdump/</guid>
       <description>当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过iostat，vmstat命令从宏观上来查看系统的一些io参数，比</description>
     </item>
     
     <item>
       <title>linux系统之pdflush</title>
-      <link>http://hongbing.github.io/post/2015-08-20-linux-of-pdflush/</link>
+      <link>https://hongbing.github.io/post/2015-08-20-linux-of-pdflush/</link>
       <pubDate>Thu, 20 Aug 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-08-20-linux-of-pdflush/</guid>
+      <guid>https://hongbing.github.io/post/2015-08-20-linux-of-pdflush/</guid>
       <description>当我们向磁盘文件写入数据时，由于内存与磁盘之间数据读取的差异，操作系统不会直接将数据写透（write through）到磁盘上，而是会写到页高</description>
     </item>
     
     <item>
       <title>UnknowHostException问题</title>
-      <link>http://hongbing.github.io/post/2015-08-11-unknowhostexception/</link>
+      <link>https://hongbing.github.io/post/2015-08-11-unknowhostexception/</link>
       <pubDate>Tue, 11 Aug 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-08-11-unknowhostexception/</guid>
+      <guid>https://hongbing.github.io/post/2015-08-11-unknowhostexception/</guid>
       <description>1 问题 团队使用Docker中的测试环境，在新起的测试环境中启动消息队列项目，项目启动失败，抛出如下异常： UnknowHostExceptio</description>
     </item>
     
     <item>
       <title>HAproxy部署</title>
-      <link>http://hongbing.github.io/post/2015-08-02-haproxy-install/</link>
+      <link>https://hongbing.github.io/post/2015-08-02-haproxy-install/</link>
       <pubDate>Sun, 02 Aug 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-08-02-haproxy-install/</guid>
+      <guid>https://hongbing.github.io/post/2015-08-02-haproxy-install/</guid>
       <description>1 安装 下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），Fuck GFW。 可以通过直接访问http</description>
     </item>
     
     <item>
       <title>maven介绍</title>
-      <link>http://hongbing.github.io/post/2015-07-25-maven-introduce/</link>
+      <link>https://hongbing.github.io/post/2015-07-25-maven-introduce/</link>
       <pubDate>Sat, 25 Jul 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-07-25-maven-introduce/</guid>
+      <guid>https://hongbing.github.io/post/2015-07-25-maven-introduce/</guid>
       <description>1 相关概念 1.1 版本号 版本号记录一个项目在某个阶段的某些功能的实现，实现项目中不同功能的隔离与区分。 版本号格式一般分为： 主版本号.分支版本号.小</description>
     </item>
     
     <item>
       <title>ETCD vs. Consul</title>
-      <link>http://hongbing.github.io/post/2015-06-21-etcd-vs-consul/</link>
+      <link>https://hongbing.github.io/post/2015-06-21-etcd-vs-consul/</link>
       <pubDate>Sun, 21 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-06-21-etcd-vs-consul/</guid>
+      <guid>https://hongbing.github.io/post/2015-06-21-etcd-vs-consul/</guid>
       <description>1. 协议 Etcd和consul均采用raft协议来保证server之间的数据一致性，但是consul还采用了gossip协议管理成员和传播消息</description>
     </item>
     
     <item>
       <title>如何设计分布式ID生成器</title>
-      <link>http://hongbing.github.io/post/2015-06-21-distributed-id-generator/</link>
+      <link>https://hongbing.github.io/post/2015-06-21-distributed-id-generator/</link>
       <pubDate>Sun, 21 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-06-21-distributed-id-generator/</guid>
+      <guid>https://hongbing.github.io/post/2015-06-21-distributed-id-generator/</guid>
       <description>1 什么是ID ID最大的特点就是唯一，一个ID存在的目的就是唯一性的标识某一个物体，如果唯一性做不到，那么ID也就失去了本质的作用。 另外ID还</description>
     </item>
     
     <item>
       <title>Raft简介</title>
-      <link>http://hongbing.github.io/post/2015-06-17-raft-introduce/</link>
+      <link>https://hongbing.github.io/post/2015-06-17-raft-introduce/</link>
       <pubDate>Wed, 17 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-06-17-raft-introduce/</guid>
+      <guid>https://hongbing.github.io/post/2015-06-17-raft-introduce/</guid>
       <description>1 Raft概念 分布式系统中，为了实现一致性，一般采用对称式和非对称式两种server组织方式。 对称式：所有的server都具有相同的功能，客</description>
     </item>
     
     <item>
       <title>什么样的代码才是好的代码</title>
-      <link>http://hongbing.github.io/post/2015-06-17-what-is-good-code/</link>
+      <link>https://hongbing.github.io/post/2015-06-17-what-is-good-code/</link>
       <pubDate>Wed, 17 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-06-17-what-is-good-code/</guid>
+      <guid>https://hongbing.github.io/post/2015-06-17-what-is-good-code/</guid>
       <description>文章来源：http://engineering.intenthq.com/2015/03/what-is-good-code-a-scien</description>
     </item>
     

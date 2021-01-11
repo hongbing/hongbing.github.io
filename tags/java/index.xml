@@ -2,44 +2,44 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>java on Hongbing Blog</title>
-    <link>http://hongbing.github.io/tags/java/</link>
+    <link>https://hongbing.github.io/tags/java/</link>
     <description>Recent content in java on Hongbing Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 22 Apr 2017 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 22 Apr 2017 00:00:00 +0000</lastBuildDate><atom:link href="https://hongbing.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>spring-session支持分片redis</title>
-      <link>http://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</link>
+      <link>https://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</link>
       <pubDate>Sat, 22 Apr 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</guid>
+      <guid>https://hongbing.github.io/post/2017-04-22-spring-session-with-sharded-session/</guid>
       <description>前一篇博客解析了spring session源码，分析了spring session的内部结构。本篇将扩展spring session使用分片re</description>
     </item>
     
     <item>
       <title>spring session源码解析</title>
-      <link>http://hongbing.github.io/post/2017-02-12-spring-session/</link>
+      <link>https://hongbing.github.io/post/2017-02-12-spring-session/</link>
       <pubDate>Sun, 12 Feb 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2017-02-12-spring-session/</guid>
+      <guid>https://hongbing.github.io/post/2017-02-12-spring-session/</guid>
       <description>最近要在项目中做用户踢线的功能，由于项目使用spring session来管理用户session，因此特地翻了翻spring session的源</description>
     </item>
     
     <item>
       <title>一次oom的排查过程</title>
-      <link>http://hongbing.github.io/post/2016-04-17-a-oom-problem/</link>
+      <link>https://hongbing.github.io/post/2016-04-17-a-oom-problem/</link>
       <pubDate>Sun, 17 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2016-04-17-a-oom-problem/</guid>
+      <guid>https://hongbing.github.io/post/2016-04-17-a-oom-problem/</guid>
       <description>最近对平台内部的消息中间件添加了从kafka读取数据的功能（平台内部存在着多个消息中间件，主要是由不同的使用场景与历史沿革造成的）。原有逻辑</description>
     </item>
     
     <item>
       <title>Jetty死锁问题</title>
-      <link>http://hongbing.github.io/post/2015-11-14-jetty-deadlock/</link>
+      <link>https://hongbing.github.io/post/2015-11-14-jetty-deadlock/</link>
       <pubDate>Fri, 21 Aug 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-11-14-jetty-deadlock/</guid>
+      <guid>https://hongbing.github.io/post/2015-11-14-jetty-deadlock/</guid>
       <description>1 背景 业务方反应消息队列最近几天输出的消息量变少了（良好的监控系统应该在业务方感知到故障之前将问题暴露出来），进入到前端机发现，多达20多万</description>
     </item>
     

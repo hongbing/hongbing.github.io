@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>jetty on Hongbing Blog</title>
-    <link>http://hongbing.github.io/tags/jetty/</link>
+    <link>https://hongbing.github.io/tags/jetty/</link>
     <description>Recent content in jetty on Hongbing Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 21 Aug 2015 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/jetty/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 21 Aug 2015 00:00:00 +0000</lastBuildDate><atom:link href="https://hongbing.github.io/tags/jetty/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Jetty死锁问题</title>
-      <link>http://hongbing.github.io/post/2015-11-14-jetty-deadlock/</link>
+      <link>https://hongbing.github.io/post/2015-11-14-jetty-deadlock/</link>
       <pubDate>Fri, 21 Aug 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-11-14-jetty-deadlock/</guid>
+      <guid>https://hongbing.github.io/post/2015-11-14-jetty-deadlock/</guid>
       <description>1 背景 业务方反应消息队列最近几天输出的消息量变少了（良好的监控系统应该在业务方感知到故障之前将问题暴露出来），进入到前端机发现，多达20多万</description>
     </item>
     

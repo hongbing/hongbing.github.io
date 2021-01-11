@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>log4j on Hongbing Blog</title>
-    <link>http://hongbing.github.io/tags/log4j/</link>
+    <link>https://hongbing.github.io/tags/log4j/</link>
     <description>Recent content in log4j on Hongbing Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 15 Oct 2017 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/log4j/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 15 Oct 2017 00:00:00 +0000</lastBuildDate><atom:link href="https://hongbing.github.io/tags/log4j/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>动态变更log4j日志级别</title>
-      <link>http://hongbing.github.io/post/2017-10-15-dynamic-change-logger-level/</link>
+      <link>https://hongbing.github.io/post/2017-10-15-dynamic-change-logger-level/</link>
       <pubDate>Sun, 15 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2017-10-15-dynamic-change-logger-level/</guid>
+      <guid>https://hongbing.github.io/post/2017-10-15-dynamic-change-logger-level/</guid>
       <description>log4j的日志级别包括ALL，TRACE，DEBUG，INFO，WARN，ERROR, FATAL，OFF。日志级别从前往后越来越严格，AL</description>
     </item>
     

@@ -2,35 +2,35 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>linux on Hongbing Blog</title>
-    <link>http://hongbing.github.io/tags/linux/</link>
+    <link>https://hongbing.github.io/tags/linux/</link>
     <description>Recent content in linux on Hongbing Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 21 May 2016 00:00:00 +0000</lastBuildDate><atom:link href="http://hongbing.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 21 May 2016 00:00:00 +0000</lastBuildDate><atom:link href="https://hongbing.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>linux常用命令</title>
-      <link>http://hongbing.github.io/post/2016-05-21-linux-common-command/</link>
+      <link>https://hongbing.github.io/post/2016-05-21-linux-common-command/</link>
       <pubDate>Sat, 21 May 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2016-05-21-linux-common-command/</guid>
+      <guid>https://hongbing.github.io/post/2016-05-21-linux-common-command/</guid>
       <description>本文记录了在工作中常用的linux命令。 文件保护，禁止编辑 chattr +i filename 使用lsattr显示文件的隐藏属性 查找某个端口运行的程序 lsof -i:[port] netstat -antp | grep [port] 注意使</description>
     </item>
     
     <item>
       <title>linux系统之block_dump</title>
-      <link>http://hongbing.github.io/post/2015-08-21-linux-of-blockdump/</link>
+      <link>https://hongbing.github.io/post/2015-08-21-linux-of-blockdump/</link>
       <pubDate>Fri, 21 Aug 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-08-21-linux-of-blockdump/</guid>
+      <guid>https://hongbing.github.io/post/2015-08-21-linux-of-blockdump/</guid>
       <description>当系统的iowait值比较高时，表明系统在处理大量的磁盘操作，我们可以通过iostat，vmstat命令从宏观上来查看系统的一些io参数，比</description>
     </item>
     
     <item>
       <title>linux系统之pdflush</title>
-      <link>http://hongbing.github.io/post/2015-08-20-linux-of-pdflush/</link>
+      <link>https://hongbing.github.io/post/2015-08-20-linux-of-pdflush/</link>
       <pubDate>Thu, 20 Aug 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://hongbing.github.io/post/2015-08-20-linux-of-pdflush/</guid>
+      <guid>https://hongbing.github.io/post/2015-08-20-linux-of-pdflush/</guid>
       <description>当我们向磁盘文件写入数据时，由于内存与磁盘之间数据读取的差异，操作系统不会直接将数据写透（write through）到磁盘上，而是会写到页高</description>
     </item>
     
